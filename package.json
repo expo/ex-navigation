@@ -1,0 +1,46 @@
+{
+  "name": "@exponent/ex-navigation",
+  "version": "1.0.0",
+  "description": "",
+  "main": "./lib/ExNavigation.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "run-example": "gulp clean && gulp modules && cd example/ExNavigationExample && react-native start --root ../../ --transformer ./transformer",
+    "prepublish": "gulp clean && gulp modules",
+    "postinstall": "if [ -d node_modules ]; then find node_modules -type f -not -regex \".*react-native\\/.*\" -name \".babelrc\" -exec rm -rf {} \\;; fi && cd example/ExNavigationExample && npm install"
+  },
+  "files": [
+    "lib/"
+  ],
+  "keywords": [],
+  "author": "Adam Miskiewicz <adam@exponentjs.com>",
+  "license": "MIT",
+  "dependencies": {
+    "core-decorators": "^0.12.2",
+    "debug": "^2.2.0",
+    "fbemitter": "^2.0.2",
+    "hoist-non-react-statics": "^1.0.5",
+    "invariant": "^2.2.1",
+    "lodash": "^4.6.1",
+    "mirror-creator": "^1.1.0",
+    "react-clone-referenced-element": "^1.0.1",
+    "react-pure-render": "^1.0.2",
+    "react-redux": "^4.4.5",
+    "react-static-container": "^1.0.0",
+    "redux": "^3.5.2",
+    "redux-batched-actions": "^0.1.2",
+    "reselect": "^2.5.1",
+    "uuid-js": "^0.7.5",
+    "warning": "^2.1.0"
+  },
+  "devDependencies": {
+    "babel-preset-react-native-stage-0": "^1.0.1",
+    "del": "^2.2.0",
+    "fbjs-scripts": "^0.6.0",
+    "gulp": "^3.9.1",
+    "gulp-babel": "^6.1.2",
+    "gulp-flatten": "^0.2.0",
+    "gulp-watch": "^4.3.6",
+    "run-sequence": "^1.1.5"
+  }
+}

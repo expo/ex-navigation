@@ -1,0 +1,15 @@
+{
+  "name": "ExNavigationExample",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "node node_modules/react-native/local-cli/cli.js start"
+  },
+  "dependencies": {
+    "react": "15.0.2",
+    "react-native": "^0.26.3"
+  },
+  "devDependencies": {
+    "babel-plugin-module-alias": "^1.4.0"
+  }
+}

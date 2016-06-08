@@ -1,0 +1,48 @@
+/**
+ * @providesModule ExNavigationTypeDefinition
+ * @flow
+ */
+
+import React from 'react';
+
+import type Animated from 'Animated';
+
+import type { EventEmitter } from 'fbemitter';
+
+import type { ExNavigationRoute } from 'ExNavigationRouter';
+import type { NavigationSceneRendererProps } from 'NavigationTypeDefinition';
+
+export type ExNavigationStyles = {
+  applyAnimation: ?((position: Animated.Value, navigationState: Object) => void);
+  sceneAnimations: ?((props: NavigationSceneRendererProps) => Object),
+  navigationBarAnimations: ?((props: NavigationSceneRendererProps) => Object),
+  gestures: ?((props: NavigationSceneRendererProps) => Object),
+}
+
+export type ExNavigationState = {
+  key: string,
+  params: Object,
+  config: ExNavigationConfig,
+};
+
+export type ExNavigationBarConfig = {
+  height?: Animated.Value,
+  visible?: boolean,
+  styles?: ExNavigationStyles,
+  renderLeft?: (state: ExNavigationState, props: NavigationSceneRendererProps) => ?React.Element,
+  renderTitle?: (state: ExNavigationState, props: NavigationSceneRendererProps) => ?React.Element,
+  renderRight?: (state: ExNavigationState, props: NavigationSceneRendererProps) => ?React.Element,
+}
+
+export type ExNavigationConfig = {
+  styles?: ExNavigationStyles,
+  navigationBar?: ExNavigationBarConfig,
+  eventEmitter?: EventEmitter,
+}
+
+export type StackNavigationPropTypes = {
+  id: string,
+  initialRoute: ExNavigationRoute,
+  defaultRouteConfig?: ExNavigationConfig,
+  renderOverlay?: (props: NavigationSceneRendererProps) => ?React.Element,
+}
