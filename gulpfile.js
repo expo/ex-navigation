@@ -39,6 +39,10 @@ const babelOpts = {
         'react-static-container': 'react-static-container',
         'uuid-js': 'uuid-js',
         'warning': 'warning',
+
+        //provides module from rn -- gross
+        'NavigationCardStackStyleInterpolator': 'NavigationCardStackStyleInterpolator',
+        'NavigationCardStackPanResponder': 'NavigationCardStackPanResponder',
       },
     }],
   ],
