@@ -19,7 +19,6 @@ const applyTimingAnimation = (position, navigationState) => {
       easing: Easing.inOut(Easing.linear),
       toValue: navigationState.index,
       duration: 150,
-      useNativeDriver: true,
     }
   ).start();
 };
@@ -31,7 +30,6 @@ const applySpringAnimation = (position, navigationState) => {
       bounciness: 0,
       speed: 12,
       toValue: navigationState.index,
-      useNativeDriver: true,
     }
   ).start();
 };
