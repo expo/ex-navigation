@@ -200,11 +200,11 @@ export function withNavigation(WrappedComponent: ReactClass) {
   return hoistStatics(WithNavigation, WrappedComponent);
 }
 
-export const createFocusableComponent = (WrappedComponent) => {
+export const createFocusableComponent = (WrappedComponent: ReactClass<any>) => {
   class FocusableComponent extends PureComponent {
 
     static childContextTypes = {
-      isFocused: React.PropTypes.boolean,
+      isFocused: React.PropTypes.bool,
     };
 
     getChildContext() {
@@ -277,14 +277,14 @@ export const createFocusableComponent = (WrappedComponent) => {
   return hoistStatics(withNavigation(FocusableComponent), WrappedComponent);
 };
 
-export const createFocusAwareComponent = (WrappedComponent) => {
+export const createFocusAwareComponent = (WrappedComponent: ReactClass<any>) => {
   class FocusAwareComponent extends React.Component {
     static contextTypes = {
-      isFocused: React.PropTypes.boolean,
+      isFocused: React.PropTypes.bool,
     };
 
     static childContextTypes = {
-      isFocused: React.PropTypes.boolean,
+      isFocused: React.PropTypes.bool,
     };
 
     getChildContext() {
