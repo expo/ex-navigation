@@ -1,6 +1,6 @@
 {
   "name": "@exponent/ex-navigation",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "",
   "main": "./lib/ExNavigation.js",
   "scripts": {
