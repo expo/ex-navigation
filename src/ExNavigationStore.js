@@ -14,7 +14,7 @@ import ExNavigationReducer from 'ExNavigationReducer';
 import createExNavigationMiddleware from 'ExNavigationMiddleware';
 
 export type ExNavigatorState = {
-  children: any,
+  routes: any,
   index: number,
   key: string,
   type: string,

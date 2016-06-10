@@ -341,8 +341,8 @@ function barVisibleForSceneIndex(scenes, sceneIndex) {
   if (!sceneForIndex) {
     return true;
   }
-  const { navigationState } = sceneForIndex;
-  const navBarState = navigationState.config.navigationBar;
+  const { route } = sceneForIndex;
+  const navBarState = route.config.navigationBar;
   let visible = false;
   if (navBarState) {
     visible = navBarState.visible;

@@ -36,8 +36,8 @@ class ExNavigationReducer {
     return INITIAL_STATE;
   }
 
-  static [ActionTypes.SET_CURRENT_NAVIGATOR](state, { navigatorUID, parentNavigatorUID, navigatorType, defaultRouteConfig, children, index }) {
-    if (!state.navigators[navigatorUID] && !children) {
+  static [ActionTypes.SET_CURRENT_NAVIGATOR](state, { navigatorUID, parentNavigatorUID, navigatorType, defaultRouteConfig, routes, index }) {
+    if (!state.navigators[navigatorUID] && !routes) {
       return state;
     }
 
@@ -45,9 +45,9 @@ class ExNavigationReducer {
       currentNavigatorUID: navigatorUID,
     };
 
-    if (children) {
+    if (routes) {
       const navigatorState = state.navigators[navigatorUID];
-      children = children.map(child => {
+      routes = routes.map(child => {
         if (child.clone) {
           const newChild = child.clone();
           newChild.config = _.merge({}, defaultRouteConfig, child.config);
@@ -61,7 +61,8 @@ class ExNavigationReducer {
         navigators: {
           ...state.navigators,
           [navigatorUID]: {
-            ...NavigationStateUtils.set(navigatorState, navigatorUID, children, index),
+            routes: routes,
+            index: index,
             ...(parentNavigatorUID ? { parentNavigatorUID } : null),
             defaultRouteConfig,
             type: navigatorType,
@@ -89,7 +90,7 @@ class ExNavigationReducer {
 
   static [ActionTypes.PUSH](state, { navigatorUID, child }) {
     const navigatorState = state.navigators[navigatorUID] || {
-      children: [],
+      routes: [],
       key: navigatorUID,
       index: 0,
       defaultRouteConfig: {},
@@ -122,9 +123,9 @@ class ExNavigationReducer {
     return _updateNavigator(state, navigatorUID, NavigationStateUtils.pop(navigatorState));
   }
 
-  static [ActionTypes.IMMEDIATELY_RESET_STACK](state, { navigatorUID, children, index }) {
+  static [ActionTypes.IMMEDIATELY_RESET_STACK](state, { navigatorUID, routes, index }) {
     const navigatorState = state.navigators[navigatorUID] || {
-      children: [],
+      routes: [],
       index: 0,
       key: navigatorUID,
       defaultRouteConfig: {},
@@ -133,7 +134,7 @@ class ExNavigationReducer {
 
     const defaultRouteConfig = navigatorState.defaultRouteConfig;
 
-    const newChildren = children.map(child => {
+    const newChildren = routes.map(child => {
       const newChild = child.clone();
       newChild.config = _.merge({}, defaultRouteConfig, child.config);
       return newChild;
@@ -156,22 +157,22 @@ class ExNavigationReducer {
     invariant(state.navigators[navigatorUID].type === 'tab', 'Navigator is not tab navigator.');
 
     const newNavigatorState = { ...state.navigators[navigatorUID] };
-    const selectedTab = newNavigatorState.children[newNavigatorState.index];
+    const selectedTab = newNavigatorState.routes[newNavigatorState.index];
 
     if (tab.key === selectedTab.key) { // haven't changed tabs
       return state;
     }
 
     let tabIndex = NavigationStateUtils.indexOf(newNavigatorState, tab.key);
-    if (tabIndex !== null) {
-      const oldTab = newNavigatorState.children[tabIndex];
-      newNavigatorState.children.splice(tabIndex, 1);
-      newNavigatorState.children.push(oldTab);
+    if (tabIndex !== -1) {
+      const oldTab = newNavigatorState.routes[tabIndex];
+      newNavigatorState.routes.splice(tabIndex, 1);
+      newNavigatorState.routes.push(oldTab);
     } else {
-      newNavigatorState.children.push(tab);
+      newNavigatorState.routes.push(tab);
     }
 
-    newNavigatorState.index = newNavigatorState.children.length - 1;
+    newNavigatorState.index = newNavigatorState.routes.length - 1;
 
     return {
       ..._updateNavigator(state, navigatorUID, newNavigatorState),

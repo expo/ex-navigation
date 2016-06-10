@@ -41,7 +41,7 @@ export class ExNavigationTabContext extends ExNavigatorContext {
 
   setNavigatorUIDForCurrentTab(navigatorUID: string) {
     const navigatorState = this._getNavigatorState();
-    const currentTab = navigatorState.children[navigatorState.index];
+    const currentTab = navigatorState.routes[navigatorState.index];
     this._navigatorTabMap[currentTab.key] = navigatorUID;
   }
 
@@ -136,7 +136,7 @@ class ExNavigationTab extends PureComponent<any, Props, State> {
     }
 
     const tabBarProps = {
-      selectedTab: navigationState.children[navigationState.index].key,
+      selectedTab: navigationState.routes[navigationState.index].key,
       items: this.state.tabItems,
     };
 
@@ -171,7 +171,7 @@ class ExNavigationTab extends PureComponent<any, Props, State> {
     }
 
     const navState = this._getNavigationState();
-    const selectedChild = navState.children[navState.index];
+    const selectedChild = navState.routes[navState.index];
 
     const isSelected = tabItem.id === selectedChild.key;
 
@@ -229,7 +229,7 @@ class ExNavigationTab extends PureComponent<any, Props, State> {
     // if it exists.
     if (prevProps.navigationState !== this.props.navigationState) {
       const navigationState = this.props.navigationState;
-      const currentTabKey = navigationState.children[navigationState.index].key;
+      const currentTabKey = navigationState.routes[navigationState.index].key;
       const navigatorUIDForTabKey = this._getNavigatorContext().getNavigatorUIDForTabKey(currentTabKey);
       if (navigatorUIDForTabKey) {
         this.props.navigation.dispatch(
@@ -241,8 +241,8 @@ class ExNavigationTab extends PureComponent<any, Props, State> {
 
   _updateRenderedTabKeys(props, currentRenderedTabKeys) {
     const navState = this._getNavigationState(props);
-    const currentTabItems = navState.children.map(c => c.key);
-    const selectedChild = navState.children[navState.index];
+    const currentTabItems = navState.routes.map(c => c.key);
+    const selectedChild = navState.routes[navState.index];
 
     return [
       ..._.uniq(_.without([...currentRenderedTabKeys, ...currentTabItems], selectedChild.key)),

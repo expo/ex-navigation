@@ -10,14 +10,14 @@ export default class ExNavigationActions {
     return { type: ActionTypes.INITIALIZE };
   }
 
-  static setCurrentNavigator(navigatorUID, parentNavigatorUID, navigatorType, defaultRouteConfig, children, index = 0) {
+  static setCurrentNavigator(navigatorUID, parentNavigatorUID, navigatorType, defaultRouteConfig, routes, index = 0) {
     return {
       type: ActionTypes.SET_CURRENT_NAVIGATOR,
       navigatorUID,
       parentNavigatorUID,
       navigatorType,
       defaultRouteConfig,
-      children,
+      routes,
       index,
     };
   }
@@ -44,11 +44,11 @@ export default class ExNavigationActions {
     };
   }
 
-  static immediatelyResetStack(navigatorUID, children, index) {
+  static immediatelyResetStack(navigatorUID, routes, index) {
     return {
       type: ActionTypes.IMMEDIATELY_RESET_STACK,
       navigatorUID,
-      children,
+      routes,
       index,
     };
   }

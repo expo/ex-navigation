@@ -37,7 +37,7 @@ export default (navigationStateKey) => ([
       const navigatorState = navState.navigators[navigatorUID];
 
       const currentIndex = navigatorState.index;
-      const currentRouteAtIndex = navigatorState.children[currentIndex];
+      const currentRouteAtIndex = navigatorState.routes[currentIndex];
 
       // Check for equal params -- if it's the same, don't update the state (avoids unnecessary component updates)
       if (_.isEqual(newParams, currentRouteAtIndex.params)) {

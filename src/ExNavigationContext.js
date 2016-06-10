@@ -85,7 +85,7 @@ export default class NavigationContext {
     if (!currentNavigator) {
       return null;
     }
-    return currentNavigator.children[currentNavigator.index];
+    return currentNavigator.routes[currentNavigator.index];
   }
 
   registerNavigatorContext(navigatorUID: string, navigatorContext: ExNavigatorContext) {
@@ -143,8 +143,8 @@ export default class NavigationContext {
             Actions.pop(uid)
           );
         },
-        immediatelyResetStack: (children, index) => {
-          const mappedChildren = children.map((route, i) => {
+        immediatelyResetStack: (routes, index) => {
+          const mappedChildren = routes.map((route, i) => {
             invariant(route !== null && route.key, `Route at index ${i} is null or malformed.`);
             return route;
           });

@@ -120,7 +120,7 @@ export class ExNavigationStackContext extends ExNavigatorContext {
     if (!navigatorState) {
       throw new Error('Navigation state for this navigator does not exist.');
     }
-    return navigatorState.children[navigatorState.index];
+    return navigatorState.routes[navigatorState.index];
   }
 
   getCurrentIndex() {
@@ -145,11 +145,11 @@ export class ExNavigationStackContext extends ExNavigatorContext {
     };
   }
 
-  immediatelyResetStack(children: Array<ExNavigationRoute>, index: number = 0) {
+  immediatelyResetStack(routes: Array<ExNavigationRoute>, index: number = 0) {
     this.componentInstance._useAnimation = false;
 
     this.navigation.performAction(({ stacks }) => {
-      stacks(this.navigatorUID).immediatelyResetStack(children, index);
+      stacks(this.navigatorUID).immediatelyResetStack(routes, index);
     });
 
     requestAnimationFrame(() => {
@@ -275,7 +275,7 @@ class ExNavigationStack extends PureComponent<any, Props, State> {
     if (this.props.navigationState) {
       stack = [
         ...routes,
-        ...this.props.navigationState.children,
+        ...this.props.navigationState.routes,
       ];
     }
 
@@ -332,7 +332,7 @@ class ExNavigationStack extends PureComponent<any, Props, State> {
       return null;
     }
 
-    const latestRoute = navigationState.children[navigationState.children.length - 1];
+    const latestRoute = navigationState.routes[navigationState.routes.length - 1];
     const latestRouteConfig = latestRoute.config;
     const { applyAnimation } = latestRouteConfig.styles || {};
 
@@ -394,7 +394,7 @@ class ExNavigationStack extends PureComponent<any, Props, State> {
   };
 
   _renderLeftComponentForHeader = (props) => { //eslint-disable-line react/display-name
-    const { route } = props;
+    const { scene: { route } } = props;
     const routeConfig = route.config;
     if (typeof routeConfig.navigationBar.renderLeft === 'function') {
       return routeConfig.navigationBar.renderLeft(route, props);
@@ -403,7 +403,7 @@ class ExNavigationStack extends PureComponent<any, Props, State> {
   };
 
   _renderTitleComponentForHeader = (props) => { //eslint-disable-line react/display-name
-    const { route } = props;
+    const { scene: { route } } = props;
     const routeConfig = route.config;
     if (typeof routeConfig.navigationBar.renderTitle === 'function') {
       return routeConfig.navigationBar.renderTitle(route, props);
@@ -412,7 +412,7 @@ class ExNavigationStack extends PureComponent<any, Props, State> {
   };
 
   _renderRightComponentForHeader = (props) => {
-    const { route } = props;
+    const { scene: { route } } = props;
     const routeConfig = route.config;
     return routeConfig.navigationBar.renderRight && routeConfig.navigationBar.renderRight(route, props);
   };
@@ -425,12 +425,12 @@ class ExNavigationStack extends PureComponent<any, Props, State> {
     const { sceneAnimations, gestures } = latestRouteConfig.styles || {};
 
     const scene: any = props.scene;
-    const routeForScene = scene.navigationState;
+    const routeForScene = scene.route;
 
     return (
       <NavigationItem
         {...props}
-        key={props.scene.navigationState.key}
+        key={props.scene.key}
         route={routeForScene}
         sceneAnimations={sceneAnimations}
         gestures={gestures}
@@ -478,7 +478,7 @@ class ExNavigationStack extends PureComponent<any, Props, State> {
 
   _getRouteAtIndex(scenes: Array<NavigationScene>, index: number): ExNavigationRoute {
     const scene: any = scenes[index];
-    const latestRoute: ExNavigationState = scene.navigationState;
+    const latestRoute: ExNavigationState = scene.route;
     return latestRoute;
   }
 

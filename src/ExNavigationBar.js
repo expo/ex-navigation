@@ -141,7 +141,6 @@ export default class ExNavigationBar extends PureComponent {
     const scenesProps = scenes.map(scene => {
       const props = extractSceneRendererProps(this.props);
       props.scene = scene;
-      props.route = scene.navigationState;
       return props;
     });
 
