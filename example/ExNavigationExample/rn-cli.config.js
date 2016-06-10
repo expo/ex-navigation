@@ -10,8 +10,7 @@ const blacklist = require('react-native/packager/blacklist');
 module.exports = {
   getBlacklistRE(platform) {
     return blacklist(platform, [
-      /ex\-navigation\/src\/(.*)/,
-      /ex\-navigation\/__internal__\/(.*)/,
+      /ex\-navigation\/(src|vendor|__internal__)\/(.*)/,
     ]);
   },
 };

@@ -6,7 +6,6 @@
 import React from 'react';
 import {
   Animated,
-  NavigationExperimental,
   Platform,
   StyleSheet,
   View,
@@ -30,7 +29,7 @@ import * as Utils from 'ExNavigationUtils';
 
 const {
   AnimatedView: NavigationAnimatedView,
-} = NavigationExperimental;
+} = require('VendoredNavigationExperimental');
 
 import type { NavigationSceneRendererProps, NavigationScene } from 'NavigationTypeDefinition';
 import type { ExNavigationRoute } from 'ExNavigationRouter';

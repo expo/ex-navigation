@@ -4,9 +4,9 @@
 
 import _ from 'lodash';
 
-import {
-  NavigationExperimental,
-} from 'react-native';
+// import {
+//   NavigationExperimental,
+// } from 'react-native';
 
 import invariant from 'invariant';
 
@@ -14,7 +14,7 @@ import ActionTypes from 'ExNavigationActionTypes';
 
 const {
   StateUtils: NavigationStateUtils,
-} = NavigationExperimental;
+} = require('VendoredNavigationExperimental');
 
 const INITIAL_STATE = {
   navigators: {},

@@ -7,8 +7,10 @@ import {
   Easing,
 } from 'react-native';
 
-import NavigationCardStackStyleInterpolator from 'NavigationCardStackStyleInterpolator';
-import NavigationCardStackPanResponder from 'NavigationCardStackPanResponder';
+const {
+  CardStackStyleInterpolator,
+  CardStackPanResponder,
+} = require('VendoredNavigationExperimental').Card;
 
 import type { ExNavigationStyles } from 'ExNavigationTypeDefinition';
 
@@ -40,7 +42,7 @@ const applyAnimationNoop = (position, navigationState) => {
 
 export const FloatHorizontal: ExNavigationStyles = {
   applyAnimation: applySpringAnimation,
-  sceneAnimations: NavigationCardStackStyleInterpolator.forHorizontal,
+  sceneAnimations: CardStackStyleInterpolator.forHorizontal,
   navigationBarAnimations: {
     forContainer: (props, delta) => {
       const {
@@ -132,12 +134,12 @@ export const FloatHorizontal: ExNavigationStyles = {
       };
     },
   },
-  gestures: NavigationCardStackPanResponder.forHorizontal,
+  gestures: CardStackPanResponder.forHorizontal,
 };
 
 export const FloatVertical: ExNavigationStyles = {
   applyAnimation: applySpringAnimation,
-  sceneAnimations: NavigationCardStackStyleInterpolator.forVertical,
+  sceneAnimations: CardStackStyleInterpolator.forVertical,
   navigationBarAnimations: {
     forContainer: (props, delta) => {
       const {
@@ -233,7 +235,7 @@ export const FloatVertical: ExNavigationStyles = {
       };
     },
   },
-  gestures: NavigationCardStackPanResponder.forVertical,
+  gestures: CardStackPanResponder.forVertical,
 };
 
 export const Fade: ExNavigationStyles = {

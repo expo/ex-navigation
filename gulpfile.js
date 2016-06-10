@@ -10,7 +10,7 @@ const runSequence = require('run-sequence');
 
 const paths = {
   lib: 'lib',
-  src: 'src/**/*.js',
+  src: ['src/**/*.js', 'vendor/**/*.js'],
 };
 
 const babelOpts = {
@@ -19,10 +19,14 @@ const babelOpts = {
     babelPluginDEV,
     [babelPluginModules, {
       map: {
+        'clamp': 'clamp',
         'core-decorators': 'core-decorators',
         'debug': 'debug',
         'fbemitter': 'fbemitter',
         'fbjs/lib/shallowEqual': 'fbjs/lib/shallowEqual',
+        'fbjs/lib/emptyFunction': 'fbjs/lib/emptyFunction',
+        'fbjs/lib/invariant': 'fbjs/lib/invariant',
+        './assets/back-icon.png': './back-icon.png',
         'hoist-non-react-statics': 'hoist-non-react-statics',
         'invariant': 'invariant',
         'lodash': 'lodash',
@@ -34,16 +38,9 @@ const babelOpts = {
         'redux-batched-actions': 'redux-batched-actions',
         'react-redux': 'react-redux',
         'reselect': 'reselect',
-        'react-pure-render': 'react-pure-render',
-        'react-pure-render/component': 'react-pure-render/component',
-        'react-pure-render/shallowEqual': 'react-pure-render/shallowEqual',
         'react-static-container': 'react-static-container',
         'uuid-js': 'uuid-js',
         'warning': 'warning',
-
-        //provides module from rn -- gross
-        'NavigationCardStackStyleInterpolator': 'NavigationCardStackStyleInterpolator',
-        'NavigationCardStackPanResponder': 'NavigationCardStackPanResponder',
       },
     }],
   ],
@@ -64,6 +61,13 @@ gulp.task('modules', function() {
     .pipe(gulp.dest(paths.lib));
 });
 
+gulp.task('assets', function() {
+  return gulp
+    .src('vendor/**/*.png')
+    .pipe(flatten())
+    .pipe(gulp.dest(paths.lib));
+});
+
 gulp.task('watch', function() {
   return gulp
     .src(paths.src)
@@ -74,5 +78,5 @@ gulp.task('watch', function() {
 });
 
 gulp.task('default', function(cb) {
-  runSequence('clean', ['modules'], cb);
+  runSequence('clean', ['modules', 'assets'], cb);
 });
