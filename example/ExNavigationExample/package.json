@@ -6,8 +6,8 @@
     "start": "node node_modules/react-native/local-cli/cli.js start --root ../../ --transformer ./transformer"
   },
   "dependencies": {
-    "react": "15.0.2",
-    "react-native": "^0.26.3"
+    "react": "^15.1.0",
+    "react-native": "git://github.com/facebook/react-native.git#faa67dbfeb4d8c107cfac3a20ecb9638296f9df1"
   },
   "devDependencies": {
     "babel-plugin-module-alias": "^1.4.0"
