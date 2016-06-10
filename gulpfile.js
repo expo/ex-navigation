@@ -22,6 +22,7 @@ const babelOpts = {
         'core-decorators': 'core-decorators',
         'debug': 'debug',
         'fbemitter': 'fbemitter',
+        'fbjs/lib/shallowEqual': 'fbjs/lib/shallowEqual',
         'hoist-non-react-statics': 'hoist-non-react-statics',
         'invariant': 'invariant',
         'lodash': 'lodash',

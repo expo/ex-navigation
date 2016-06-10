@@ -5,13 +5,13 @@
 
 import React, { PropTypes } from 'react';
 
-import PureComponent from 'react-pure-render/component';
 import UUID from 'uuid-js';
 
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import hoistStatics from 'hoist-non-react-statics';
-import shallowEqual from 'react-pure-render/shallowEqual';
+import PureComponent from 'PureComponent';
+import shallowEqual from 'fbjs/lib/shallowEqual';
 
 import ExNavigationContext from 'ExNavigationContext';
 

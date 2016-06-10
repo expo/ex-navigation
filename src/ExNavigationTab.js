@@ -10,7 +10,7 @@ import {
   StyleSheet,
   View,
 } from 'react-native';
-import PureComponent from 'react-pure-render/component';
+import PureComponent from 'PureComponent';
 import StaticContainer from 'react-static-container';
 
 import invariant from 'invariant';

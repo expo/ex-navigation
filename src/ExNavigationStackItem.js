@@ -8,7 +8,7 @@ import {
   StyleSheet,
 } from 'react-native';
 
-import PureComponent from 'react-pure-render/component';
+import PureComponent from 'PureComponent';
 
 import * as NavigationStyles from 'ExNavigationStyles';
 

@@ -15,7 +15,7 @@ import {
 import _ from 'lodash';
 import invariant from 'invariant';
 import cloneReferencedElement from 'react-clone-referenced-element';
-import PureComponent from 'react-pure-render/component';
+import PureComponent from 'PureComponent';
 import { debounce } from 'core-decorators';
 
 import Actions from 'ExNavigationActions';

@@ -12,7 +12,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import PureComponent from 'react-pure-render/component';
+import PureComponent from 'PureComponent';
 
 import {
   createNavigatorComponent,
