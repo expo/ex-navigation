@@ -1,6 +1,6 @@
 {
   "name": "@exponent/ex-navigation",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "",
   "main": "./lib/ExNavigation.js",
   "scripts": {
@@ -17,7 +17,7 @@
   "license": "MIT",
   "peerDependencies": {
     "react-native": "^0.27.2",
-    "react": "^15.1.0",
+    "react": "^15.1.0"
   },
   "dependencies": {
     "core-decorators": "^0.12.2",
