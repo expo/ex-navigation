@@ -12,7 +12,7 @@ This will start the packager for react-native:
 
 ```
 git clone git@github.com:exponentjs/ex-navigation.git
-cd ex-navigation
+cd ./ex-navigation
 npm install
 npm run run-example
 ```
