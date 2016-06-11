@@ -15,6 +15,10 @@
   "keywords": [],
   "author": "Adam Miskiewicz <adam@exponentjs.com>",
   "license": "MIT",
+  "peerDependencies": {
+    "react-native": "^0.27.2",
+    "react": "^15.1.0",
+  },
   "dependencies": {
     "core-decorators": "^0.12.2",
     "debug": "^2.2.0",
