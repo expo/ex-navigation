@@ -3,6 +3,7 @@
   "version": "1.2.2",
   "description": "",
   "main": "./lib/ExNavigation.js",
+  "description": "Route-centric navigation libary for React Native.",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "run-example": "gulp && cd example/ExNavigationExample && react-native start --root ../../ --transformer ./transformer",
@@ -12,7 +13,12 @@
   "files": [
     "lib/"
   ],
-  "keywords": [],
+  "keywords": [
+    "react-native",
+    "navigation",
+    "exponent",
+    "react"
+  ],
   "author": "Adam Miskiewicz <adam@exponentjs.com>",
   "license": "MIT",
   "peerDependencies": {
