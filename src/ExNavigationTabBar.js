@@ -41,8 +41,9 @@ export default class ExNavigationTabBar extends React.Component {
       }
 
       let renderIcon;
-      if (this.props.selectedTab === item.id &&
-          typeof item.renderSelectedIcon === 'function') {
+      let isSelected = this.props.selectedTab === item.id;
+
+      if (isSelected && typeof item.renderSelectedIcon === 'function') {
         renderIcon = item.renderSelectedIcon;
       } else {
         renderIcon = item.renderIcon;
@@ -64,7 +65,7 @@ export default class ExNavigationTabBar extends React.Component {
             onPress={item.onPress}
             onLongPress={item.onPress}
             delayPressIn={0}
-            style={[styles.tabItem, item.style]}
+            style={[styles.tabItem, isSelected ? item.selectedStyle : item.style]}
             background={item.nativeFeedbackBackground}>
             {title}
             {icon}
@@ -74,7 +75,7 @@ export default class ExNavigationTabBar extends React.Component {
       } else {
         return (
           <TouchableWithoutFeedback key={index} onPress={item.onPress}>
-            <View style={[styles.tabItem, item.style]}>
+            <View style={[styles.tabItem, isSelected ? item.selectedStyle : item.style]}>
               {title}
               {icon}
               {badge}
