@@ -210,6 +210,7 @@ class TabLandingScreen extends Component {
           initialTab="home">
           <TabItem
             id="home"
+            selectedStyle={styles.selectedTab}
             title="Home Tab">
             <StackNavigation
               id="home"
@@ -218,6 +219,7 @@ class TabLandingScreen extends Component {
           </TabItem>
           <TabItem
             id="other"
+            selectedStyle={styles.selectedTab}
             title="Other Tab">
             <StackNavigation
               id="other"
@@ -262,6 +264,9 @@ const styles = StyleSheet.create({
     fontSize: 20,
     textAlign: 'center',
     margin: 10,
+  },
+  selectedTab: {
+    backgroundColor: '#eee'
   },
   instructions: {
     textAlign: 'center',
