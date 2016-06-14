@@ -22,5 +22,6 @@ Open a new terminal to deploy to the simulator.
 ```
 cd ./example/ExNavigationExample
 react-native run-ios
+react-native run-android
 ```
 
