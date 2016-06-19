@@ -73,25 +73,22 @@ let ROUTE_LISTENER_INDEX = 0;
 type ExNavigationStackInstance = ReactComponent & { _useAnimation: boolean, _routeListeners: { [listenerId: string]: Function } };
 
 export class ExNavigationStackContext extends ExNavigatorContext {
-  navigatorUID: string;
-  navigatorId: string;
   parentNavigatorUID: string;
-  navigation: ExNavigationContext;
   defaultRouteConfig: ExNavigationConfig;
   componentInstance: ExNavigationStackInstance;
   type: string = 'stack';
 
   constructor(
     navigatorUID: string,
-    navigatorId: string,
     parentNavigatorUID: string,
+    navigatorId: string,
     navigation: ExNavigationContext,
     componentInstance: ExNavigationStackInstance,
   ) {
-    super();
+    super(navigatorUID, parentNavigatorUID, navigatorId, navigation);
     this.navigatorUID = navigatorUID;
-    this.navigatorId = navigatorId;
     this.parentNavigatorUID = parentNavigatorUID;
+    this.navigatorId = navigatorId;
     this.navigation = navigation;
     this.componentInstance = componentInstance;
   }
@@ -125,10 +122,6 @@ export class ExNavigationStackContext extends ExNavigatorContext {
       throw new Error('Navigation state for this navigator does not exist.');
     }
     return navigatorState.index;
-  }
-
-  getParentNavigator() {
-    return this.navigation.getNavigatorByUID(this.parentNavigatorUID);
   }
 
   addRouteListener(listener: Function) {
@@ -200,11 +193,6 @@ class ExNavigationStack extends PureComponent<any, Props, State> {
 
   constructor(props: Props, context: Context) {
     super(props, context);
-
-    invariant(
-      props.id,
-      `Every StackNavigation instance must have an id.`,
-    );
 
     this.state = {
       id: props.id,
@@ -338,8 +326,8 @@ class ExNavigationStack extends PureComponent<any, Props, State> {
     this.props.onRegisterNavigatorContext(this.state.navigatorUID,
       new ExNavigationStackContext(
         this.state.navigatorUID,
-        this.state.id,
         this.state.parentNavigatorUID,
+        this.state.id,
         this.props.navigation,
         this,
       )

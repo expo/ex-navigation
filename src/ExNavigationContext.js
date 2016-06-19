@@ -12,14 +12,13 @@ import createNavigationStore, { batchNavigationActions } from 'ExNavigationStore
 import type ExNavigatorContext from 'ExNavigatorContext';
 
 import type {
-  ExNavigationStore,
-  ExNavigationState,
-} from 'ExNavigationStore';
-
-import type {
   ExNavigationRoute,
   ExNavigationRouter,
 } from 'ExNavigationRouter';
+import type {
+  ExNavigationStore,
+  ExNavigationState,
+} from 'ExNavigationStore';
 
 /**
  * Represents
@@ -44,13 +43,12 @@ export default class NavigationContext {
     this._navigatorContexts = {};
 
     this.registerNavigatorContext = this.registerNavigatorContext.bind(this);
-
-    // this._visiblityManager = new ExNavigationVisibilityManager(this);
   }
 
   getNavigator(navigatorId: string): ExNavigatorContext {
     let navigatorContext;
-    Object.values(this._navigatorContexts).forEach((c: ExNavigatorContext) => {
+    const contexts = Object.values(this._navigatorContexts);
+    contexts.forEach((c: ExNavigatorContext) => {
       if (c.navigatorId === navigatorId) {
         if (!navigatorContext) {
           navigatorContext = c;
@@ -72,7 +70,7 @@ export default class NavigationContext {
     return this._navigatorContexts[navigatorUID];
   }
 
-  getCurrentNavigatorUID(): ExNavigatorContext {
+  getCurrentNavigatorUID(): ?string {
     const state = this.navigationState;
     if (state) {
       return state.currentNavigatorUID;

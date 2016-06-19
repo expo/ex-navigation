@@ -32,15 +32,11 @@ export class ExNavigationTabContext extends ExNavigatorContext {
   _navigatorTabMap: Object = {};
   type: string = 'tab';
 
-  constructor(navigatorUID: string, navigatorId: string, navigation: Object) {
-    super();
-    this.navigatorUID = navigatorUID;
-    this.navigatorId = navigatorId;
-    this.navigation = navigation;
-  }
-
   setNavigatorUIDForCurrentTab(navigatorUID: string) {
     const navigatorState = this._getNavigatorState();
+    if (!navigatorState) {
+      return;
+    }
     const currentTab = navigatorState.routes[navigatorState.index];
     this._navigatorTabMap[currentTab.key] = navigatorUID;
   }
@@ -306,6 +302,7 @@ class ExNavigationTab extends PureComponent<any, Props, State> {
       this.state.navigatorUID,
       new ExNavigationTabContext(
         this.state.navigatorUID,
+        this.state.parentNavigatorUID,
         this.state.id,
         this.props.navigation,
       )

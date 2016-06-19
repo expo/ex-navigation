@@ -162,7 +162,6 @@ class NestedNavigationScreen extends Component {
   render() {
     return (
       <StackNavigation
-        id="nested-nav"
         defaultRouteConfig={{
           navigationBar: {
             visible: true,
@@ -187,7 +186,6 @@ class ModalContainer extends Component {
   render() {
     return (
       <StackNavigation
-        id="modal"
         defaultRouteConfig={{
           navigationBar: {
             visible: false,
@@ -206,14 +204,12 @@ class TabLandingScreen extends Component {
     return (
       <View style={styles.container}>
         <TabNavigation
-          id="tab-navigator"
           initialTab="home">
           <TabItem
             id="home"
             selectedStyle={styles.selectedTab}
             title="Home Tab">
             <StackNavigation
-              id="home"
               initialRoute={AppRouter.getRoute('landing')}
             />
           </TabItem>
@@ -222,7 +218,6 @@ class TabLandingScreen extends Component {
             selectedStyle={styles.selectedTab}
             title="Other Tab">
             <StackNavigation
-              id="other"
               initialRoute={AppRouter.getRoute('another', { text: `I'm in a tab!`})}
             />
           </TabItem>
