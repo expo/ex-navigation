@@ -69,7 +69,6 @@ type ExNavigationSceneRendererProps = {
 } & NavigationSceneRendererProps;
 
 let ROUTE_LISTENER_INDEX = 0;
-let STACK_NAVIGATION_ID_INDEX = 0;
 
 type ExNavigationStackInstance = ReactComponent & { _useAnimation: boolean, _routeListeners: { [listenerId: string]: Function } };
 
@@ -202,12 +201,13 @@ class ExNavigationStack extends PureComponent<any, Props, State> {
   constructor(props: Props, context: Context) {
     super(props, context);
 
-    if (!props.id) {
-      STACK_NAVIGATION_ID_INDEX++;
-    }
+    invariant(
+      props.id,
+      `Every StackNavigation instance must have an id.`,
+    );
 
     this.state = {
-      id: props.id || `__stack_navigation_${STACK_NAVIGATION_ID_INDEX}`,
+      id: props.id,
       navigatorUID: props.navigatorUID,
       parentNavigatorUID: context.parentNavigatorUID,
       navigatingFromIndex: -1,
