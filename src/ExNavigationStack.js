@@ -38,10 +38,6 @@ import type { ExNavigationConfig, ExNavigationState } from 'ExNavigationTypeDefi
 
 const DEFAULT_ROUTE_CONFIG: ExNavigationConfig = {
   styles: Platform.OS !== 'android' ? NavigationStyles.FloatHorizontal : NavigationStyles.Fade,
-  navigationBar: {
-    height: new Animated.Value(0),
-    visible: false,
-  },
 };
 
 type Props = {
@@ -177,9 +173,6 @@ class ExNavigationStack extends PureComponent<any, Props, State> {
 
   static navigation: ExNavigationConfig = {
     __isNavigator: true,
-    navigationBar: {
-      visible: false,
-    },
   };
 
   static defaultProps = {
@@ -379,12 +372,15 @@ class ExNavigationStack extends PureComponent<any, Props, State> {
 
     // Get HeaderComponent from props/context
     const HeaderComponent = this.props.headerComponent || this.context.headerComponent || NavigationBar;
+    const navigationBarIsVisible =
+      latestRouteConfig.navigationBar &&
+      latestRouteConfig.navigationBar.visible !== false;
 
     return (
       <HeaderComponent
         {...props}
         navigatorUID={this.state.navigatorUID}
-        visible={latestRouteConfig.navigationBar && latestRouteConfig.navigationBar.visible}
+        visible={navigationBarIsVisible}
         interpolator={interpolator}
         renderLeftComponent={this._renderLeftComponentForHeader}
         renderTitleComponent={this._renderTitleComponentForHeader}
@@ -455,7 +451,7 @@ class ExNavigationStack extends PureComponent<any, Props, State> {
       styles.routeInnerContainer,
     ];
 
-    if (routeConfig.navigationBar && routeConfig.navigationBar.visible) {
+    if (routeConfig.navigationBar && routeConfig.navigationBar.visible !== false) {
       style = [...style, styles.withNavigationBar];
     } else {
       style = [...style, styles.withoutNavigationBar];
