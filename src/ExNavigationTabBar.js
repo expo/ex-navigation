@@ -40,16 +40,10 @@ export default class ExNavigationTabBar extends React.Component {
         title = <Text>{item.title}</Text>;
       }
 
-      let renderIcon;
+      let { renderIcon } = item;
       let isSelected = this.props.selectedTab === item.id;
 
-      if (isSelected && typeof item.renderSelectedIcon === 'function') {
-        renderIcon = item.renderSelectedIcon;
-      } else {
-        renderIcon = item.renderIcon;
-      }
-
-      const icon = renderIcon && renderIcon();
+      const icon = renderIcon && renderIcon(isSelected);
 
       let badge = null;
       if (item.badgeText) {

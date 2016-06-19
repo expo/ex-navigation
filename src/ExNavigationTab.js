@@ -59,7 +59,6 @@ export class ExNavigationTabContext extends ExNavigatorContext {
 type TabItem = {
   id: string,
   renderIcon?: Function,
-  renderSelectedIcon?: Function,
   tabContent?: React.Element,
 };
 
