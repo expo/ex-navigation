@@ -1,6 +1,5 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import {
-  AppRegistry,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -25,10 +24,8 @@ const AppRouter = createRouter(() => ({
   tabLanding: () => TabLandingScreen,
 }));
 
-@AppRouter.makeRoute()
-@withNavigation
 class LandingScreen extends Component {
-  static navigation = {
+  static route = {
     navigationBar: {
       title: 'Landing',
     },
@@ -73,13 +70,12 @@ class LandingScreen extends Component {
   }
 }
 
-@AppRouter.makeRoute(
-  /* mapParamsToProps */
-  ({ text }) => ({ text })
-)
-@withNavigation
 class AnotherRouteScreen extends Component {
-  static navigation = {
+  static propTypes = {
+    text: PropTypes.string.isRequired,
+  };
+
+  static route = {
     navigationBar: {
       title: 'Another Route',
     },
@@ -90,9 +86,7 @@ class AnotherRouteScreen extends Component {
   }
 
   componentDidMount() {
-    const ee = this.props.navigator
-      .getCurrentRoute()
-      .getEventEmitter();
+    const ee = this.props.route.getEventEmitter();
 
     this.listener = ee.addListener('hello', () => {
       this.setState({
@@ -150,10 +144,9 @@ class AnotherRouteScreen extends Component {
   }
 }
 
-@AppRouter.makeRoute()
 @withNavigation
 class NestedNavigationScreen extends Component {
-  static navigation = {
+  static route = {
     navigationBar: {
       visible: false,
     },
@@ -173,9 +166,11 @@ class NestedNavigationScreen extends Component {
   }
 }
 
-@AppRouter.makeRoute(({ initialRoute }) => ({ initialRoute }))
-@withNavigation
 class ModalContainer extends Component {
+  static propTypes = {
+    initialRoute: PropTypes.string.isRequired,
+  };
+
   static navigation = {
     styles: NavigationStyles.FloatVertical,
     navigationBar: {
@@ -197,8 +192,6 @@ class ModalContainer extends Component {
   }
 }
 
-@AppRouter.makeRoute()
-@withNavigation
 class TabLandingScreen extends Component {
   render() {
     return (
@@ -261,7 +254,7 @@ const styles = StyleSheet.create({
     margin: 10,
   },
   selectedTab: {
-    backgroundColor: '#eee'
+    backgroundColor: '#eee',
   },
   instructions: {
     textAlign: 'center',

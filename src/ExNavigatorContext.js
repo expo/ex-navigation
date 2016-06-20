@@ -9,29 +9,29 @@ export default class ExNavigatorContext {
   navigatorUID: string;
   parentNavigatorUID: string;
   navigatorId: string;
-  navigation: ExNavigationContext;
+  navigationContext: ExNavigationContext;
   type: string;
 
   constructor(
     navigatorUID: string,
     parentNavigatorUID: string,
     navigatorId: string,
-    navigation: Object
+    navigationContext: Object
   ) {
     this.navigatorUID = navigatorUID;
     this.navigatorId = navigatorId;
-    this.navigation = navigation;
+    this.navigationContext = navigationContext;
   }
 
   getParentNavigator() {
-    return this.navigation.getNavigatorByUID(this.parentNavigatorUID);
+    return this.navigationContext.getNavigatorByUID(this.parentNavigatorUID);
   }
 
   isFocused() {
-    return this.navigation.getCurrentNavigatorUID() === this.navigatorUID;
+    return this.navigationContext.getCurrentNavigatorUID() === this.navigatorUID;
   }
 
   _getNavigatorState() {
-    return this.navigation.navigationState && this.navigation.navigationState.navigators[this.navigatorUID];
+    return this.navigationContext.navigationState && this.navigationContext.navigationState.navigators[this.navigatorUID];
   }
 }

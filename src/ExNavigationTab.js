@@ -27,7 +27,6 @@ import type ExNavigationContext from 'ExNavigationContext';
 export class ExNavigationTabContext extends ExNavigatorContext {
   navigatorUID: string;
   navigatorId: string;
-  navigation: ExNavigationContext;
   dispatch: Function;
   _navigatorTabMap: Object = {};
   type: string = 'tab';
@@ -46,7 +45,7 @@ export class ExNavigationTabContext extends ExNavigatorContext {
   }
 
   jumpToTab(tabKey: string) {
-    this.navigation.performAction(({ tabs }) => {
+    this.navigationContext.performAction(({ tabs }) => {
       tabs(this.navigatorUID).jumpToTab(tabKey);
     });
   }
@@ -81,7 +80,7 @@ class ExNavigationTab extends PureComponent<any, Props, State> {
   props: Props;
   state: State;
 
-  static navigation = {
+  static route = {
     __isNavigator: true,
   };
 

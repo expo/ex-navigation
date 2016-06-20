@@ -82,28 +82,28 @@ export class ExNavigationStackContext extends ExNavigatorContext {
     navigatorUID: string,
     parentNavigatorUID: string,
     navigatorId: string,
-    navigation: ExNavigationContext,
+    navigationContext: ExNavigationContext,
     componentInstance: ExNavigationStackInstance,
   ) {
-    super(navigatorUID, parentNavigatorUID, navigatorId, navigation);
+    super(navigatorUID, parentNavigatorUID, navigatorId, navigationContext);
     this.navigatorUID = navigatorUID;
     this.parentNavigatorUID = parentNavigatorUID;
     this.navigatorId = navigatorId;
-    this.navigation = navigation;
+    this.navigationContext = navigationContext;
     this.componentInstance = componentInstance;
   }
 
   @debounce(500, true)
   push(route: ExNavigationRoute) {
     invariant(route !== null && route.key, 'Route is null or malformed.');
-    this.navigation.performAction(({ stacks }) => {
+    this.navigationContext.performAction(({ stacks }) => {
       stacks(this.navigatorUID).push(route);
     });
   }
 
   @debounce(500, true)
   pop() {
-    this.navigation.performAction(({ stacks }) => {
+    this.navigationContext.performAction(({ stacks }) => {
       stacks(this.navigatorUID).pop();
     });
   }
@@ -137,7 +137,7 @@ export class ExNavigationStackContext extends ExNavigatorContext {
   immediatelyResetStack(routes: Array<ExNavigationRoute>, index: number = 0) {
     this.componentInstance._useAnimation = false;
 
-    this.navigation.performAction(({ stacks }) => {
+    this.navigationContext.performAction(({ stacks }) => {
       stacks(this.navigatorUID).immediatelyResetStack(routes, index);
     });
 
@@ -147,7 +147,7 @@ export class ExNavigationStackContext extends ExNavigatorContext {
   }
 
   updateCurrentRouteParams(newParams: Object) {
-    this.navigation.performAction(({ stacks }) => {
+    this.navigationContext.performAction(({ stacks }) => {
       stacks(this.navigatorUID).updateCurrentRouteParams(newParams);
     });
   }
@@ -163,7 +163,7 @@ class ExNavigationStack extends PureComponent<any, Props, State> {
   };
   _useAnimation: boolean;
 
-  static navigation: ExNavigationConfig = {
+  static route: ExNavigationConfig = {
     __isNavigator: true,
   };
 
@@ -470,7 +470,7 @@ class ExNavigationStack extends PureComponent<any, Props, State> {
     if (!props) {
       props = this.props;
     }
-    return _.merge({}, DEFAULT_ROUTE_CONFIG, this.props.defaultRouteConfig);
+    return _.merge({}, DEFAULT_ROUTE_CONFIG, props.defaultRouteConfig);
   }
 
   _getNavigatorContext(): ExNavigationStackContext {

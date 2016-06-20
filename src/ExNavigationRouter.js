@@ -12,7 +12,7 @@ import invariant from 'invariant';
 import warning from 'warning';
 import _ from 'lodash';
 
-import { createFocusableComponent } from 'ExNavigationComponents';
+import { withNavigation, createFocusableComponent } from 'ExNavigationComponents';
 
 import type {
   ExNavigationState,
@@ -80,27 +80,6 @@ export class ExNavigationRouter {
     this._routesCreated = false;
   }
 
-  makeRoute(mapParamsToProps: Function, mapConfigToProps: Function, extraProps: Object = {}) {
-    if (!mapParamsToProps) {
-      mapParamsToProps = (params) => ({ ...params }); // default, pass all params as props
-    }
-    if (!mapConfigToProps) {
-      mapConfigToProps = (config) => ({}); // default, don't pass any config
-    }
-
-    return (RouteComponent: ReactClass): ReactClass => {
-      const FocusAwareRouteComponent = createFocusableComponent(RouteComponent);
-      FocusAwareRouteComponent.__routeDefinition = ({ params, config }): React.Element => (
-        <FocusAwareRouteComponent
-          {...mapParamsToProps(params)}
-          {...mapConfigToProps(config)}
-          {...extraProps}
-        />
-      );
-      return FocusAwareRouteComponent;
-    };
-  }
-
   getRoute(routeName: string, routeParams:Object = {}): ExNavigationRoute {
     this._ensureRoute(routeName);
 
@@ -119,23 +98,29 @@ export class ExNavigationRouter {
     return this._createRoute(route.routeName, this._routes[route.routeName], { ...route.params, ...newParams });
   }
 
-  _createRoute(routeName: string, routeDefinitionThunk, routeParams: Object = {}): ExNavigationRoute {
-    let renderRoute;
+  _makeRoute(RouteComponent: ReactClass) {
+    const FocusAwareRouteComponent = createFocusableComponent(
+      withNavigation(RouteComponent)
+    );
+    return ({ params, config }): React.Element => (
+      <FocusAwareRouteComponent
+        {...(config && config.defaultParams ? config.defaultParams : {})}
+        {...params}
+      />
+    );
+  }
 
+  _createRoute(routeName: string, routeDefinitionThunk, routeParams: Object = {}): ExNavigationRoute {
     const routeDefinitionOrComponent = routeDefinitionThunk();
 
     let routeDefinition;
-    if (routeDefinitionOrComponent.__routeDefinition) {
-      routeDefinition = routeDefinitionOrComponent.__routeDefinition;
-    } else {
-      routeDefinition = routeDefinitionOrComponent;
-    }
-
-    if (typeof routeDefinition === 'function') {
-      // no extra definition, just render the component
+    let renderRoute;
+    if (typeof routeDefinitionOrComponent === 'function') {
+      routeDefinition = this._makeRoute(routeDefinitionOrComponent);
       renderRoute = routeDefinition;
-    } else if (typeof routeDefinition.render === 'function') {
-      renderRoute = routeDefinition.render;
+    } else if (typeof routeDefinitionOrComponent.render === 'function') {
+      routeDefinition = routeDefinitionOrComponent;
+      renderRoute = routeDefinitionOrComponent.render;
     } else {
       throw new Error(
         'Route definition must either be a function that returns a ReactElement, or an object with a `render` function.'
@@ -175,8 +160,9 @@ export class ExNavigationRouter {
     const routeElement: React.Element = route.render();
     const ComponentClass = routeElement.type;
 
-    if (ComponentClass.navigation) {
-      route.config = _.merge({}, route.config, ComponentClass.navigation);
+    const componentRouteConfig = ComponentClass.route;
+    if (componentRouteConfig) {
+      route.config = _.merge({}, route.config, componentRouteConfig);
     }
 
     return route;
