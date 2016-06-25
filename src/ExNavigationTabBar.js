@@ -14,14 +14,16 @@ import {
 
 import TabBadge from 'ExNavigationBadge';
 
-const TAB_BAR_HEIGHT = 56;
+const DEFAULT_TAB_BAR_HEIGHT = 56;
 
 export default class ExNavigationTabBar extends React.Component {
-  static height = TAB_BAR_HEIGHT;
+  static defaultHeight = DEFAULT_TAB_BAR_HEIGHT;
 
   render() {
+    const height = this.props.height || DEFAULT_TAB_BAR_HEIGHT;
+
     return (
-      <View style={styles.container}>
+      <View style={[styles.container, {height}, this.props.style]}>
         <View style={styles.itemContainer}>
           {this.renderTabItems()}
         </View>
@@ -87,7 +89,6 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     right: 0,
-    height: TAB_BAR_HEIGHT,
     backgroundColor: '#fefefe',
     borderTopColor: '#b2b2b2',
     borderTopWidth: StyleSheet.hairlineWidth,

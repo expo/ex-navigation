@@ -62,6 +62,9 @@ type Props = {
   navigatorUID: string,
   initialTab: string,
   renderTabBar: (props: Object) => React.Element,
+  tabBarHeight?: number,
+  tabBarColor?: string,
+  tabBarStyle?: any,
   children: Array<React.Element>,
   navigation: ExNavigationContext,
   onRegisterNavigatorContext: (navigatorUID: string, navigatorContext: ExNavigationTabContext) => void,
@@ -132,11 +135,17 @@ class ExNavigationTab extends PureComponent<any, Props, State> {
     const tabBarProps = {
       selectedTab: navigationState.routes[navigationState.index].key,
       items: this.state.tabItems,
+      height: this.props.tabBarHeight,
+      style: [
+        this.props.tabBarStyle,
+        this.props.tabBarColor ? {backgroundColor: this.props.tabBarColor} : {},
+      ],
     };
 
     const tabBar = this.props.renderTabBar(tabBarProps);
     const TabBarComponent = tabBar.type;
-    const tabBarHeight = TabBarComponent.height || 0; // Get the tab bar's height from a static property on the class.
+    // Get the tab bar's height from a static property on the class
+    const tabBarHeight =  this.props.tabBarHeight || TabBarComponent.defaultHeight || 0;
 
     return (
       <View style={styles.container}>
@@ -166,7 +175,6 @@ class ExNavigationTab extends PureComponent<any, Props, State> {
 
     const navState = this._getNavigationState();
     const selectedChild = navState.routes[navState.index];
-
     const isSelected = tabItem.id === selectedChild.key;
 
     return (
