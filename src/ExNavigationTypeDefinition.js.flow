@@ -26,13 +26,20 @@ export type ExNavigationState = {
 };
 
 export type ExNavigationBarConfig = {
-  height?: Animated.Value,
   visible?: boolean,
   styles?: ExNavigationStyles,
   title?: string | Function,
+  tintColor?: string,
+  backgroundColor?: string,
+  height?: number,
+  statusBarHeight?: number,
   renderLeft?: (state: ExNavigationState, props: NavigationSceneRendererProps) => ?React.Element<{}>,
   renderTitle?: (state: ExNavigationState, props: NavigationSceneRendererProps) => ?React.Element<{}>,
   renderRight?: (state: ExNavigationState, props: NavigationSceneRendererProps) => ?React.Element<{}>,
+}
+
+export type ExNavigationDrawerConfig = {
+  open?: boolean,
 }
 
 export type ExNavigationConfig = {

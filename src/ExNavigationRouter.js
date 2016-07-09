@@ -45,6 +45,9 @@ export class ExNavigationRoute {
 
   render: () => ReactElement<{}>;
   getTitle: Function;
+  getTitleStyle: Function;
+  getBarBackgroundColor: Function;
+  getBarTintColor: Function;
 
   constructor({ key, routeName, params, config, _renderRoute }: RouteConfig) {
     this.key = key;
@@ -62,6 +65,18 @@ export class ExNavigationRoute {
       return title(this.params, this.config);
     }
     return title;
+  };
+
+  getBarBackgroundColor = () => {
+    return _.get(this.config, 'navigationBar.backgroundColor');
+  };
+
+  getBarTintColor = () => {
+    return _.get(this.config, 'navigationBar.tintColor');
+  };
+
+  getTitleStyle = () => {
+    return _.get(this.config, 'navigationBar.titleStyle');
   };
 
   getEventEmitter = () => {

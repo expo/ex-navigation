@@ -126,6 +126,20 @@ export default class NavigationContext {
   performAction(actionFn: Function) {
     let actions = [];
     const stateUtils = {
+      drawer: (uid) => ({
+        jumpToItem: (itemId) => {
+          actions.push(
+            Actions.jumpToItem(uid, {
+              key: itemId,
+            })
+          );
+        },
+        toggleDrawer: () => {
+          actions.push(
+            Actions.toggleDrawer(uid)
+          );
+        },
+      }),
       tabs: (uid) => ({
         jumpToTab: (tabId) => {
           actions.push(

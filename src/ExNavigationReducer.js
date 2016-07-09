@@ -123,6 +123,17 @@ class ExNavigationReducer {
     return _updateNavigator(state, navigatorUID, NavigationStateUtils.pop(navigatorState));
   }
 
+  static [ActionTypes.TOGGLE_DRAWER](state, { navigatorUID }) {
+    invariant(state.navigators[navigatorUID], 'Navigator does not exist.');
+    const navigatorState = state.navigators[navigatorUID];
+
+    if (navigatorState.index === 0) {
+      return state;
+    }
+
+    return _updateNavigator(state, navigatorUID, NavigationStateUtils.pop(navigatorState));
+  }
+
   static [ActionTypes.IMMEDIATELY_RESET_STACK](state, { navigatorUID, routes, index }) {
     const navigatorState = state.navigators[navigatorUID] || {
       routes: [],
@@ -152,36 +163,46 @@ class ExNavigationReducer {
     return _updateNavigator(state, navigatorUID, NavigationStateUtils.replaceAtIndex(navigatorState, index, newRoute));
   }
 
+  static [ActionTypes.JUMP_TO_ITEM](state, { navigatorUID, item }) {
+    invariant(state.navigators[navigatorUID], 'Navigator does not exist.');
+    invariant(state.navigators[navigatorUID].type === 'drawer', 'Navigator is not drawer navigator.');
+    return _updateSelectedKey(item, state, navigatorUID);
+  }
+
   static [ActionTypes.JUMP_TO_TAB](state, { navigatorUID, tab }) {
     invariant(state.navigators[navigatorUID], 'Navigator does not exist.');
     invariant(state.navigators[navigatorUID].type === 'tab', 'Navigator is not tab navigator.');
-
-    const newNavigatorState = { ...state.navigators[navigatorUID] };
-    const selectedTab = newNavigatorState.routes[newNavigatorState.index];
-
-    if (tab.key === selectedTab.key) { // haven't changed tabs
-      return state;
-    }
-
-    let tabIndex = NavigationStateUtils.indexOf(newNavigatorState, tab.key);
-    if (tabIndex !== -1) {
-      const oldTab = newNavigatorState.routes[tabIndex];
-      newNavigatorState.routes.splice(tabIndex, 1);
-      newNavigatorState.routes.push(oldTab);
-    } else {
-      newNavigatorState.routes.push(tab);
-    }
-
-    newNavigatorState.index = newNavigatorState.routes.length - 1;
-
-    return {
-      ..._updateNavigator(state, navigatorUID, newNavigatorState),
-      currentNavigatorUID: navigatorUID,
-    };
+    return _updateSelectedKey(tab, state, navigatorUID);
   }
+
 }
 
 export default ExNavigationReducer.reduce;
+
+function _updateSelectedKey(target, state, navigatorUID) {
+  const newNavigatorState = { ...state.navigators[navigatorUID] };
+  const selected = newNavigatorState.routes[newNavigatorState.index];
+
+  if (target.key === selected.key) { // haven't changed sections
+    return state;
+  }
+
+  let targetIndex = NavigationStateUtils.indexOf(newNavigatorState, target.key);
+  if (targetIndex !== -1) {
+    const old = newNavigatorState.routes[targetIndex];
+    newNavigatorState.routes.splice(targetIndex, 1);
+    newNavigatorState.routes.push(old);
+  } else {
+    newNavigatorState.routes.push(target);
+  }
+
+  newNavigatorState.index = newNavigatorState.routes.length - 1;
+
+  return {
+    ..._updateNavigator(state, navigatorUID, newNavigatorState),
+    currentNavigatorUID: navigatorUID,
+  };
+}
 
 function _updateNavigator(state, navigatorUID, newState) {
   return {

@@ -18,15 +18,22 @@ import {
   withNavigation,
 } from 'ExNavigationComponents';
 
-const APPBAR_HEIGHT = Platform.OS === 'ios' ? 44 : 56;
-const STATUSBAR_HEIGHT = Platform.OS === 'ios' ? 20 : 0;
+const APPBAR_HEIGHT = Platform.OS === 'ios' ? 44 : 55;
+const STATUSBAR_HEIGHT = Platform.OS === 'ios' ? 20 : 25;
 
 class ExNavigationBarTitle extends PureComponent {
   render() {
-    const { children, style, textStyle } = this.props;
+    const { children, style, textStyle, tintColor } = this.props;
+
     return (
       <View style={[titleStyles.title, style]}>
-        <Text style={[titleStyles.titleText, textStyle]}>{children}</Text>
+        <Text style={[
+          titleStyles.titleText,
+          tintColor ? {color: tintColor} : null,
+          textStyle
+        ]}>
+          {children}
+        </Text>
       </View>
     );
   }
@@ -52,9 +59,13 @@ const titleStyles = StyleSheet.create({
 @withNavigation
 class ExNavigationBarBackButton extends PureComponent {
   render() {
+    const { tintColor } = this.props;
+
     return (
-      <TouchableOpacity style={backButtonStyles.buttonContainer} onPress={this._onPress}>
-        <Image style={backButtonStyles.button} source={require('ExNavigationAssets').backIcon} />
+      <TouchableOpacity style={buttonStyles.buttonContainer} onPress={this._onPress}>
+        <Image
+          style={[buttonStyles.button, tintColor ? {tintColor} : null]}
+          source={require('ExNavigationAssets').backIcon} />
       </TouchableOpacity>
     );
   }
@@ -62,7 +73,21 @@ class ExNavigationBarBackButton extends PureComponent {
   _onPress = () => this.props.navigator.pop();
 }
 
-const backButtonStyles = StyleSheet.create({
+class ExNavigationBarMenuButton extends PureComponent {
+  render() {
+    const { tintColor } = this.props;
+
+    return (
+      <TouchableOpacity style={buttonStyles.buttonContainer} onPress={() => this.props.navigator.toggleDrawer()}>
+        <Image
+          style={[buttonStyles.menuButton, tintColor ? {tintColor} : null]}
+          source={require('ExNavigationAssets').menuIcon} />
+      </TouchableOpacity>
+    );
+  }
+}
+
+const buttonStyles = StyleSheet.create({
   buttonContainer: {
     flex: 1,
     flexDirection: 'row',
@@ -75,6 +100,20 @@ const backButtonStyles = StyleSheet.create({
     margin: Platform.OS === 'ios' ? 10 : 16,
     resizeMode: 'contain',
   },
+  menuButton: {
+    height: 26,
+    width: 26,
+    ...Platform.select({
+      ios: {
+        margin: 10,
+      },
+      android: {
+        marginLeft: 23,
+        marginTop: -1,
+      },
+    }),
+    resizeMode: 'contain',
+  },
 });
 
 // @withNavigation
@@ -85,20 +124,16 @@ export default class ExNavigationBar extends PureComponent {
       const title = String(navigationState.title || '');
       return <ExNavigationBarTitle>{title}</ExNavigationBarTitle>;
     },
-
-    renderLeftComponent(props) {
-      return props.scene.index > 0 ? <ExNavigationBarBackButton /> : null;
-    },
-
-    renderRightComponent(props) {
-      return null;
-    },
+    barHeight: APPBAR_HEIGHT,
+    statusBarHeight: STATUSBAR_HEIGHT,
   };
 
   static propTypes = {
     renderLeftComponent: PropTypes.func,
     renderRightComponent: PropTypes.func,
     renderTitleComponent: PropTypes.func,
+    barHeight: PropTypes.number.isRequired,
+    statusBarHeight: PropTypes.number.isRequired,
     style: View.propTypes.style,
   };
 
@@ -145,19 +180,27 @@ export default class ExNavigationBar extends PureComponent {
       return props;
     });
 
-    let containerStyle = [styles.appbar, style];
+    const height = this.props.barHeight + this.props.statusBarHeight;
+    let containerStyle = [styles.appbar, style, {height}];
     if (this.props.overrideStyle) {
       containerStyle = [style];
     }
     containerStyle.push(this.props.interpolator.forContainer(this.props, this.state.delta));
 
+    let backgroundColor = this.props.latestRoute.getBarBackgroundColor();
+    if (backgroundColor) {
+      containerStyle.push({backgroundColor});
+    }
+
     return (
       <Animated.View
         pointerEvents={this.props.visible ? 'auto' : 'none'}
         style={containerStyle}>
-        {scenesProps.map(this._renderLeft, this)}
-        {scenesProps.map(this._renderTitle, this)}
-        {scenesProps.map(this._renderRight, this)}
+        <View style={[styles.appbarInnerContainer, {top: this.props.statusBarHeight}]}>
+          {scenesProps.map(this._renderLeft, this)}
+          {scenesProps.map(this._renderTitle, this)}
+          {scenesProps.map(this._renderRight, this)}
+        </View>
       </Animated.View>
     );
   }
@@ -242,7 +285,6 @@ const styles = StyleSheet.create({
     borderBottomWidth: Platform.OS === 'ios' ? StyleSheet.hairlineWidth : 0,
     elevation: 2,
     flexDirection: 'row',
-    height: APPBAR_HEIGHT + STATUSBAR_HEIGHT,
     justifyContent: 'flex-start',
     left: 0,
     marginBottom: 16, // This is needed for elevation shadow
@@ -250,36 +292,40 @@ const styles = StyleSheet.create({
     right: 0,
     top: 0,
   },
-
+  appbarInnerContainer: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    bottom: 0
+  },
   title: {
     bottom: 0,
-    left: APPBAR_HEIGHT,
-    marginTop: STATUSBAR_HEIGHT,
     position: 'absolute',
-    right: APPBAR_HEIGHT,
     top: 0,
+    // NOTE(brentvatne): these hard coded values must change!
+    left: APPBAR_HEIGHT,
+    right: APPBAR_HEIGHT,
   },
 
   left: {
     bottom: 0,
     left: 0,
-    marginTop: STATUSBAR_HEIGHT,
     position: 'absolute',
     top: 0,
   },
 
   right: {
     bottom: 0,
-    marginTop: STATUSBAR_HEIGHT,
     position: 'absolute',
     right: 0,
     top: 0,
   },
 });
 
-ExNavigationBar.HEIGHT = APPBAR_HEIGHT + STATUSBAR_HEIGHT;
+ExNavigationBar.DEFAULT_HEIGHT = APPBAR_HEIGHT + STATUSBAR_HEIGHT;
 ExNavigationBar.Title = ExNavigationBarTitle;
 ExNavigationBar.BackButton = ExNavigationBarBackButton;
+ExNavigationBar.MenuButton = ExNavigationBarMenuButton;
 
 function extractSceneRendererProps(props) {
   return {

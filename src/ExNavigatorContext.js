@@ -17,11 +17,13 @@ export default class ExNavigatorContext<T: string> {
     navigatorUID: string,
     parentNavigatorUID: string,
     navigatorId: string,
-    navigationContext: Object
+    navigationContext: Object,
+    options: ?Object
   ) {
     this.navigatorUID = navigatorUID;
     this.navigatorId = navigatorId;
     this.navigationContext = navigationContext;
+    this.options = options || {};
   }
 
   getParentNavigator() {

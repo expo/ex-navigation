@@ -310,7 +310,7 @@ class ExNavigationStack extends PureComponent<any, Props, State> {
     }
 
     // Gross...should figure out a way to make this stuff better TODO @skevy
-    // In general though, we're getting route config (and thus, animation config) froim the latest
+    // In general though, we're getting route config (and thus, animation config) from the latest
     // scene, so that we know how to apply the animation.
     const navigationState: ?Object = this.props.navigationState;
     if (!navigationState) {
@@ -348,7 +348,7 @@ class ExNavigationStack extends PureComponent<any, Props, State> {
     // Determine animation styles based on the most recent scene in the stack.
     const latestRoute = this._getRouteAtIndex(props.scenes, props.scenes.length - 1);
     const latestRouteConfig: ExNavigationConfig = latestRoute.config;
-    props = { ...props, latestRouteConfig };
+    props = { ...props, latestRouteConfig, latestRoute };
 
     if (typeof this.props.renderOverlay === 'function') {
       return this.props.renderOverlay(props);
@@ -368,6 +368,8 @@ class ExNavigationStack extends PureComponent<any, Props, State> {
       latestRouteConfig.navigationBar &&
       latestRouteConfig.navigationBar.visible !== false;
 
+    // TODO: add height and statusBarHeight options ehre
+
     return (
       <HeaderComponent
         {...props}
@@ -381,13 +383,49 @@ class ExNavigationStack extends PureComponent<any, Props, State> {
     );
   };
 
+  _drawerNavigatorParent = () => {
+    let result;
+    let currentNavigator = this._getNavigatorContext();
+
+    while(currentNavigator) {
+      try {
+        currentNavigator = currentNavigator.getParentNavigator();
+      } catch(e) {
+        break;
+      }
+
+      if (currentNavigator.type === 'drawer') {
+        result = currentNavigator;
+        break;
+      }
+    }
+
+    return result;
+  }
+
   _renderLeftComponentForHeader = (props) => { //eslint-disable-line react/display-name
     const { scene: { route } } = props;
     const routeConfig = route.config;
+
     if (typeof routeConfig.navigationBar.renderLeft === 'function') {
       return routeConfig.navigationBar.renderLeft(route, props);
     }
-    return props.scene.index > 0 ? <NavigationBar.BackButton /> : null;
+
+    const drawerNavigatorParent = this._drawerNavigatorParent();
+    if (props.scene.index === 0 && !!drawerNavigatorParent) {
+      return (
+        <NavigationBar.MenuButton
+          navigator={drawerNavigatorParent}
+          tintColor={route.getBarTintColor()} />
+      );
+    }
+    if (props.scene.index > 0) {
+      return (
+        <NavigationBar.BackButton tintColor={route.getBarTintColor()} />
+      );
+    } else {
+      return null;
+    }
   };
 
   _renderTitleComponentForHeader = (props) => { //eslint-disable-line react/display-name
@@ -396,7 +434,11 @@ class ExNavigationStack extends PureComponent<any, Props, State> {
     if (typeof routeConfig.navigationBar.renderTitle === 'function') {
       return routeConfig.navigationBar.renderTitle(route, props);
     }
-    return <NavigationBar.Title>{route.getTitle()}</NavigationBar.Title>;
+    return (
+      <NavigationBar.Title textStyle={route.getTitleStyle()} tintColor={route.getBarTintColor()}>
+        {route.getTitle()}
+      </NavigationBar.Title>
+    );
   };
 
   _renderRightComponentForHeader = (props) => {
@@ -409,6 +451,7 @@ class ExNavigationStack extends PureComponent<any, Props, State> {
     // Determine gesture and animation styles based on the most recent scene in the stack,
     // not based on the scene we're rendering in this method.
     const latestRoute = this._getRouteAtIndex(props.scenes, props.scenes.length - 1);
+
     const latestRouteConfig = latestRoute.config;
     const { sceneAnimations, gestures } = latestRouteConfig.styles || {};
 
@@ -444,19 +487,31 @@ class ExNavigationStack extends PureComponent<any, Props, State> {
     ];
 
     if (routeConfig.navigationBar && routeConfig.navigationBar.visible !== false) {
-      style = [...style, styles.withNavigationBar];
+      let customHeight = 0;
+      if (_.isNumber(routeConfig.navigationBar.height)) {
+        customHeight += routeConfig.height;
+      }
+      if (_.isNumber(routeConfig.navigationBar.statusBarHeight)) {
+        customHeight += routeConfig.statusBarHeight;
+      }
+
+      if (_.isNumber(routeConfig.height) || _.isNumber(routeConfig.statusBarHeight)) {
+        style = [...style, {marginTop: customHeight}];
+      } else {
+        style = [...style, styles.withNavigationBar];
+      }
     } else {
       style = [...style, styles.withoutNavigationBar];
     }
 
     if (routeConfig.sceneStyle) {
-      style = [...style, routeConfig.sceneStyle];
+      style = [...style, routeConfig.sceneStyle || styles.defaultSceneStyle];
     }
 
     return (
       <View style={styles.routeContainer}>
         <Animated.View style={style}>
-          <View style={{ flex: 1, backgroundColor: 'white' }}>
+          <View style={{ flex: 1 }}>
             {cloneReferencedElement(routeElement, routeElementProps)}
           </View>
         </Animated.View>
@@ -484,12 +539,12 @@ class ExNavigationStack extends PureComponent<any, Props, State> {
 
 export default createNavigatorComponent(ExNavigationStack);
 
-const NAVBAR_HEIGHT = Platform.OS === 'ios' ? 64 : 56;
-// const STATUSBAR_HEIGHT = Platform.OS === 'ios' ? 20 : 0;
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  defaultSceneStyle: {
+    backgroundColor: '#fff',
   },
   routeContainer: {
     flex: 1,
@@ -501,6 +556,6 @@ const styles = StyleSheet.create({
     marginTop: 0,
   },
   withNavigationBar: {
-    marginTop: NAVBAR_HEIGHT,
+    marginTop: NavigationBar.DEFAULT_HEIGHT,
   },
 });

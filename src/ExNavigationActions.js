@@ -69,6 +69,21 @@ export default class ExNavigationActions {
     };
   }
 
+  static jumpToItem(navigatorUID, item) {
+    return {
+      type: ActionTypes.JUMP_TO_ITEM,
+      navigatorUID,
+      item,
+    };
+  }
+
+  static toggleDrawer(navigatorUID) {
+    return {
+      type: ActionTypes.TOGGLE_DRAWER,
+      navigatorUID,
+    };
+  }
+
   static goBack() {
     return {
       type: ActionTypes.GO_BACK,

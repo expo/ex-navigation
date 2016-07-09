@@ -14,5 +14,7 @@ export default mirror([
   'UPDATE_CURRENT_ROUTE_PARAMS',
   'UPDATE_ROUTE_AT_INDEX',
   'JUMP_TO_TAB',
+  'JUMP_TO_ITEM',
+  'TOGGLE_DRAWER',
   'GO_BACK',
 ], { prefix: 'EX_NAVIGATION.'});

@@ -42,10 +42,11 @@ function compareScenes(
   one: NavigationScene,
   two: NavigationScene,
 ): number {
-  if (one.index > two.index) {
+  if (one.index > two.index || one.isActive) {
     return 1;
   }
-  if (one.index < two.index) {
+
+  if (one.index < two.index || two.isActive) {
     return -1;
   }
 
@@ -66,6 +67,7 @@ function areScenesShallowEqual(
     one.key === two.key &&
     one.index === two.index &&
     one.isStale === two.isStale &&
+    one.isActive === two.isActive &&
     areRoutesShallowEqual(one.route, two.route)
   );
 }
@@ -115,6 +117,7 @@ function NavigationScenesReducer(
     const key = SCENE_KEY_PREFIX + route.key;
     const scene = {
       index,
+      isActive: false,
       isStale: false,
       key,
       route,
@@ -143,6 +146,7 @@ function NavigationScenesReducer(
       }
       staleScenes.set(key, {
         index,
+        isActive: false,
         isStale: true,
         key,
         route,
@@ -167,7 +171,27 @@ function NavigationScenesReducer(
   staleScenes.forEach(mergeScene);
   freshScenes.forEach(mergeScene);
 
+  let activeScenesCount = 0;
+  nextScenes.forEach((scene, ii) => {
+    const isActive = !scene.isStale && scene.index === nextState.index;
+    if (isActive !== scene.isActive) {
+      nextScenes[ii] = {
+        ...scene,
+        isActive,
+      };
+    }
+    if (isActive) {
+      activeScenesCount++;
+    }
+  });
+
   nextScenes.sort(compareScenes);
+
+  invariant(
+    activeScenesCount === 1,
+    'there should always be only one scene active, not %s.',
+    activeScenesCount,
+  );
 
   if (nextScenes.length !== scenes.length) {
     return nextScenes;

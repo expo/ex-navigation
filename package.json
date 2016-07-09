@@ -34,6 +34,7 @@
     "lodash": "^4.6.1",
     "mirror-creator": "^1.1.0",
     "react-clone-referenced-element": "^1.0.1",
+    "react-native-drawer-layout": "^1.0.0",
     "react-redux": "^4.4.5",
     "react-static-container": "^1.0.0",
     "redux": "^3.5.2",

@@ -115,12 +115,14 @@ class NavigationAnimatedView
 
   componentWillReceiveProps(nextProps: Props): void {
     if (nextProps.navigationState !== this.props.navigationState) {
+      const nextScenes = NavigationScenesReducer(
+        this.state.scenes,
+        nextProps.navigationState,
+        this.props.navigationState
+      );
+
       this.setState({
-        scenes: NavigationScenesReducer(
-          this.state.scenes,
-          nextProps.navigationState,
-          this.props.navigationState
-        ),
+        scenes: nextScenes,
       });
     }
   }
@@ -157,6 +159,7 @@ class NavigationAnimatedView
   render(): ReactElement<any> {
     const overlay = this._renderOverlay();
     const scenes = this._renderScenes();
+
     return (
       <View
         onLayout={this._onLayout}

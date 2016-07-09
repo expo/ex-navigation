@@ -58,6 +58,7 @@ const layout = PropTypes.shape({
 const scene = PropTypes.shape({
   index: PropTypes.number.isRequired,
   isStale: PropTypes.bool.isRequired,
+  isActive: PropTypes.bool.isRequired,
   key: PropTypes.string.isRequired,
   route: navigationRoute.isRequired,
 });
