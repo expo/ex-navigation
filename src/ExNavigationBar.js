@@ -323,6 +323,7 @@ const styles = StyleSheet.create({
 });
 
 ExNavigationBar.DEFAULT_HEIGHT = APPBAR_HEIGHT + STATUSBAR_HEIGHT;
+ExNavigationBar.DEFAULT_HEIGHT_WITHOUT_STATUS_BAR = APPBAR_HEIGHT;
 ExNavigationBar.Title = ExNavigationBarTitle;
 ExNavigationBar.BackButton = ExNavigationBarBackButton;
 ExNavigationBar.MenuButton = ExNavigationBarMenuButton;
