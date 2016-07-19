@@ -48,7 +48,9 @@ export default class NavigationContext {
 
   getNavigator(navigatorId: string): ExNavigatorContext<*> {
     let navigatorContext;
-    for (let c of this._navigatorContexts) {
+    const contextKeys = Object.keys(this._navigatorContexts);
+    contextKeys.forEach(contextKey => {
+      let c = this._navigatorContexts[contextKey];
       if (c.navigatorId === navigatorId) {
         if (!navigatorContext) {
           navigatorContext = c;
@@ -56,7 +58,8 @@ export default class NavigationContext {
           throw new Error(`More than one navigator exists with id '${navigatorId}'. Please access the navigator context using 'getNavigatorByUID'.`);
         }
       }
-    }
+    });
+
     invariant(navigatorContext, 'Navigator does not exist.');
     return navigatorContext;
   }

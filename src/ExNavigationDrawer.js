@@ -154,16 +154,16 @@ class ExNavigationDrawer extends PureComponent<any, Props, State> {
   }
 
   renderContent = () => {
-    const items = this.state.renderedItemKeys.map(key =>
-      this.state.drawerItems.find(i => i.id === key)
-    );
+    const items = this.state.renderedItemKeys.map(key => {
+      return this.state.drawerItems.find(i => i.id === key);
+    });
 
     return (
       <View style={styles.itemContentOuter}>
         {items.map(item => this.renderItemContent(item))}
       </View>
     );
-  }
+  };
 
   renderItemContent(drawerItem: Object) {
     if (!drawerItem.element) {
@@ -297,7 +297,7 @@ class ExNavigationDrawer extends PureComponent<any, Props, State> {
 
   toggleDrawer = () => {
     this._drawerLayout.toggle();
-  }
+  };
 
   _getNavigationState(props: ?Props): Object {
     if (!props) {

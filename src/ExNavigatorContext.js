@@ -12,6 +12,7 @@ export default class ExNavigatorContext<T: string> {
   parentNavigatorUID: string;
   navigatorId: string;
   navigationContext: ExNavigationContext;
+  options: Object;
 
   constructor(
     navigatorUID: string,
