@@ -1,5 +1,6 @@
 /**
  * @providesModule ExNavigationBadge
+ * @flow
  */
 
 import React from 'react';
@@ -9,10 +10,16 @@ import {
   View,
 } from 'react-native';
 
+type Props = {
+  textStyle: StyleSheet,
+  onLayout: () => void,
+}
+
 export default class Badge extends React.Component {
   static propTypes = Text.propTypes;
+  _handleLayout: (event: Object) => void;
 
-  constructor(props, context) {
+  constructor(props: Props, context: mixed) {
     super(props, context);
 
     this._handleLayout = this._handleLayout.bind(this);
@@ -46,7 +53,7 @@ export default class Badge extends React.Component {
     );
   }
 
-  _handleLayout(event) {
+  _handleLayout(event: Object) {
     let { width, height } = event.nativeEvent.layout;
     let { computedSize } = this.state;
     if (computedSize && computedSize.height === height &&
@@ -55,7 +62,9 @@ export default class Badge extends React.Component {
     }
 
     this.setState({
-      computedSize: { width, height },
+      computedSize: {
+        width, height,
+      },
     });
 
     if (this.props.onLayout) {

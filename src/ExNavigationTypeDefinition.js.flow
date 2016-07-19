@@ -30,9 +30,9 @@ export type ExNavigationBarConfig = {
   visible?: boolean,
   styles?: ExNavigationStyles,
   title?: string | Function,
-  renderLeft?: (state: ExNavigationState, props: NavigationSceneRendererProps) => ?React.Element,
-  renderTitle?: (state: ExNavigationState, props: NavigationSceneRendererProps) => ?React.Element,
-  renderRight?: (state: ExNavigationState, props: NavigationSceneRendererProps) => ?React.Element,
+  renderLeft?: (state: ExNavigationState, props: NavigationSceneRendererProps) => ?React.Element<{}>,
+  renderTitle?: (state: ExNavigationState, props: NavigationSceneRendererProps) => ?React.Element<{}>,
+  renderRight?: (state: ExNavigationState, props: NavigationSceneRendererProps) => ?React.Element<{}>,
 }
 
 export type ExNavigationConfig = {
@@ -45,5 +45,5 @@ export type StackNavigationPropTypes = {
   id: string,
   initialRoute: ExNavigationRoute,
   defaultRouteConfig?: ExNavigationConfig,
-  renderOverlay?: (props: NavigationSceneRendererProps) => ?React.Element,
+  renderOverlay?: (props: NavigationSceneRendererProps) => ?React.Element<{}>,
 }

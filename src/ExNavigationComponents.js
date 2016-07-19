@@ -74,7 +74,7 @@ export function createNavigatorComponent(WrappedComponent: ReactClass<any>) {
     props: Props;
     state: State;
     context: Context;
-    _wrappedInstance: ?ReactElement;
+    _wrappedInstance: ?ReactElement<{}>;
     _unsubscribe: ?() => void;
 
     static contextTypes = {
@@ -130,7 +130,7 @@ export function createNavigatorComponent(WrappedComponent: ReactClass<any>) {
         this.context.navigation;
     }
 
-    _wrappedInstanceRef = (c: ReactElement) => {
+    _wrappedInstanceRef = (c: ReactElement<{}>) => {
       if (c == null) {
         this._wrappedInstance = null;
       } else {
@@ -150,9 +150,9 @@ const NavigatorPropType = PropTypes.oneOfType([
   StackNavigatorContextType,
 ]);
 
-export function withNavigation(WrappedComponent: ReactClass) {
+export function withNavigation<T>(WrappedComponent: ReactClass<T>) {
   class WithNavigation extends PureComponent {
-    _wrappedInstance: ReactElement;
+    _wrappedInstance: ReactElement<T>;
 
     static contextTypes = {
       navigation: NavigationPropType,

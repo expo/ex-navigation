@@ -25,11 +25,12 @@ import { createNavigatorComponent } from 'ExNavigationComponents';
 import type ExNavigationContext from 'ExNavigationContext';
 
 export class ExNavigationTabContext extends ExNavigatorContext {
+  type = 'tab';
+
   navigatorUID: string;
   navigatorId: string;
   dispatch: Function;
   _navigatorTabMap: Object = {};
-  type: string = 'tab';
 
   setNavigatorUIDForCurrentTab(navigatorUID: string) {
     const navigatorState = this._getNavigatorState();
@@ -54,18 +55,18 @@ export class ExNavigationTabContext extends ExNavigatorContext {
 type TabItem = {
   id: string,
   renderIcon?: Function,
-  tabContent?: React.Element,
+  tabContent?: React.Element<{}>,
 };
 
 type Props = {
   id: string,
   navigatorUID: string,
   initialTab: string,
-  renderTabBar: (props: Object) => React.Element,
+  renderTabBar: (props: Object) => React.Element<{}>,
   tabBarHeight?: number,
   tabBarColor?: string,
   tabBarStyle?: any,
-  children: Array<React.Element>,
+  children: Array<React.Element<{}>>,
   navigation: ExNavigationContext,
   onRegisterNavigatorContext: (navigatorUID: string, navigatorContext: ExNavigationTabContext) => void,
   navigationState: Object,
@@ -317,7 +318,8 @@ class ExNavigationTab extends PureComponent<any, Props, State> {
   }
 
   _getNavigatorContext(): ExNavigationTabContext {
-    return this.props.navigation.getNavigatorByUID(this.state.navigatorUID);
+    const navigatorContext: any = this.props.navigation.getNavigatorByUID(this.state.navigatorUID);
+    return (navigatorContext: ExNavigationTabContext);
   }
 }
 

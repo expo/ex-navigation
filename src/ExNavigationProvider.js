@@ -17,9 +17,9 @@ import ExNavigationContext from 'ExNavigationContext';
 import { ExNavigationRouter } from 'ExNavigationRouter';
 
 type Props = {
-  router: ExNavigationRouter,
+  router: ExNavigationRouter<*>,
   context?: ExNavigationContext,
-  children: React.Element,
+  children: React.Element<{}>,
 };
 
 type State = {};

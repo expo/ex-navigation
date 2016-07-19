@@ -15,7 +15,6 @@ import {
 import PureComponent from 'PureComponent';
 
 import {
-  createNavigatorComponent,
   withNavigation,
 } from 'ExNavigationComponents';
 
@@ -54,11 +53,13 @@ const titleStyles = StyleSheet.create({
 class ExNavigationBarBackButton extends PureComponent {
   render() {
     return (
-      <TouchableOpacity style={backButtonStyles.buttonContainer} onPress={() => this.props.navigator.pop()}>
+      <TouchableOpacity style={backButtonStyles.buttonContainer} onPress={this._onPress}>
         <Image style={backButtonStyles.button} source={require('ExNavigationAssets').backIcon} />
       </TouchableOpacity>
     );
   }
+
+  _onPress = () => this.props.navigator.pop();
 }
 
 const backButtonStyles = StyleSheet.create({

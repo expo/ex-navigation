@@ -20,23 +20,33 @@ import type {
 } from 'ExNavigationTypeDefinition';
 
 type ExNavigationRouteDefinition = (
-  (state: ExNavigationState) => React.Element
+  (state: ExNavigationState) => React.Element<{}>
 ) | {
-  render: (state: ExNavigationState) => React.Element,
+  render: (state: ExNavigationState) => ReactElement<{}>,
   config?: (routeConfig: ExNavigationConfig, routeParams: Object) => ExNavigationConfig,
 };
 
-class ExNavigationRoute {
+type RouteRenderer = (x: ExNavigationState) => ReactElement<{}>;
+
+type RouteConfig = {
+  key: string,
+  routeName: string,
+  params: Object,
+  config: Object,
+  _renderRoute: RouteRenderer,
+}
+
+export class ExNavigationRoute {
   key: string;
   routeName: string;
   params: Object;
-  config: Object;
-  _renderRoute: Function;
+  config: ExNavigationConfig;
+  _renderRoute: RouteRenderer;
 
-  render: Function;
+  render: () => ReactElement<{}>;
   getTitle: Function;
 
-  constructor({ key, routeName, params, config, _renderRoute }) {
+  constructor({ key, routeName, params, config, _renderRoute }: RouteConfig) {
     this.key = key;
     this.routeName = routeName;
     this.params = params;
@@ -69,8 +79,8 @@ class ExNavigationRoute {
   }
 }
 
-export class ExNavigationRouter {
-  _routes: { [routeName: string]: ExNavigationRouteDefinition };
+export class ExNavigationRouter<RC: RouteCreator> {
+  _routes: { [routeName: string]: () => ExNavigationRouteDefinition };
   _routesCreator: Function;
   _routesCreated: bool;
 
@@ -80,7 +90,7 @@ export class ExNavigationRouter {
     this._routesCreated = false;
   }
 
-  getRoute(routeName: string, routeParams:Object = {}): ExNavigationRoute {
+  getRoute(routeName: $Keys<RC>, routeParams: Object = {}): ExNavigationRoute {
     this._ensureRoute(routeName);
 
     if (__DEV__) {
@@ -98,11 +108,11 @@ export class ExNavigationRouter {
     return this._createRoute(route.routeName, this._routes[route.routeName], { ...route.params, ...newParams });
   }
 
-  _makeRoute(RouteComponent: ReactClass) {
+  _makeRoute(RouteComponent: ReactClass<{}>): RouteRenderer {
     const FocusAwareRouteComponent = createFocusableComponent(
       withNavigation(RouteComponent)
     );
-    return ({ params, config }): React.Element => (
+    return ({ params, config }: ExNavigationState): ReactElement<{}> => (
       <FocusAwareRouteComponent
         {...(config && config.defaultParams ? config.defaultParams : {})}
         {...params}
@@ -110,7 +120,7 @@ export class ExNavigationRouter {
     );
   }
 
-  _createRoute(routeName: string, routeDefinitionThunk, routeParams: Object = {}): ExNavigationRoute {
+  _createRoute(routeName: string, routeDefinitionThunk: () => ExNavigationRouteDefinition, routeParams: Object = {}): ExNavigationRoute {
     const routeDefinitionOrComponent = routeDefinitionThunk();
 
     let routeDefinition;
@@ -157,7 +167,7 @@ export class ExNavigationRouter {
       _renderRoute,
     });
 
-    const routeElement: React.Element = route.render();
+    const routeElement: ReactElement<{}> = route.render();
     const ComponentClass = routeElement.type;
 
     const componentRouteConfig = ComponentClass.route;
@@ -180,7 +190,11 @@ export class ExNavigationRouter {
   }
 }
 
-export function createRouter(routesCreator: Function): ExNavigationRouter {
+type RouteCreator = {
+  [key: string]: () => ExNavigationRouteDefinition
+}
+
+export function createRouter<RC: RouteCreator>(routesCreator: () => RC): ExNavigationRouter<RC> {
   return new ExNavigationRouter(routesCreator);
 }
 

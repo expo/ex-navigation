@@ -35,6 +35,7 @@ import type { NavigationSceneRendererProps, NavigationScene } from 'NavigationTy
 import type { ExNavigationRoute } from 'ExNavigationRouter';
 import type ExNavigationContext from 'ExNavigationContext';
 import type { ExNavigationConfig, ExNavigationState } from 'ExNavigationTypeDefinition';
+import type { ExNavigationTabContext } from 'ExNavigationTab';
 
 const DEFAULT_ROUTE_CONFIG: ExNavigationConfig = {
   styles: Platform.OS !== 'android' ? NavigationStyles.FloatHorizontal : NavigationStyles.Fade,
@@ -46,7 +47,7 @@ type Props = {
   initialRoute?: ExNavigationRoute,
   initialStack?: Array<ExNavigationRoute>,
   navigation: ExNavigationContext,
-  onRegisterNavigatorContext: (navigatorUID: string, navigatorContext: ExNavigatorContext) => void,
+  onRegisterNavigatorContext: (navigatorUID: string, navigatorContext: ExNavigationStackContext) => void,
   navigationState?: Object,
   defaultRouteConfig?: ExNavigationConfig,
 };
@@ -70,13 +71,16 @@ type ExNavigationSceneRendererProps = {
 
 let ROUTE_LISTENER_INDEX = 0;
 
-type ExNavigationStackInstance = ReactComponent & { _useAnimation: boolean, _routeListeners: { [listenerId: string]: Function } };
+type ExNavigationStackInstance = ReactComponent<*, *, *> & { _useAnimation: boolean, _routeListeners: { [listenerId: string]: Function } };
+
+declare var requestAnimationFrame: () => void;
 
 export class ExNavigationStackContext extends ExNavigatorContext {
+  type = 'stack';
+
   parentNavigatorUID: string;
   defaultRouteConfig: ExNavigationConfig;
   componentInstance: ExNavigationStackInstance;
-  type: string = 'stack';
 
   constructor(
     navigatorUID: string,
@@ -272,7 +276,7 @@ class ExNavigationStack extends PureComponent<any, Props, State> {
     if (this.state.parentNavigatorUID) {
       const parentNavigator = this.props.navigation.getNavigatorByUID(this.state.parentNavigatorUID);
       if (parentNavigator.type === 'tab') {
-        parentNavigator.setNavigatorUIDForCurrentTab(this.state.navigatorUID);
+        ((parentNavigator: any): ExNavigationTabContext).setNavigatorUIDForCurrentTab(this.state.navigatorUID);
       }
     }
 

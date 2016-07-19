@@ -20,7 +20,7 @@ export { default as NavigationReducer } from 'ExNavigationReducer';
 
 export * as NavigationStyles from 'ExNavigationStyles';
 
-export { makeRoute, createRouter } from 'ExNavigationRouter';
+export { createRouter } from 'ExNavigationRouter';
 export { withNavigation, createFocusAwareComponent } from 'ExNavigationComponents';
 
 export { getBackButtonManager } from 'ExNavigationBackButtonManager';

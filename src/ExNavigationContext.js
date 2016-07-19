@@ -15,6 +15,7 @@ import type {
   ExNavigationRoute,
   ExNavigationRouter,
 } from 'ExNavigationRouter';
+
 import type {
   ExNavigationStore,
   ExNavigationState,
@@ -25,15 +26,15 @@ import type {
  */
 export default class NavigationContext {
   _store: ExNavigationStore;
-  _router: ExNavigationRouter;
+  _router: ExNavigationRouter<*>;
   _navigatorContexts: {
-    [navigatorUID: string]: ExNavigatorContext
+    [navigatorUID: string]: ExNavigatorContext<*>
   };
   // _visiblityManager: ExNavigationVisibilityManager;
 
-  registerNavigatorContext: (navigatorUID: string, navigatorContext: ExNavigatorContext) => void;
+  registerNavigatorContext: (navigatorUID: string, navigatorContext: ExNavigatorContext<*>) => void;
 
-  constructor({ store, router }: { store?: ExNavigationStore, router: ExNavigationRouter }) {
+  constructor({ store, router }: { store?: ExNavigationStore, router: ExNavigationRouter<*> }) {
     if (store == null) {
       store = createNavigationStore();
     }
@@ -45,10 +46,9 @@ export default class NavigationContext {
     this.registerNavigatorContext = this.registerNavigatorContext.bind(this);
   }
 
-  getNavigator(navigatorId: string): ExNavigatorContext {
+  getNavigator(navigatorId: string): ExNavigatorContext<*> {
     let navigatorContext;
-    const contexts = Object.values(this._navigatorContexts);
-    contexts.forEach((c: ExNavigatorContext) => {
+    for (let c of this._navigatorContexts) {
       if (c.navigatorId === navigatorId) {
         if (!navigatorContext) {
           navigatorContext = c;
@@ -56,7 +56,7 @@ export default class NavigationContext {
           throw new Error(`More than one navigator exists with id '${navigatorId}'. Please access the navigator context using 'getNavigatorByUID'.`);
         }
       }
-    });
+    }
     invariant(navigatorContext, 'Navigator does not exist.');
     return navigatorContext;
   }
@@ -64,7 +64,7 @@ export default class NavigationContext {
   /**
    * Returns the NavigatorContext for the specified navigator.
    */
-  getNavigatorByUID(navigatorUID: string): ExNavigatorContext {
+  getNavigatorByUID(navigatorUID: string): ExNavigatorContext<*> {
     // return the NavigatorContext for navigatorId
     invariant(this._navigatorContexts[navigatorUID], 'Navigator does not exist.');
     return this._navigatorContexts[navigatorUID];
@@ -79,14 +79,19 @@ export default class NavigationContext {
   }
 
   getFocusedRoute(): ?ExNavigationRoute {
+    if (!this.navigationState) {
+      return null;
+    }
+
     const currentNavigator = this.navigationState.navigators[this.navigationState.currentNavigatorUID];
     if (!currentNavigator) {
       return null;
     }
+
     return currentNavigator.routes[currentNavigator.index];
   }
 
-  registerNavigatorContext(navigatorUID: string, navigatorContext: ExNavigatorContext) {
+  registerNavigatorContext(navigatorUID: string, navigatorContext: ExNavigatorContext<*>) {
     this._navigatorContexts[navigatorUID] = navigatorContext;
   }
 
@@ -106,7 +111,7 @@ export default class NavigationContext {
     return this._store.dispatch;
   }
 
-  get router(): ExNavigationRouter {
+  get router(): ExNavigationRouter<*> {
     return this._router;
   }
 

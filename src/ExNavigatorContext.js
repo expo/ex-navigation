@@ -5,12 +5,13 @@
 
 import ExNavigationContext from 'ExNavigationContext';
 
-export default class ExNavigatorContext {
+export default class ExNavigatorContext<T: string> {
+  type: T;
+
   navigatorUID: string;
   parentNavigatorUID: string;
   navigatorId: string;
   navigationContext: ExNavigationContext;
-  type: string;
 
   constructor(
     navigatorUID: string,

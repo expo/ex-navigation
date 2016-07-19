@@ -11,7 +11,7 @@ import { getBackButtonManager } from 'ExNavigationBackButtonManager';
 type Props = {
   isFocused: boolean,
   onBackButtonPress: () => void,
-  children: Array<ReactElement>,
+  children: Array<ReactElement<{}>>,
 };
 
 type State = {

@@ -1,10 +1,13 @@
 /**
  * @providesModule ExNavigationBackButtonManager
+ * @flow
  */
 
-import { BackAndroid, Platform } from 'react-native';
+import { BackAndroid } from 'react-native';
 
 import ExNavigationActions from 'ExNavigationActions';
+
+import type { ExNavigationStore } from 'ExNavigationStore';
 
 /**
  * Manages a global listener, as well as any custom listeners, on the
@@ -16,13 +19,15 @@ import ExNavigationActions from 'ExNavigationActions';
  */
 class ExNavigationBackButtonManager {
   _listeners = [];
+  store: ExNavigationStore;
+  _onHardwareBackPress: Function;
 
-  constructor(store) {
+  constructor(store: ExNavigationStore) {
     this.store = store;
     this._listeners = [];
   }
 
-  pushListener(listener) {
+  pushListener(listener: () => void) {
     let newListeners = [...this._listeners];
     newListeners.push(listener);
     this._setListeners(newListeners);
@@ -49,7 +54,7 @@ class ExNavigationBackButtonManager {
     this._setListeners([...this._listeners]);
   }
 
-  _setListeners(newListeners) {
+  _setListeners(newListeners: Array<() => void>) {
     this.disable();
     this._listeners = newListeners;
     BackAndroid.removeEventListener('hardwareBackPress', this._disabledBackButtonPress);
@@ -70,7 +75,7 @@ class ExNavigationBackButtonManager {
 
 let manager;
 
-export function createBackButtonManager(store) {
+export function createBackButtonManager(store: ExNavigationStore) {
   if (!manager) {
     manager = new ExNavigationBackButtonManager(store);
   }
