@@ -65,7 +65,7 @@ export default class ExNavigationAlertBar extends React.Component {
     };
 
     return (
-      <TouchableWithoutFeedback onPress={this._hide}>
+      <TouchableWithoutFeedback onPress={this._dispatchHide}>
         <Animated.View style={[styles.alertBar, dynamicStyles, this.props.style]}>
           <View
             style={styles.alertBarInnerContainer}
