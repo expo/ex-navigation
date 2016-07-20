@@ -150,6 +150,18 @@ export class ExNavigationStackContext extends ExNavigatorContext {
     });
   }
 
+  showLocalAlert = (message, options) => {
+    this.navigationContext.performAction(({ stacks }) => {
+      stacks(this.navigatorUID).showLocalAlert(message, options);
+    });
+  };
+
+  hideLocalAlert = () => {
+    this.navigationContext.performAction(({ stacks }) => {
+      stacks(this.navigatorUID).hideLocalAlert();
+    });
+  }
+
   updateCurrentRouteParams(newParams: Object) {
     this.navigationContext.performAction(({ stacks }) => {
       stacks(this.navigatorUID).updateCurrentRouteParams(newParams);
@@ -373,6 +385,7 @@ class ExNavigationStack extends PureComponent<any, Props, State> {
     return (
       <HeaderComponent
         {...props}
+        getNavigatorContext={this._getNavigatorContext}
         navigatorUID={this.state.navigatorUID}
         visible={navigationBarIsVisible}
         interpolator={interpolator}
@@ -532,7 +545,7 @@ class ExNavigationStack extends PureComponent<any, Props, State> {
     return _.merge({}, DEFAULT_ROUTE_CONFIG, props.defaultRouteConfig);
   }
 
-  _getNavigatorContext(): ExNavigationStackContext {
+  _getNavigatorContext = (): ExNavigationStackContext => {
     return this.props.navigation.getNavigatorByUID(this.state.navigatorUID);
   }
 }

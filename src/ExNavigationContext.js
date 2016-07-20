@@ -178,6 +178,16 @@ export default class NavigationContext {
             Actions.updateCurrentRouteParams(uid, newParams)
           );
         },
+        showLocalAlert: (message, options) => {
+          actions.push(
+            Actions.showLocalAlert(uid, message, options)
+          );
+        },
+        hideLocalAlert: () => {
+          actions.push(
+            Actions.hideLocalAlert(uid)
+          );
+        },
       }),
     };
     actionFn(stateUtils);

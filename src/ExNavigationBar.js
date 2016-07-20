@@ -14,12 +14,11 @@ import {
 } from 'react-native';
 import PureComponent from 'PureComponent';
 
-import {
-  withNavigation,
-} from 'ExNavigationComponents';
+import ExNavigationAlertBar from 'ExNavigationAlertBar';
+import { withNavigation } from 'ExNavigationComponents';
 
 const APPBAR_HEIGHT = Platform.OS === 'ios' ? 44 : 55;
-const STATUSBAR_HEIGHT = Platform.OS === 'ios' ? 20 : 25;
+const STATUSBAR_HEIGHT = Platform.OS === 'ios' ? 20 : 24;
 
 class ExNavigationBarTitle extends PureComponent {
   render() {
@@ -169,7 +168,15 @@ export default class ExNavigationBar extends PureComponent {
 
   render() {
     if (!this.state.visible) {
-      return null;
+      return (
+        <View style={[styles.wrapper, styles.wrapperWithoutAppbar]}>
+          <ExNavigationAlertBar
+            {...this.props}
+            alertState={this.props.navigationState.alert}
+            style={styles.alertBarWithoutAppbar}
+          />
+        </View>
+      );
     }
 
     const { scenes, style } = this.props;
@@ -193,15 +200,23 @@ export default class ExNavigationBar extends PureComponent {
     }
 
     return (
-      <Animated.View
+      <View
         pointerEvents={this.props.visible ? 'auto' : 'none'}
-        style={containerStyle}>
-        <View style={[styles.appbarInnerContainer, {top: this.props.statusBarHeight}]}>
-          {scenesProps.map(this._renderLeft, this)}
-          {scenesProps.map(this._renderTitle, this)}
-          {scenesProps.map(this._renderRight, this)}
-        </View>
-      </Animated.View>
+        style={styles.wrapper}>
+        <ExNavigationAlertBar
+          {...this.props}
+          alertState={this.props.navigationState.alert}
+        />
+
+        <Animated.View
+          style={containerStyle}>
+          <View style={[styles.appbarInnerContainer, {top: this.props.statusBarHeight}]}>
+            {scenesProps.map(this._renderLeft, this)}
+            {scenesProps.map(this._renderTitle, this)}
+            {scenesProps.map(this._renderRight, this)}
+          </View>
+        </Animated.View>
+      </View>
     );
   }
 
@@ -277,7 +292,29 @@ export default class ExNavigationBar extends PureComponent {
   }
 }
 
+ExNavigationBar.DEFAULT_HEIGHT = APPBAR_HEIGHT + STATUSBAR_HEIGHT;
+ExNavigationBar.DEFAULT_HEIGHT_WITHOUT_STATUS_BAR = APPBAR_HEIGHT;
+ExNavigationBar.Title = ExNavigationBarTitle;
+ExNavigationBar.BackButton = ExNavigationBarBackButton;
+ExNavigationBar.MenuButton = ExNavigationBarMenuButton;
+
 const styles = StyleSheet.create({
+  wrapper: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    paddingTop: ExNavigationBar.DEFAULT_HEIGHT,
+  },
+
+  wrapperWithoutAppbar: {
+    paddingTop: 0,
+  },
+
+  alertBarWithoutAppbar: {
+    paddingTop: STATUSBAR_HEIGHT,
+  },
+
   appbar: {
     alignItems: 'center',
     backgroundColor: Platform.OS === 'ios' ? '#EFEFF2' : '#FFF',
@@ -321,12 +358,6 @@ const styles = StyleSheet.create({
     top: 0,
   },
 });
-
-ExNavigationBar.DEFAULT_HEIGHT = APPBAR_HEIGHT + STATUSBAR_HEIGHT;
-ExNavigationBar.DEFAULT_HEIGHT_WITHOUT_STATUS_BAR = APPBAR_HEIGHT;
-ExNavigationBar.Title = ExNavigationBarTitle;
-ExNavigationBar.BackButton = ExNavigationBarBackButton;
-ExNavigationBar.MenuButton = ExNavigationBarMenuButton;
 
 function extractSceneRendererProps(props) {
   return {

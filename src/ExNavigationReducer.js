@@ -123,6 +123,32 @@ class ExNavigationReducer {
     return _updateNavigator(state, navigatorUID, NavigationStateUtils.pop(navigatorState));
   }
 
+  static [ActionTypes.SHOW_LOCAL_ALERT_BAR](state, { navigatorUID, message, options }) {
+    let navigatorState = {
+      ...state.navigators[navigatorUID],
+      alert: {
+        message,
+        options,
+      },
+    };
+
+    return {
+      ..._updateNavigator(state, navigatorUID, navigatorState),
+    };
+  }
+
+  static [ActionTypes.HIDE_LOCAL_ALERT_BAR](state, { navigatorUID }) {
+    let previousNavigatorState = state.navigators[navigatorUID];
+    let navigatorState = {
+      ...state.navigators[navigatorUID],
+      alert: null,
+    };
+
+    return {
+      ..._updateNavigator(state, navigatorUID, navigatorState),
+    };
+  }
+
   static [ActionTypes.TOGGLE_DRAWER](state, { navigatorUID }) {
     invariant(state.navigators[navigatorUID], 'Navigator does not exist.');
     const navigatorState = state.navigators[navigatorUID];
@@ -174,7 +200,6 @@ class ExNavigationReducer {
     invariant(state.navigators[navigatorUID].type === 'tab', 'Navigator is not tab navigator.');
     return _updateSelectedKey(tab, state, navigatorUID);
   }
-
 }
 
 export default ExNavigationReducer.reduce;

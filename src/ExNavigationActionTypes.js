@@ -7,6 +7,8 @@ import mirror from 'mirror-creator';
 export default mirror([
   'INITIALIZE',
   'SET_CURRENT_NAVIGATOR',
+  'SHOW_LOCAL_ALERT_BAR',
+  'HIDE_LOCAL_ALERT_BAR',
   'REMOVE_NAVIGATOR',
   'PUSH',
   'POP',

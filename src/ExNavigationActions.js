@@ -89,4 +89,20 @@ export default class ExNavigationActions {
       type: ActionTypes.GO_BACK,
     };
   }
+
+  static showLocalAlert(navigatorUID, message, options) {
+    return {
+      type: ActionTypes.SHOW_LOCAL_ALERT_BAR,
+      navigatorUID,
+      message,
+      options,
+    };
+  }
+
+  static hideLocalAlert(navigatorUID) {
+    return {
+      type: ActionTypes.HIDE_LOCAL_ALERT_BAR,
+      navigatorUID,
+    };
+  }
 }
