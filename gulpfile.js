@@ -39,6 +39,8 @@ const babelOpts = {
         'react-redux': 'react-redux',
         'reselect': 'reselect',
         'react-static-container': 'react-static-container',
+        'react-native-drawer-layout': 'react-native-drawer-layout',
+        '@exponent/react-native-touchable-native-feedback-safe': '@exponent/react-native-touchable-native-feedback-safe',
         'uuid-js': 'uuid-js',
         'warning': 'warning',
       },
