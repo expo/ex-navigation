@@ -25,20 +25,28 @@ export default class ExNavigationAlertBar extends React.Component {
   state = {
     isVisible: false,
     yOffset: new Animated.Value(-500),
+    currentAlertState: null,
   };
+
+  componentWillReceiveProps(nextProps) {
+    if (!this.props.alertState && nextProps.alertState) {
+      // note(brentvatne): we save this in state so that when the store updates
+      // to hide the alert we don't have to do some janky shouldComponentUpdate
+      // business to make sure that the text/styles remain the same until
+      // the animation is completed
+      this.setState({currentAlertState: nextProps.alertState});
+    }
+  }
 
   componentDidUpdate(prevProps) {
     if (!prevProps.alertState && this.props.alertState) {
-      console.log({exNavigationAlertBar: true, alertState: this.props.alertState});
       this._show();
     } else if (prevProps.alertState && !this.props.alertState) {
-      console.log({exNavigationAlertBar: true, alertState: prevProps.alertState});
       this._hide();
     } else if (prevProps.alertState !== this.props.alertState) {
       this._maybeRestartTimeout();
-      console.log({exNavigationAlertBar: true, message: 'change text'});
     } else {
-      console.log({exNavigationAlertBar: true, message: 'no alert state changes'});
+      // No changes that we need to concern ourselves with
     }
   }
 
@@ -47,31 +55,29 @@ export default class ExNavigationAlertBar extends React.Component {
       return <View />;
     }
 
-    let backgroundColor, message;
-    let { alertState } = this.props;
+    let { currentAlertState } = this.state;
+    let containerStyleOptions, textStyleOptions, message;
 
-    if (!alertState) {
-      backgroundColor = 'black';
-      message = '';
-    } else {
-      let { options } = alertState;
-      backgroundColor = options.backgroundColor || 'black';
-      message = alertState.message;
+    if (currentAlertState) {
+      let { options } = currentAlertState;
+      containerStyleOptions = options.container;
+      textStyleOptions = options.text;
+      message = currentAlertState.message;
     }
-
-    let dynamicStyles = {
-      backgroundColor,
-      transform: [{translateY: this.state.yOffset}],
-    };
 
     return (
       <TouchableWithoutFeedback onPress={this._dispatchHide}>
-        <Animated.View style={[styles.alertBar, dynamicStyles, this.props.style]}>
+        <Animated.View style={[
+          {transform: [{translateY: this.state.yOffset}]}, // Animated styles
+          styles.alertBar, // Default styles
+          this.props.style, // This is necessary to take into account the appbar visibility
+          containerStyleOptions, // Configurable styles when presenting the alert
+        ]}>
           <View
             style={styles.alertBarInnerContainer}
             onLayout={this._onLayout}
             ref={view => { this._textContainerRef = view; }}>
-            <Text style={styles.alertText}>
+            <Text style={[styles.alertText, textStyleOptions]}>
               {message}
             </Text>
           </View>
@@ -152,6 +158,7 @@ const WINDOW_WIDTH = Dimensions.get('window').width;
 
 const styles = StyleSheet.create({
   alertBar: {
+    backgroundColor: '#000',
     justifyContent: 'center',
     alignItems: 'center',
     overflow: 'hidden',

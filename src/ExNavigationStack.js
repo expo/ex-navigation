@@ -380,7 +380,7 @@ class ExNavigationStack extends PureComponent<any, Props, State> {
       latestRouteConfig.navigationBar &&
       latestRouteConfig.navigationBar.visible !== false;
 
-    // TODO: add height and statusBarHeight options ehre
+    // TODO: add height and statusBarHeight options here
 
     return (
       <HeaderComponent
