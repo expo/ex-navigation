@@ -53,9 +53,6 @@ export class ExNavigationDrawerContext extends ExNavigatorContext {
 
   toggleDrawer() {
     this.options.toggleDrawer();
-    // this.navigationContext.performAction(({ drawer }) => {
-    //   drawer(this.navigatorUID).toggleDrawer();
-    // });
   }
 }
 

@@ -12,6 +12,9 @@ export { default as TabNavigation } from 'ExNavigationTab';
 export { default as TabNavigationItem } from 'ExNavigationTabItem';
 export { default as TabBadge } from 'ExNavigationBadge';
 
+export { default as SlidingTabNavigation } from 'ExNavigationSlidingTab';
+export { default as SlidingTabNavigationItem } from 'ExNavigationSlidingTabItem';
+
 export { default as DrawerNavigation } from 'ExNavigationDrawer';
 export { default as DrawerNavigationItem } from 'ExNavigationDrawerItem';
 

@@ -294,6 +294,7 @@ export default class ExNavigationBar extends PureComponent {
 
 ExNavigationBar.DEFAULT_HEIGHT = APPBAR_HEIGHT + STATUSBAR_HEIGHT;
 ExNavigationBar.DEFAULT_HEIGHT_WITHOUT_STATUS_BAR = APPBAR_HEIGHT;
+ExNavigationBar.DEFAULT_BACKGROUND_COLOR = Platform.OS === 'ios' ? '#EFEFF2' : '#FFF';
 ExNavigationBar.Title = ExNavigationBarTitle;
 ExNavigationBar.BackButton = ExNavigationBarBackButton;
 ExNavigationBar.MenuButton = ExNavigationBarMenuButton;
@@ -317,7 +318,7 @@ const styles = StyleSheet.create({
 
   appbar: {
     alignItems: 'center',
-    backgroundColor: Platform.OS === 'ios' ? '#EFEFF2' : '#FFF',
+    backgroundColor: ExNavigationBar.DEFAULT_BACKGROUND_COLOR,
     borderBottomColor: 'rgba(0, 0, 0, .15)',
     borderBottomWidth: Platform.OS === 'ios' ? StyleSheet.hairlineWidth : 0,
     elevation: 2,

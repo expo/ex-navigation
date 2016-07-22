@@ -36,6 +36,7 @@
     "react-clone-referenced-element": "^1.0.1",
     "react-mixin": "^3.0.5",
     "react-native-drawer-layout": "^1.0.0",
+    "react-native-tab-view": "0.0.18",
     "react-redux": "^4.4.5",
     "react-static-container": "^1.0.0",
     "react-timer-mixin": "^0.13.3",
