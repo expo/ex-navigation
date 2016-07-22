@@ -152,15 +152,6 @@ export default class NavigationContext {
           );
         },
       }),
-      slidingTabs: (uid) => ({
-        jumpToTab: (tabId) => {
-          actions.push(
-            Actions.jumpToTab(uid, {
-              key: tabId,
-            })
-          );
-        },
-      }),
       stacks: (uid) => ({
         push: (route) => {
           actions.push(

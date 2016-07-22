@@ -20,38 +20,11 @@ import Actions from 'ExNavigationActions';
 import ExNavigatorContext from 'ExNavigatorContext';
 import ExNavigationBar from 'ExNavigationBar';
 import ExNavigationSlidingTabItem from 'ExNavigationSlidingTabItem';
+import { ExNavigationTabContext } from 'ExNavigationTab';
 import { TabViewAnimated, TabViewPage, TabBarTop, TabBar } from 'react-native-tab-view';
 import { createNavigatorComponent } from 'ExNavigationComponents';
 
 import type ExNavigationContext from 'ExNavigationContext';
-
-export class ExNavigationSlidingTabContext extends ExNavigatorContext {
-  type = 'slidingTab';
-
-  navigatorUID: string;
-  navigatorId: string;
-  dispatch: Function;
-  _navigatorTabMap: Object = {};
-
-  setNavigatorUIDForCurrentTab(navigatorUID: string) {
-    const navigatorState = this._getNavigatorState();
-    if (!navigatorState) {
-      return;
-    }
-    const currentTab = navigatorState.routes[navigatorState.index];
-    this._navigatorTabMap[currentTab.key] = navigatorUID;
-  }
-
-  getNavigatorUIDForTabKey(tabKey: string) {
-    return this._navigatorTabMap[tabKey];
-  }
-
-  jumpToTab(tabKey: string) {
-    this.navigationContext.performAction(({ slidingTabs }) => {
-      slidingTabs(this.navigatorUID).jumpToTab(tabKey);
-    });
-  }
-}
 
 // TODO: Fill this in
 type SlidingTabItem = {
@@ -98,7 +71,7 @@ class ExNavigationSlidingTab extends PureComponent<any, Props, State> {
 
   static childContextTypes = {
     parentNavigatorUID: React.PropTypes.string,
-    navigator: React.PropTypes.instanceOf(ExNavigationSlidingTabContext),
+    navigator: React.PropTypes.instanceOf(ExNavigationTabContext),
   };
 
   constructor(props, context) {
@@ -138,17 +111,10 @@ class ExNavigationSlidingTab extends PureComponent<any, Props, State> {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.children && nextProps.children !== this.props.children) {
-      let tabItems = this._parseTabItems(nextProps);
-      let routes = tabItems.map(i => ({ key: i.id }));
-      console.log({routes});
-
-      this.props.navigation.dispatch(Actions.immediatelyResetStack(
-        this.state.navigatorUID,
-        routes,
-        0,
-      ));
-    }
+    // TODO: Should make it possible to dynamically add children after initial render?
+    // if (nextProps.children && nextProps.children !== this.props.children) {
+    //   this._parseTabItems(nextProps);
+    // }
   }
 
   componentDidUpdate(prevProps) {
@@ -269,15 +235,15 @@ class ExNavigationSlidingTab extends PureComponent<any, Props, State> {
         tabItem.element = Children.only(tabItemProps.children);
       }
 
-      const tabItemOnPress = () => {
-        this._setActiveTab(tabItemProps.id, index);
-      };
+      // const tabItemOnPress = () => {
+      //   this._setActiveTab(tabItemProps.id, index);
+      // };
 
-      if (typeof tabItemProps.onPress === 'function') {
-        tabItem.onPress = tabItem.onPress.bind(this, tabItemOnPress);
-      } else {
-        tabItem.onPress = tabItemOnPress;
-      }
+      // if (typeof tabItemProps.onPress === 'function') {
+      //   tabItem.onPress = tabItem.onPress.bind(this, tabItemOnPress);
+      // } else {
+      //   tabItem.onPress = tabItemOnPress;
+      // }
 
       return tabItem;
     });
@@ -289,11 +255,18 @@ class ExNavigationSlidingTab extends PureComponent<any, Props, State> {
     return tabItems;
   }
 
-  _setActiveTab = (id, index) => {
-    this._getNavigatorContext().jumpToTab(id);
-    if (typeof this.props.onTabPress === 'function') {
-      this.props.onTabPress(id);
-    }
+  _setActiveTab = (i) => {
+    let tabItem = this.state.tabItems[i];
+    let key = tabItem.id;
+    console.log({key, i});
+    this._getNavigatorContext().jumpToTab(key);
+
+    // console.log({setActiveTab: true, i, tabItemKey: tabItem.id, tabItemsLength: this.state.tabItems.length});
+    // return;
+
+    // if (typeof this.props.onTabPress === 'function') {
+    //   this.props.onTabPress(key);
+    // }
   }
 
   _getNavigationState(props: ?Props): Object {
@@ -307,7 +280,7 @@ class ExNavigationSlidingTab extends PureComponent<any, Props, State> {
   _registerNavigatorContext() {
     this.props.onRegisterNavigatorContext(
       this.state.navigatorUID,
-      new ExNavigationSlidingTabContext(
+      new ExNavigationTabContext(
         this.state.navigatorUID,
         this.state.parentNavigatorUID,
         this.state.id,
@@ -316,9 +289,9 @@ class ExNavigationSlidingTab extends PureComponent<any, Props, State> {
     );
   }
 
-  _getNavigatorContext(): ExNavigationSlidingTabContext {
+  _getNavigatorContext(): ExNavigationTabContext {
     const navigatorContext: any = this.props.navigation.getNavigatorByUID(this.state.navigatorUID);
-    return (navigatorContext: ExNavigationSlidingTabContext);
+    return (navigatorContext: ExNavigationTabContext);
   }
 }
 

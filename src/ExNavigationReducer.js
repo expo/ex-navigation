@@ -120,6 +120,14 @@ class ExNavigationReducer {
       return state;
     }
 
+    if (navigatorState.type === 'slidingTab') {
+      return _updateNavigator(
+        state,
+        navigatorUID,
+        {...navigatorState, index: 0 },
+      );
+    }
+
     return _updateNavigator(state, navigatorUID, NavigationStateUtils.pop(navigatorState));
   }
 
@@ -197,9 +205,25 @@ class ExNavigationReducer {
   }
 
   static [ActionTypes.JUMP_TO_TAB](state, { navigatorUID, tab }) {
-    invariant(state.navigators[navigatorUID], 'Navigator does not exist.');
-    invariant(state.navigators[navigatorUID].type === 'tab', 'Navigator is not tab navigator.');
-    return _updateSelectedKey(tab, state, navigatorUID);
+    let navigator = state.navigators[navigatorUID];
+    invariant(navigator, 'Navigator does not exist.');
+
+    let { type } = navigator;
+    invariant(['slidingTab', 'tab'].indexOf(type) !== -1, 'Navigator is not tab navigator.');
+
+    if (type === 'tab') {
+      return _updateSelectedKey(tab, state, navigatorUID);
+    } else if (type === 'slidingTab') {
+      let route = navigator.routes.find(r => r.key === tab.key);
+      let index = navigator.routes.indexOf(route);
+
+      // With slidingTab we only need to change the index
+      return _updateNavigator(
+        state,
+        navigatorUID,
+        {...navigator, index },
+      );
+    }
   }
 }
 

@@ -61,11 +61,12 @@ export default class ExNavigationActions {
     };
   }
 
-  static jumpToTab(navigatorUID, tab) {
+  static jumpToTab(navigatorUID, tab, index) {
     return {
       type: ActionTypes.JUMP_TO_TAB,
       navigatorUID,
       tab,
+      index,
     };
   }
 
