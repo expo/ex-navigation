@@ -19,6 +19,9 @@ import { withNavigation } from 'ExNavigationComponents';
 
 const APPBAR_HEIGHT = Platform.OS === 'ios' ? 44 : 55;
 const STATUSBAR_HEIGHT = Platform.OS === 'ios' ? 20 : 24;
+const BACKGROUND_COLOR = Platform.OS === 'ios' ? '#EFEFF2' : '#FFF';
+const BORDER_BOTTOM_COLOR = 'rgba(0, 0, 0, .15)';
+const BORDER_BOTTOM_WIDTH = Platform.OS === 'ios' ? StyleSheet.hairlineWidth : 0;
 
 class ExNavigationBarTitle extends PureComponent {
   render() {
@@ -115,7 +118,6 @@ const buttonStyles = StyleSheet.create({
   },
 });
 
-// @withNavigation
 export default class ExNavigationBar extends PureComponent {
   static defaultProps = {
     renderTitleComponent(props) {
@@ -125,6 +127,8 @@ export default class ExNavigationBar extends PureComponent {
     },
     barHeight: APPBAR_HEIGHT,
     statusBarHeight: STATUSBAR_HEIGHT,
+    borderBottomColor: BORDER_BOTTOM_COLOR,
+    borderBottomWidth: BORDER_BOTTOM_WIDTH,
   };
 
   static propTypes = {
@@ -133,6 +137,7 @@ export default class ExNavigationBar extends PureComponent {
     renderTitleComponent: PropTypes.func,
     barHeight: PropTypes.number.isRequired,
     statusBarHeight: PropTypes.number.isRequired,
+    borderBottomWidth: PropTypes.number.isRequired,
     style: View.propTypes.style,
   };
 
@@ -188,16 +193,14 @@ export default class ExNavigationBar extends PureComponent {
     });
 
     const height = this.props.barHeight + this.props.statusBarHeight;
-    let containerStyle = [styles.appbar, style, {height}];
+    let styleFromRouteConfig = this.props.latestRoute.getBarStyle();
+    let containerStyle = [styles.appbar, style, {height}, styleFromRouteConfig];
+
     if (this.props.overrideStyle) {
       containerStyle = [style];
     }
-    containerStyle.push(this.props.interpolator.forContainer(this.props, this.state.delta));
 
-    let backgroundColor = this.props.latestRoute.getBarBackgroundColor();
-    if (backgroundColor) {
-      containerStyle.push({backgroundColor});
-    }
+    containerStyle.push(this.props.interpolator.forContainer(this.props, this.state.delta));
 
     return (
       <View
@@ -294,7 +297,9 @@ export default class ExNavigationBar extends PureComponent {
 
 ExNavigationBar.DEFAULT_HEIGHT = APPBAR_HEIGHT + STATUSBAR_HEIGHT;
 ExNavigationBar.DEFAULT_HEIGHT_WITHOUT_STATUS_BAR = APPBAR_HEIGHT;
-ExNavigationBar.DEFAULT_BACKGROUND_COLOR = Platform.OS === 'ios' ? '#EFEFF2' : '#FFF';
+ExNavigationBar.DEFAULT_BACKGROUND_COLOR = BACKGROUND_COLOR;
+ExNavigationBar.DEFAULT_BORDER_BOTTOM_COLOR = BORDER_BOTTOM_COLOR;
+ExNavigationBar.DEFAULT_BORDER_BOTTOM_WIDTH = BORDER_BOTTOM_WIDTH;
 ExNavigationBar.Title = ExNavigationBarTitle;
 ExNavigationBar.BackButton = ExNavigationBarBackButton;
 ExNavigationBar.MenuButton = ExNavigationBarMenuButton;
@@ -319,8 +324,8 @@ const styles = StyleSheet.create({
   appbar: {
     alignItems: 'center',
     backgroundColor: ExNavigationBar.DEFAULT_BACKGROUND_COLOR,
-    borderBottomColor: 'rgba(0, 0, 0, .15)',
-    borderBottomWidth: Platform.OS === 'ios' ? StyleSheet.hairlineWidth : 0,
+    borderBottomColor: ExNavigationBar.DEFAULT_BORDER_BOTTOM_COLOR,
+    borderBottomWidth: ExNavigationBar.DEFAULT_BORDER_BOTTOM_WIDTH,
     elevation: 2,
     flexDirection: 'row',
     justifyContent: 'flex-start',

@@ -46,6 +46,10 @@ export class ExNavigationRoute {
   render: () => ReactElement<{}>;
   getTitle: Function;
   getTitleStyle: Function;
+  getBarStyle: Function;
+  getBarHeight: Function;
+  getBarBorderBottomColor: Function;
+  getBarBorderBottomWidth: Function;
   getBarBackgroundColor: Function;
   getBarTintColor: Function;
 
@@ -65,6 +69,44 @@ export class ExNavigationRoute {
       return title(this.params, this.config);
     }
     return title;
+  };
+
+  getBarStyle = () => {
+    let result = {};
+    let height = this.getBarHeight();
+    let borderBottomWidth = this.getBarBorderBottomWidth();
+    let borderBottomColor = this.getBarBorderBottomColor();
+    let backgroundColor = this.getBarBackgroundColor();
+
+    if (backgroundColor) {
+      result.backgroundColor = backgroundColor;
+    }
+
+    if (_.isNumber(height)) {
+      result.height = height;
+    }
+
+    if (_.isNumber(borderBottomWidth)) {
+      result.borderBottomWidth = borderBottomWidth;
+    }
+
+    if (borderBottomColor) {
+      result.borderBottomColor = borderBottomColor;
+    }
+
+    return result;
+  };
+
+  getBarHeight = () => {
+    return _.get(this.config, 'navigationBar.height');
+  };
+
+  getBarBorderBottomWidth = () => {
+    return _.get(this.config, 'navigationBar.borderBottomWidth');
+  };
+
+  getBarBorderBottomColor = () => {
+    return _.get(this.config, 'navigationBar.borderBottomColor');
   };
 
   getBarBackgroundColor = () => {
