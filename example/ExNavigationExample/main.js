@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import {
+  AppRegistry,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -8,13 +9,12 @@ import {
 
 import {
   createRouter,
-  withNavigation,
   NavigationProvider,
   StackNavigation,
   NavigationStyles,
   TabNavigation,
   TabNavigationItem as TabItem,
-} from '../../';
+} from '@exponent/ex-navigation';
 
 const AppRouter = createRouter(() => ({
   modal: () => ModalContainer,
@@ -144,7 +144,6 @@ class AnotherRouteScreen extends Component {
   }
 }
 
-@withNavigation
 class NestedNavigationScreen extends Component {
   static route = {
     navigationBar: {
@@ -171,7 +170,7 @@ class ModalContainer extends Component {
     initialRoute: PropTypes.string.isRequired,
   };
 
-  static navigation = {
+  static route = {
     styles: NavigationStyles.FloatVertical,
     navigationBar: {
       visible: false,
@@ -262,3 +261,5 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
 });
+
+AppRegistry.registerComponent('main', () => AppContainer);
