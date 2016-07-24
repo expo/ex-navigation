@@ -147,8 +147,6 @@ class ExNavigationSlidingTab extends PureComponent<any, Props, State> {
       return null;
     }
 
-    console.log({navigationState, routesLength: navigationState.routes.length, tabItemsLength: this.state.tabItems.length});
-
     if (this.state.tabItems.length !== navigationState.routes.length) {
       return null;
     }
@@ -169,7 +167,6 @@ class ExNavigationSlidingTab extends PureComponent<any, Props, State> {
   }
 
   _renderScene = ({ route }) => {
-    console.log({renderScene: true, route: route.key});
     let tabItem = this.state.tabItems.find(i => i.id === route.key);
     if (tabItem) {
       return tabItem.element;
@@ -258,11 +255,7 @@ class ExNavigationSlidingTab extends PureComponent<any, Props, State> {
   _setActiveTab = (i) => {
     let tabItem = this.state.tabItems[i];
     let key = tabItem.id;
-    console.log({key, i});
     this._getNavigatorContext().jumpToTab(key);
-
-    // console.log({setActiveTab: true, i, tabItemKey: tabItem.id, tabItemsLength: this.state.tabItems.length});
-    // return;
 
     // if (typeof this.props.onTabPress === 'function') {
     //   this.props.onTabPress(key);

@@ -169,7 +169,6 @@ class ExNavigationReducer {
   }
 
   static [ActionTypes.IMMEDIATELY_RESET_STACK](state, { navigatorUID, routes, index }) {
-    console.log({ navigatorUID, routes, index });
     const navigatorState = state.navigators[navigatorUID] || {
       routes: [],
       index: 0,
