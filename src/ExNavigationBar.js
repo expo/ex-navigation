@@ -127,8 +127,6 @@ export default class ExNavigationBar extends PureComponent {
     },
     barHeight: APPBAR_HEIGHT,
     statusBarHeight: STATUSBAR_HEIGHT,
-    borderBottomColor: BORDER_BOTTOM_COLOR,
-    borderBottomWidth: BORDER_BOTTOM_WIDTH,
   };
 
   static propTypes = {
@@ -137,7 +135,6 @@ export default class ExNavigationBar extends PureComponent {
     renderTitleComponent: PropTypes.func,
     barHeight: PropTypes.number.isRequired,
     statusBarHeight: PropTypes.number.isRequired,
-    borderBottomWidth: PropTypes.number.isRequired,
     style: View.propTypes.style,
   };
 
@@ -202,6 +199,7 @@ export default class ExNavigationBar extends PureComponent {
 
     containerStyle.push(this.props.interpolator.forContainer(this.props, this.state.delta));
 
+
     return (
       <View
         pointerEvents={this.props.visible ? 'auto' : 'none'}
@@ -211,8 +209,7 @@ export default class ExNavigationBar extends PureComponent {
           alertState={this.props.navigationState.alert}
         />
 
-        <Animated.View
-          style={containerStyle}>
+        <Animated.View style={containerStyle}>
           <View style={[styles.appbarInnerContainer, {top: this.props.statusBarHeight}]}>
             {scenesProps.map(this._renderLeft, this)}
             {scenesProps.map(this._renderTitle, this)}
@@ -311,6 +308,7 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     paddingTop: ExNavigationBar.DEFAULT_HEIGHT,
+    paddingBottom: 16,
   },
 
   wrapperWithoutAppbar: {
@@ -330,7 +328,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'flex-start',
     left: 0,
-    marginBottom: 16, // This is needed for elevation shadow
     position: 'absolute',
     right: 0,
     top: 0,
