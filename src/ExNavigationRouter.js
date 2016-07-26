@@ -48,6 +48,7 @@ export class ExNavigationRoute {
   getTitleStyle: Function;
   getBarStyle: Function;
   getBarHeight: Function;
+  getBarElevation: Function;
   getBarBorderBottomColor: Function;
   getBarBorderBottomWidth: Function;
   getBarBackgroundColor: Function;
@@ -74,12 +75,17 @@ export class ExNavigationRoute {
   getBarStyle = () => {
     let result = {};
     let height = this.getBarHeight();
+    let elevation = this.getBarElevation();
     let borderBottomWidth = this.getBarBorderBottomWidth();
     let borderBottomColor = this.getBarBorderBottomColor();
     let backgroundColor = this.getBarBackgroundColor();
 
     if (backgroundColor) {
       result.backgroundColor = backgroundColor;
+    }
+
+    if (_.isNumber(elevation)) {
+      result.elevation = elevation;
     }
 
     if (_.isNumber(height)) {
@@ -95,6 +101,10 @@ export class ExNavigationRoute {
     }
 
     return result;
+  };
+
+  getBarElevation = () => {
+    return _.get(this.config, 'navigationBar.elevation');
   };
 
   getBarHeight = () => {

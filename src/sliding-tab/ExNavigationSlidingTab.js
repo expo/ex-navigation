@@ -56,6 +56,11 @@ class ExNavigationSlidingTab extends PureComponent<any, Props, State> {
     __isNavigator: true,
   };
 
+  static navigationBarStyles = {
+    borderBottomWidth: 0,
+    elevation: 0,
+  };
+
   static defaultProps = {
     barBackgroundColor: ExNavigationBar.DEFAULT_BACKGROUND_COLOR,
     indicatorStyle: {},
