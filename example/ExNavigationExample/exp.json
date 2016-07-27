@@ -17,4 +17,7 @@
   packagerOpts: {
     assetExts: ["ttf"]
   },
+  android: {
+    package: "com.getexponent.exnavigation",
+  },
 }
