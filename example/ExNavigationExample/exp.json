@@ -17,6 +17,12 @@
   packagerOpts: {
     assetExts: ["ttf"]
   },
+  ios: {
+    bundleIdentifier: "com.getexponent.exnvagiation",
+    permissions: {
+      remoteNotifications: true,
+    },
+  },
   android: {
     package: "com.getexponent.exnavigation",
   },
