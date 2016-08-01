@@ -66,23 +66,25 @@ export default class ExNavigationAlertBar extends React.Component {
     }
 
     return (
-      <TouchableWithoutFeedback onPress={this._dispatchHide}>
-        <Animated.View style={[
-          {transform: [{translateY: this.state.yOffset}]}, // Animated styles
-          styles.alertBar, // Default styles
-          this.props.style, // This is necessary to take into account the appbar visibility
-          containerStyleOptions, // Configurable styles when presenting the alert
-        ]}>
-          <View
-            style={styles.alertBarInnerContainer}
-            onLayout={this._onLayout}
-            ref={view => { this._textContainerRef = view; }}>
-            <Text style={[styles.alertText, textStyleOptions]}>
-              {message}
-            </Text>
-          </View>
-        </Animated.View>
-      </TouchableWithoutFeedback>
+      <View style={styles.overflowContainer}>
+        <TouchableWithoutFeedback onPress={this._dispatchHide}>
+          <Animated.View style={[
+            {transform: [{translateY: this.state.yOffset}]}, // Animated styles
+            styles.alertBar, // Default styles
+            this.props.style, // This is necessary to take into account the appbar visibility
+            containerStyleOptions, // Configurable styles when presenting the alert
+          ]}>
+            <View
+              style={styles.alertBarInnerContainer}
+              onLayout={this._onLayout}
+              ref={view => { this._textContainerRef = view; }}>
+              <Text style={[styles.alertText, textStyleOptions]}>
+                {message}
+              </Text>
+            </View>
+          </Animated.View>
+        </TouchableWithoutFeedback>
+      </View>
     );
   }
 
@@ -157,11 +159,13 @@ export default class ExNavigationAlertBar extends React.Component {
 const WINDOW_WIDTH = Dimensions.get('window').width;
 
 const styles = StyleSheet.create({
+  overflowContainer: {
+    overflow: 'hidden',
+  },
   alertBar: {
     backgroundColor: '#000',
     justifyContent: 'center',
     alignItems: 'center',
-    overflow: 'hidden',
     flexDirection: 'column',
   },
   alertBarInnerContainer: {
