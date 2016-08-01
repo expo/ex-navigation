@@ -14,6 +14,8 @@ import {
 } from 'react-native';
 import PureComponent from 'PureComponent';
 
+import { Components } from 'exponent';
+
 import ExNavigationAlertBar from 'ExNavigationAlertBar';
 import { withNavigation } from 'ExNavigationComponents';
 
@@ -32,7 +34,7 @@ class ExNavigationBarTitle extends PureComponent {
         <Text style={[
           titleStyles.titleText,
           tintColor ? {color: tintColor} : null,
-          textStyle
+          textStyle,
         ]}>
           {children}
         </Text>
@@ -67,7 +69,8 @@ class ExNavigationBarBackButton extends PureComponent {
       <TouchableOpacity style={buttonStyles.buttonContainer} onPress={this._onPress}>
         <Image
           style={[buttonStyles.button, tintColor ? {tintColor} : null]}
-          source={require('ExNavigationAssets').backIcon} />
+          source={require('ExNavigationAssets').backIcon}
+        />
       </TouchableOpacity>
     );
   }
@@ -83,7 +86,8 @@ class ExNavigationBarMenuButton extends PureComponent {
       <TouchableOpacity style={buttonStyles.buttonContainer} onPress={() => this.props.navigator.toggleDrawer()}>
         <Image
           style={[buttonStyles.menuButton, tintColor ? {tintColor} : null]}
-          source={require('ExNavigationAssets').menuIcon} />
+          source={require('ExNavigationAssets').menuIcon}
+        />
       </TouchableOpacity>
     );
   }
@@ -169,6 +173,9 @@ export default class ExNavigationBar extends PureComponent {
   }
 
   render() {
+    // We still want to render the alerts even if no navigation bar. For this
+    // reason, it may make sense to refactor alerts to the Stack rather than
+    // the navigation bar
     if (!this.state.visible) {
       return (
         <View style={[styles.wrapper, styles.wrapperWithoutAppbar]}>
@@ -189,9 +196,13 @@ export default class ExNavigationBar extends PureComponent {
       return props;
     });
 
+    // TODO: this should come from the latest scene config
     const height = this.props.barHeight + this.props.statusBarHeight;
+
     let styleFromRouteConfig = this.props.latestRoute.getBarStyle();
-    let containerStyle = [styles.appbar, style, {height}, styleFromRouteConfig];
+    let isTranslucent = !!this.props.latestRoute.getTranslucent();
+    let backgroundStyle = isTranslucent ? styles.appbarTranslucent : styles.appbarSolid;
+    let containerStyle = [styles.appbar, backgroundStyle, style, {height}, styleFromRouteConfig];
 
     if (this.props.overrideStyle) {
       containerStyle = [style];
@@ -199,15 +210,10 @@ export default class ExNavigationBar extends PureComponent {
 
     containerStyle.push(this.props.interpolator.forContainer(this.props, this.state.delta));
 
-
     return (
-      <View
-        pointerEvents={this.props.visible ? 'auto' : 'none'}
-        style={styles.wrapper}>
-        <ExNavigationAlertBar
-          {...this.props}
-          alertState={this.props.navigationState.alert}
-        />
+      <View pointerEvents={this.props.visible ? 'auto' : 'none'} style={styles.wrapper}>
+        {isTranslucent && <Components.BlurView style={[styles.translucentUnderlay, {height}]} />}
+        <ExNavigationAlertBar {...this.props} alertState={this.props.navigationState.alert} />
 
         <Animated.View style={containerStyle}>
           <View style={[styles.appbarInnerContainer, {top: this.props.statusBarHeight}]}>
@@ -315,13 +321,20 @@ const styles = StyleSheet.create({
     paddingTop: 0,
   },
 
+  translucentUnderlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+  },
+
   alertBarWithoutAppbar: {
     paddingTop: STATUSBAR_HEIGHT,
   },
 
   appbar: {
     alignItems: 'center',
-    backgroundColor: ExNavigationBar.DEFAULT_BACKGROUND_COLOR,
     borderBottomColor: ExNavigationBar.DEFAULT_BORDER_BOTTOM_COLOR,
     borderBottomWidth: ExNavigationBar.DEFAULT_BORDER_BOTTOM_WIDTH,
     elevation: 2,
@@ -332,11 +345,17 @@ const styles = StyleSheet.create({
     right: 0,
     top: 0,
   },
+  appbarSolid: {
+    backgroundColor: ExNavigationBar.DEFAULT_BACKGROUND_COLOR,
+  },
+  appbarTranslucent: {
+    backgroundColor: 'rgba(255,255,255,0.7)',
+  },
   appbarInnerContainer: {
     position: 'absolute',
     left: 0,
     right: 0,
-    bottom: 0
+    bottom: 0,
   },
   title: {
     bottom: 0,

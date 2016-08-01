@@ -12,6 +12,8 @@ import invariant from 'invariant';
 import warning from 'warning';
 import _ from 'lodash';
 
+import NavigationBar from 'ExNavigationBar';
+
 import { withNavigation, createFocusableComponent } from 'ExNavigationComponents';
 
 import type {
@@ -81,6 +83,10 @@ export class ExNavigationRoute {
     let backgroundColor = this.getBarBackgroundColor();
 
     if (backgroundColor) {
+      if (__DEV__ && this.getTranslucent() && !backgroundColor.match(/rgba/)) {
+        console.warn('Using translucent navigation bar and specifying a solid background color, please use rgba or the bar will not be translucent.');
+      }
+
       result.backgroundColor = backgroundColor;
     }
 
@@ -101,6 +107,10 @@ export class ExNavigationRoute {
     }
 
     return result;
+  };
+
+  getTranslucent = () => {
+    return _.get(this.config, 'navigationBar.translucent');
   };
 
   getBarElevation = () => {
@@ -133,6 +143,24 @@ export class ExNavigationRoute {
 
   getEventEmitter = () => {
     return this.config.eventEmitter;
+  };
+
+  getTabBarInset = () => {
+    return _.get(this.config, '__tabBarInset');
+  }
+
+  getContentContainerStyle = () => {
+    let result = {};
+
+    if (this.getTranslucent()) {
+      result.paddingTop = NavigationBar.DEFAULT_HEIGHT;
+    }
+
+    if (this.getTabBarInset()) {
+      result.paddingBottom = this.getTabBarInset();
+    }
+
+    return result;
   };
 
   clone() {

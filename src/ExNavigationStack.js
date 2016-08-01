@@ -400,10 +400,10 @@ class ExNavigationStack extends PureComponent<any, Props, State> {
     let result;
     let currentNavigator = this._getNavigatorContext();
 
-    while(currentNavigator) {
+    while (currentNavigator) {
       try {
         currentNavigator = currentNavigator.getParentNavigator();
-      } catch(e) {
+      } catch (e) {
         break;
       }
 
@@ -429,7 +429,8 @@ class ExNavigationStack extends PureComponent<any, Props, State> {
       return (
         <NavigationBar.MenuButton
           navigator={drawerNavigatorParent}
-          tintColor={route.getBarTintColor()} />
+          tintColor={route.getBarTintColor()}
+        />
       );
     }
     if (props.scene.index > 0) {
@@ -501,6 +502,8 @@ class ExNavigationStack extends PureComponent<any, Props, State> {
 
     if (routeConfig.navigationBar && routeConfig.navigationBar.visible !== false) {
       let customHeight = 0;
+      let isTranslucent = !!routeConfig.navigationBar.translucent;
+
       if (_.isNumber(routeConfig.navigationBar.height)) {
         customHeight += routeConfig.height;
       }
@@ -511,7 +514,7 @@ class ExNavigationStack extends PureComponent<any, Props, State> {
       if (_.isNumber(routeConfig.height) || _.isNumber(routeConfig.statusBarHeight)) {
         style = [...style, {marginTop: customHeight}];
       } else {
-        style = [...style, styles.withNavigationBar];
+        style = [...style, isTranslucent ? styles.withNavigationBarTranslucent : styles.withNavigationBarOpaque];
       }
     } else {
       style = [...style, styles.withoutNavigationBar];
@@ -568,7 +571,11 @@ const styles = StyleSheet.create({
   withoutNavigationBar: {
     marginTop: 0,
   },
-  withNavigationBar: {
-    marginTop: NavigationBar.DEFAULT_HEIGHT,
+  withNavigationBarTranslucent: {
+    paddingTop: 0,
+  },
+  withNavigationBarOpaque: {
+    // TODO: needs to be dynamic based off of current navbar height
+    paddingTop: NavigationBar.DEFAULT_HEIGHT,
   },
 });

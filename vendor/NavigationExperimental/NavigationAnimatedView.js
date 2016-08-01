@@ -167,6 +167,7 @@ class NavigationAnimatedView
         <View style={styles.scenes} key="scenes">
           {scenes}
         </View>
+
         {overlay}
       </View>
     );

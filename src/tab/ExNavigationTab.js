@@ -13,8 +13,9 @@ import {
 import PureComponent from 'PureComponent';
 import StaticContainer from 'react-static-container';
 
-import invariant from 'invariant';
 import _ from 'lodash';
+import invariant from 'invariant';
+import cloneReferencedElement from 'react-clone-referenced-element';
 
 import Actions from 'ExNavigationActions';
 import ExNavigatorContext from 'ExNavigatorContext';
@@ -137,6 +138,7 @@ class ExNavigationTab extends PureComponent<any, Props, State> {
       selectedTab: navigationState.routes[navigationState.index].key,
       items: this.state.tabItems,
       height: this.props.tabBarHeight,
+      translucent: this.props.translucent,
       style: [
         this.props.tabBarStyle,
         this.props.tabBarColor ? {backgroundColor: this.props.tabBarColor} : {},
@@ -147,10 +149,11 @@ class ExNavigationTab extends PureComponent<any, Props, State> {
     const TabBarComponent = tabBar.type;
     // Get the tab bar's height from a static property on the class
     const tabBarHeight =  this.props.tabBarHeight || TabBarComponent.defaultHeight || 0;
+    const isTranslucent = this.props.translucent;
 
     return (
       <View style={styles.container}>
-        <View style={{ flex: 1, marginBottom: tabBarHeight }}>
+        <View style={{flex: 1, marginBottom: isTranslucent ? 0 : tabBarHeight}}>
           {this.renderTabs()}
         </View>
         {tabBar}
@@ -269,7 +272,17 @@ class ExNavigationTab extends PureComponent<any, Props, State> {
       };
 
       if (Children.count(tabItemProps.children) > 0) {
-        tabItem.element = Children.only(tabItemProps.children);
+        let child = Children.only(tabItemProps.children);
+
+        // NOTE: a bit hacky, identifying navigation component like StackNav
+        // via initialRoute
+        if (child.props.initialRoute) {
+          let defaultRouteConfig = child.props.defaultRouteConfig || {};
+          defaultRouteConfig = {...defaultRouteConfig, __tabBarInset: this.props.tabBarHeight};
+          tabItem.element = cloneReferencedElement(child, {...child.props, defaultRouteConfig});
+        } else {
+          tabItem.element = child;
+        }
       }
 
       const tabItemOnPress = () => {

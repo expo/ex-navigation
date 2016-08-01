@@ -12,6 +12,8 @@ import {
   View,
 } from 'react-native';
 
+import { Components } from 'exponent';
+
 import TabBadge from 'ExNavigationBadge';
 
 const DEFAULT_TAB_BAR_HEIGHT = 56;
@@ -21,11 +23,18 @@ export default class ExNavigationTabBar extends React.Component {
 
   render() {
     const height = this.props.height || DEFAULT_TAB_BAR_HEIGHT;
+    let isTranslucent = this.props.translucent;
+    let backgroundColor = isTranslucent ? 'rgba(255,255,255,0.5)' : '#fefefe';
 
     return (
-      <View style={[styles.container, {height}, this.props.style]}>
-        <View style={styles.itemContainer}>
-          {this.renderTabItems()}
+      <View style={[styles.container, {height}]}>
+        {isTranslucent &&
+          <Components.BlurView style={[styles.translucentUnderlay, {height}]} />}
+
+        <View style={[styles.innerContainer, {backgroundColor}, this.props.style]}>
+          <View style={styles.itemContainer}>
+            {this.renderTabItems()}
+          </View>
         </View>
       </View>
     );
@@ -89,7 +98,21 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     right: 0,
-    backgroundColor: '#fefefe',
+    backgroundColor: 'transparent',
+  },
+  translucentUnderlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+  },
+  innerContainer: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
     borderTopColor: '#b2b2b2',
     borderTopWidth: StyleSheet.hairlineWidth,
   },
