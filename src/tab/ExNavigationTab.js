@@ -276,7 +276,7 @@ class ExNavigationTab extends PureComponent<any, Props, State> {
 
         // NOTE: a bit hacky, identifying navigation component like StackNav
         // via initialRoute
-        if (child.props.initialRoute) {
+        if (child.props.initialRoute && this.props.translucent) {
           let defaultRouteConfig = child.props.defaultRouteConfig || {};
           defaultRouteConfig = {...defaultRouteConfig, __tabBarInset: this.props.tabBarHeight};
           tabItem.element = cloneReferencedElement(child, {...child.props, defaultRouteConfig});
