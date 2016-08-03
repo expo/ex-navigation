@@ -112,6 +112,14 @@ export class ExNavigationStackContext extends ExNavigatorContext {
     });
   }
 
+  @debounce(500, true)
+  replace() {
+    invariant(route !== null && route.key, 'Route is null or malformed.');
+    this.navigationContext.performAction(({ stacks }) => {
+      stacks(this.navigatorUID).replace(route);
+    });
+  }
+
   getCurrentRoute() {
     const navigatorState = this._getNavigatorState();
     if (!navigatorState) {
