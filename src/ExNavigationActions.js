@@ -44,6 +44,14 @@ export default class ExNavigationActions {
     };
   }
 
+  static replace(navigatorUID, child) {
+    return {
+      type: ActionTypes.REPLACE,
+      navigatorUID,
+      child,
+    };
+  }
+
   static immediatelyResetStack(navigatorUID, routes, index) {
     return {
       type: ActionTypes.IMMEDIATELY_RESET_STACK,

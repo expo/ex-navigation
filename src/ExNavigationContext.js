@@ -163,6 +163,11 @@ export default class NavigationContext {
             Actions.pop(uid)
           );
         },
+        replace: (route) => {
+          actions.push(
+            Actions.replace(uid, route)
+          );
+        },
         immediatelyResetStack: (routes, index) => {
           const mappedChildren = routes.map((route, i) => {
             invariant(route !== null && route.key, `Route at index ${i} is null or malformed.`);

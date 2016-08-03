@@ -112,6 +112,14 @@ export class ExNavigationStackContext extends ExNavigatorContext {
     });
   }
 
+  @debounce(500, true)
+  replace(route: ExNavigationRoute) {
+    invariant(route !== null && route.key, 'Route is null or malformed.');
+    this.navigationContext.performAction(({ stacks }) => {
+      stacks(this.navigatorUID).replace(route);
+    });
+  }
+
   getCurrentRoute() {
     const navigatorState = this._getNavigatorState();
     if (!navigatorState) {
@@ -357,10 +365,12 @@ class ExNavigationStack extends PureComponent<any, Props, State> {
   };
 
   _renderOverlay = (props: ExNavigationSceneRendererProps) => {
+    // filter out stale scenes
+    const scenes = props.scenes.filter(scene => !scene.isStale);
     // Determine animation styles based on the most recent scene in the stack.
-    const latestRoute = this._getRouteAtIndex(props.scenes, props.scenes.length - 1);
+    const latestRoute = this._getRouteAtIndex(scenes, scenes.length - 1);
     const latestRouteConfig: ExNavigationConfig = latestRoute.config;
-    props = { ...props, latestRouteConfig, latestRoute };
+    props = { ...props, latestRouteConfig, latestRoute, scenes };
 
     if (typeof this.props.renderOverlay === 'function') {
       return this.props.renderOverlay(props);
@@ -462,12 +472,16 @@ class ExNavigationStack extends PureComponent<any, Props, State> {
   };
 
   _renderScene = (props: ExNavigationSceneRendererProps) => {
+    // filter out stale scenes
+    const scenes = props.scenes.filter(scene => !scene.isStale);
     // Determine gesture and animation styles based on the most recent scene in the stack,
     // not based on the scene we're rendering in this method.
-    const latestRoute = this._getRouteAtIndex(props.scenes, props.scenes.length - 1);
+    const latestRoute = this._getRouteAtIndex(scenes, scenes.length - 1);
 
     const latestRouteConfig = latestRoute.config;
     const { sceneAnimations, gestures } = latestRouteConfig.styles || {};
+
+    props = { ...props, latestRouteConfig, latestRoute, scenes };
 
     const scene: any = props.scene;
     const routeForScene = scene.route;

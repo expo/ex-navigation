@@ -112,6 +112,23 @@ class ExNavigationReducer {
     };
   }
 
+  static [ActionTypes.REPLACE](state, { navigatorUID, child }) {
+    invariant(state.navigators[navigatorUID], 'Navigator does not exist.');
+    const navigatorState = state.navigators[navigatorUID];
+
+    const index = navigatorState.index;
+    const defaultRouteConfig = navigatorState.defaultRouteConfig;
+
+    const newChild = child.clone();
+    newChild.config = _.merge({}, defaultRouteConfig, child.config);
+
+    return _updateNavigator(
+      state, 
+      navigatorUID, 
+      NavigationStateUtils.replaceAtIndex(navigatorState, index, newChild)
+    );
+  }
+
   static [ActionTypes.POP](state, { navigatorUID }) {
     invariant(state.navigators[navigatorUID], 'Navigator does not exist.');
     const navigatorState = state.navigators[navigatorUID];
