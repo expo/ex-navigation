@@ -215,8 +215,8 @@ export class ExNavigationRouter<RC: RouteCreator> {
     );
   }
 
-  _createRoute(routeName: string, routeDefinitionThunk: () => ExNavigationRouteDefinition, routeParams: Object = {}): ExNavigationRoute {
-    const routeDefinitionOrComponent = routeDefinitionThunk();
+  _createRoute(routeName: string, routeDefinitionThunk: (routeParams: Object) => ExNavigationRouteDefinition, routeParams: Object = {}): ExNavigationRoute {
+    const routeDefinitionOrComponent = routeDefinitionThunk(routeParams);
 
     let routeDefinition;
     let renderRoute;
