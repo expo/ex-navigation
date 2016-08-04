@@ -22,6 +22,7 @@ const babelOpts = {
         'clamp': 'clamp',
         'core-decorators': 'core-decorators',
         'debug': 'debug',
+        'exponent': 'exponent',
         'fbemitter': 'fbemitter',
         'fbjs/lib/shallowEqual': 'fbjs/lib/shallowEqual',
         'fbjs/lib/emptyFunction': 'fbjs/lib/emptyFunction',

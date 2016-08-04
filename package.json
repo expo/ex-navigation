@@ -1,6 +1,6 @@
 {
   "name": "@exponent/ex-navigation",
-  "version": "1.4.0-beta11",
+  "version": "1.4.0-beta12",
   "description": "Route-centric navigation libary for React Native.",
   "main": "./lib/ExNavigation.js",
   "scripts": {
@@ -21,7 +21,8 @@
   "license": "MIT",
   "peerDependencies": {
     "react-native": "^0.27.2",
-    "react": "^15.1.0"
+    "react": "^15.1.0",
+    "exponent": ">=7.0.0"
   },
   "dependencies": {
     "@exponent/react-native-touchable-native-feedback-safe": "^1.0.0",
@@ -58,3 +59,4 @@
     "run-sequence": "^1.1.5"
   }
 }
+
