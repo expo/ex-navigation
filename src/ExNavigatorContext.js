@@ -1,9 +1,8 @@
 /**
- * @providesModule ExNavigatorContext
  * @flow
  */
 
-import ExNavigationContext from 'ExNavigationContext';
+import ExNavigationContext from './ExNavigationContext';
 
 export default class ExNavigatorContext<T: string> {
   type: T;

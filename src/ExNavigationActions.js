@@ -1,9 +1,8 @@
 /**
- * @providesModule ExNavigationActions
  * @flow
  */
 
-import ActionTypes from 'ExNavigationActionTypes';
+import ActionTypes from './ExNavigationActionTypes';
 
 export default class ExNavigationActions {
   static initialize() {

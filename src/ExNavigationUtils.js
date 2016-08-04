@@ -1,7 +1,3 @@
-/**
- * @providesModule ExNavigationUtils
- */
-
 import debug from 'debug';
 
 if (__DEV__) {

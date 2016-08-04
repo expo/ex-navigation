@@ -1,7 +1,3 @@
-/**
- * @providesModule ExNavigationSlidingTabItem
- */
-
 import React from 'react';
 
 export default class ExNavigationSlidingTabItem extends React.Component {

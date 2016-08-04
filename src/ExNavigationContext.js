@@ -1,25 +1,24 @@
 /**
- * @providesModule ExNavigationContext
  * @flow
  */
 
 import invariant from 'invariant';
 
-import Actions from 'ExNavigationActions';
-import createNavigationStore, { batchNavigationActions } from 'ExNavigationStore';
+import Actions from './ExNavigationActions';
+import createNavigationStore, { batchNavigationActions } from './ExNavigationStore';
 // import ExNavigationVisibilityManager from 'ExNavigationVisibilityManager';
 
-import type ExNavigatorContext from 'ExNavigatorContext';
+import type ExNavigatorContext from './ExNavigatorContext';
 
 import type {
   ExNavigationRoute,
   ExNavigationRouter,
-} from 'ExNavigationRouter';
+} from './ExNavigationRouter';
 
 import type {
   ExNavigationStore,
   ExNavigationState,
-} from 'ExNavigationStore';
+} from './ExNavigationStore';
 
 /**
  * Represents

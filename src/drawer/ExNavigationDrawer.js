@@ -1,5 +1,4 @@
 /**
- * @providesModule ExNavigationDrawer
  * @flow
  */
 
@@ -11,19 +10,19 @@ import {
   View,
 } from 'react-native';
 import DrawerLayout from 'react-native-drawer-layout';
-import PureComponent from 'PureComponent';
+import PureComponent from '../utils/PureComponent';
 import StaticContainer from 'react-static-container';
 
 import invariant from 'invariant';
 import _ from 'lodash';
 
-import Actions from 'ExNavigationActions';
-import ExNavigatorContext from 'ExNavigatorContext';
-import { createNavigatorComponent } from 'ExNavigationComponents';
+import Actions from '../ExNavigationActions';
+import ExNavigatorContext from '../ExNavigatorContext';
+import { createNavigatorComponent } from '../ExNavigationComponents';
 
-import ExNavigationDrawerLayout from 'ExNavigationDrawerLayout';
-import ExNavigationDrawerItem from 'ExNavigationDrawerItem';
-import type ExNavigationContext from 'ExNavigationContext';
+import ExNavigationDrawerLayout from './ExNavigationDrawerLayout';
+import ExNavigationDrawerItem from './ExNavigationDrawerItem';
+import type ExNavigationContext from '../ExNavigationContext';
 
 export class ExNavigationDrawerContext extends ExNavigatorContext {
   navigatorUID: string;

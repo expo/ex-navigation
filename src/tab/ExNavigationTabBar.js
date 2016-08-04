@@ -1,7 +1,3 @@
-/**
- * @providesModule ExNavigationTabBar
- */
-
 import React from 'react';
 
 import {
@@ -14,7 +10,7 @@ import {
 
 import { Components } from 'exponent';
 
-import TabBadge from 'ExNavigationBadge';
+import TabBadge from '../ExNavigationBadge';
 
 const DEFAULT_TAB_BAR_HEIGHT = 56;
 

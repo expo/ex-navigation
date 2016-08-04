@@ -1,5 +1,4 @@
 /**
- * @providesModule ExNavigationStack
  * @flow
  */
 
@@ -15,28 +14,30 @@ import {
 import _ from 'lodash';
 import invariant from 'invariant';
 import cloneReferencedElement from 'react-clone-referenced-element';
-import PureComponent from 'PureComponent';
+import PureComponent from './utils/PureComponent';
 import { debounce } from 'core-decorators';
 
-import Actions from 'ExNavigationActions';
-import NavigationBar from 'ExNavigationBar';
-import NavigationItem from 'ExNavigationStackItem';
+import Actions from './ExNavigationActions';
+import NavigationBar from './ExNavigationBar';
+import NavigationItem from './ExNavigationStackItem';
 
-import { getBackButtonManager } from 'ExNavigationBackButtonManager';
-import { createNavigatorComponent } from 'ExNavigationComponents';
-import ExNavigatorContext from 'ExNavigatorContext';
-import * as NavigationStyles from 'ExNavigationStyles';
-import * as Utils from 'ExNavigationUtils';
+import { getBackButtonManager } from './ExNavigationBackButtonManager';
+import { createNavigatorComponent } from './ExNavigationComponents';
+import ExNavigatorContext from './ExNavigatorContext';
+import * as NavigationStyles from './ExNavigationStyles';
+import * as Utils from './ExNavigationUtils';
 
 const {
   Transitioner: NavigationTransitioner,
 } = NavigationExperimental;
 
-import type { NavigationSceneRendererProps, NavigationScene } from 'NavigationTypeDefinition';
-import type { ExNavigationRoute } from 'ExNavigationRouter';
-import type ExNavigationContext from 'ExNavigationContext';
-import type { ExNavigationConfig, ExNavigationState } from 'ExNavigationTypeDefinition';
-import type { ExNavigationTabContext } from 'ExNavigationTab';
+import type { 
+  NavigationSceneRendererProps, NavigationScene 
+} from NavigationExperimental.NavigationTypeDefinition;
+import type { ExNavigationRoute } from './ExNavigationRouter';
+import type ExNavigationContext from './ExNavigationContext';
+import type { ExNavigationConfig, ExNavigationState } from './ExNavigationTypeDefinition';
+import type { ExNavigationTabContext } from './tab/ExNavigationTab';
 
 const DEFAULT_ROUTE_CONFIG: ExNavigationConfig = {
   styles: Platform.OS !== 'android' ? NavigationStyles.FloatHorizontal : NavigationStyles.Fade,

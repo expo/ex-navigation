@@ -1,7 +1,3 @@
-/**
- * @providesModule ExNavigationDrawerItem
- */
-
 import React from 'react';
 
 export default class ExNavigationDrawerItem extends React.Component {
