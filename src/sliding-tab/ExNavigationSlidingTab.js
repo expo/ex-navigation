@@ -158,7 +158,7 @@ class ExNavigationSlidingTab extends PureComponent<any, Props, State> {
 
     return (
       <TabViewAnimated
-        style={[ styles.container, this.props.style ]}
+        style={[styles.container, this.props.style]}
         navigationState={navigationState}
         renderScene={this._renderPage}
         renderHeader={this._renderHeader}
@@ -217,8 +217,6 @@ class ExNavigationSlidingTab extends PureComponent<any, Props, State> {
       selectedChild.key,
     ];
   }
-
-  _onNavigate = () => {};
 
   _parseTabItems(props) {
     const tabItems = Children.map(props.children, (child, index) => {

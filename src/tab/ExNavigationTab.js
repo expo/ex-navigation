@@ -256,8 +256,6 @@ class ExNavigationTab extends PureComponent<any, Props, State> {
     ];
   }
 
-  _onNavigate = () => {};
-
   _parseTabItems(props) {
     const tabItems = Children.map(props.children, (child, index) => {
       invariant(

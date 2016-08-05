@@ -4,9 +4,9 @@
 
 import _ from 'lodash';
 
-// import {
-//   NavigationExperimental,
-// } from 'react-native';
+import {
+  NavigationExperimental,
+} from 'react-native';
 
 import invariant from 'invariant';
 
@@ -14,7 +14,7 @@ import ActionTypes from 'ExNavigationActionTypes';
 
 const {
   StateUtils: NavigationStateUtils,
-} = require('VendoredNavigationExperimental');
+} = NavigationExperimental;
 
 const INITIAL_STATE = {
   navigators: {},
@@ -123,8 +123,8 @@ class ExNavigationReducer {
     newChild.config = _.merge({}, defaultRouteConfig, child.config);
 
     return _updateNavigator(
-      state, 
-      navigatorUID, 
+      state,
+      navigatorUID,
       NavigationStateUtils.replaceAtIndex(navigatorState, index, newChild)
     );
   }

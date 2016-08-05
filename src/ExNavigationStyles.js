@@ -5,43 +5,35 @@
 import {
   Animated,
   Easing,
+  NavigationExperimental,
 } from 'react-native';
 
 const {
   CardStackStyleInterpolator,
   CardStackPanResponder,
-} = require('VendoredNavigationExperimental').Card;
+} = NavigationExperimental.Card;
 
 import type { ExNavigationStyles } from 'ExNavigationTypeDefinition';
 
-const applyTimingAnimation = (position, navigationState) => {
-  Animated.timing(
-    position,
-    {
-      easing: Easing.inOut(Easing.linear),
-      toValue: navigationState.index,
-      duration: 150,
-    }
-  ).start();
-};
+const configureTimingTransition = (transitionProps, previousTransitionProps) => ({
+  timing: Animated.spring,
+  easing: Easing.inOut(Easing.linear),
+  duration: 150,
+});
 
-const applySpringAnimation = (position, navigationState) => {
-  Animated.spring(
-    position,
-    {
-      bounciness: 0,
-      speed: 12,
-      toValue: navigationState.index,
-    }
-  ).start();
-};
+const configureSpringTransition = (transitionProps, previousTransitionProps) => ({
+  timing: Animated.spring,
+  bounciness: 0,
+  speed: 12,
+});
 
-const applyAnimationNoop = (position, navigationState) => {
-  position.setValue(navigationState.index);
-};
+const configureNoopTransition = (transitionProps, previousTransitionProps) => ({
+  timing: Animated.timing,
+  duration: 1,
+});
 
 export const FloatHorizontal: ExNavigationStyles = {
-  applyAnimation: applySpringAnimation,
+  configureTransition: configureSpringTransition,
   sceneAnimations: CardStackStyleInterpolator.forHorizontal,
   navigationBarAnimations: {
     forContainer: (props, delta) => {
@@ -138,7 +130,7 @@ export const FloatHorizontal: ExNavigationStyles = {
 };
 
 export const FloatVertical: ExNavigationStyles = {
-  applyAnimation: applySpringAnimation,
+  configureTransition: configureSpringTransition,
   sceneAnimations: CardStackStyleInterpolator.forVertical,
   navigationBarAnimations: {
     forContainer: (props, delta) => {
@@ -239,7 +231,7 @@ export const FloatVertical: ExNavigationStyles = {
 };
 
 export const Fade: ExNavigationStyles = {
-  applyAnimation: applyTimingAnimation,
+  configureTransition: configureTimingTransition,
   sceneAnimations: (props) => {
     const {
       position,
@@ -329,7 +321,7 @@ export const Fade: ExNavigationStyles = {
 
 export const NoAnimation: ExNavigationStyles = {
   ...Fade,
-  applyAnimation: applyAnimationNoop,
+  configureTransition: configureNoopTransition,
 };
 
 /**

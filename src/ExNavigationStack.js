@@ -9,6 +9,7 @@ import {
   Platform,
   StyleSheet,
   View,
+  NavigationExperimental,
 } from 'react-native';
 
 import _ from 'lodash';
@@ -28,8 +29,8 @@ import * as NavigationStyles from 'ExNavigationStyles';
 import * as Utils from 'ExNavigationUtils';
 
 const {
-  AnimatedView: NavigationAnimatedView,
-} = require('VendoredNavigationExperimental');
+  Transitioner: NavigationTransitioner,
+} = NavigationExperimental;
 
 import type { NavigationSceneRendererProps, NavigationScene } from 'NavigationTypeDefinition';
 import type { ExNavigationRoute } from 'ExNavigationRouter';
@@ -115,8 +116,13 @@ export class ExNavigationStackContext extends ExNavigatorContext {
   @debounce(500, true)
   replace(route: ExNavigationRoute) {
     invariant(route !== null && route.key, 'Route is null or malformed.');
+
+    this.componentInstance._useAnimation = false;
     this.navigationContext.performAction(({ stacks }) => {
       stacks(this.navigatorUID).replace(route);
+    });
+    requestAnimationFrame(() => {
+      this.componentInstance._useAnimation = true;
     });
   }
 
@@ -240,13 +246,11 @@ class ExNavigationStack extends PureComponent<any, Props, State> {
     }
 
     return (
-      <NavigationAnimatedView
+      <NavigationTransitioner
         style={styles.container}
-        applyAnimation={this._applyAnimation}
         navigationState={navigationState}
-        onNavigate={this._onNavigate}
-        renderOverlay={this._renderOverlay}
-        renderScene={this._renderScene}
+        render={this._renderTransitioner}
+        configureTransition={this._configureTransition}
       />
     );
   }
@@ -323,10 +327,11 @@ class ExNavigationStack extends PureComponent<any, Props, State> {
     }
   }
 
-  _applyAnimation = (position, nextState, prevState) => {
+  _configureTransition = (transitionProps, prevTransitionProps) => {
     if (!this._useAnimation) {
-      position.setValue(nextState.index);
-      return;
+      return {
+        duration: 0,
+      };
     }
 
     // Gross...should figure out a way to make this stuff better TODO @skevy
@@ -339,10 +344,10 @@ class ExNavigationStack extends PureComponent<any, Props, State> {
 
     const latestRoute = navigationState.routes[navigationState.routes.length - 1];
     const latestRouteConfig = latestRoute.config;
-    const { applyAnimation } = latestRouteConfig.styles || {};
+    const { configureTransition } = latestRouteConfig.styles || {};
 
-    if (typeof applyAnimation === 'function') {
-      applyAnimation(position, nextState, prevState);
+    if (typeof configureTransition === 'function') {
+      return configureTransition(transitionProps, prevTransitionProps);
     }
   };
 
@@ -359,22 +364,40 @@ class ExNavigationStack extends PureComponent<any, Props, State> {
   }
 
   _onNavigateBack = () => {
-    this._onNavigate({type: 'back'});
-  }
-
-  _onNavigate = ({ type } = {}) => {
-    if (type === 'back' || type === 'BackAction') {
-      this._getNavigatorContext().pop();
-    }
+    this._getNavigatorContext().pop();
   };
 
+  _renderTransitioner = (props) => {
+    const overlay = this._renderOverlay({
+      ...props,
+      scene: props.scene,
+    });
+
+    const scenes = props.scenes.map(
+      scene => this._renderScene({
+        ...props,
+        scene,
+      })
+    );
+
+    return (
+      <View
+        style={styles.container}>
+        <View
+          style={styles.scenes}>
+          {scenes}
+        </View>
+        {overlay}
+      </View>
+    );
+  }
+
   _renderOverlay = (props: ExNavigationSceneRendererProps) => {
-    // filter out stale scenes
-    const scenes = props.scenes.filter(scene => !scene.isStale);
     // Determine animation styles based on the most recent scene in the stack.
-    const latestRoute = this._getRouteAtIndex(scenes, scenes.length - 1);
+    const latestRoute = this._getRouteAtIndex(props.scenes, props.scenes.length - 1);
     const latestRouteConfig: ExNavigationConfig = latestRoute.config;
-    props = { ...props, latestRouteConfig, latestRoute, scenes };
+
+    props = { ...props, latestRouteConfig, latestRoute };
 
     if (typeof this.props.renderOverlay === 'function') {
       return this.props.renderOverlay(props);
@@ -434,7 +457,7 @@ class ExNavigationStack extends PureComponent<any, Props, State> {
     const { scene: { route } } = props;
     const routeConfig = route.config;
 
-    if (typeof routeConfig.navigationBar.renderLeft === 'function') {
+    if (routeConfig.navigationBar && typeof routeConfig.navigationBar.renderLeft === 'function') {
       return routeConfig.navigationBar.renderLeft(route, props);
     }
 
@@ -459,7 +482,7 @@ class ExNavigationStack extends PureComponent<any, Props, State> {
   _renderTitleComponentForHeader = (props) => { //eslint-disable-line react/display-name
     const { scene: { route } } = props;
     const routeConfig = route.config;
-    if (typeof routeConfig.navigationBar.renderTitle === 'function') {
+    if (routeConfig.navigationBar && typeof routeConfig.navigationBar.renderTitle === 'function') {
       return routeConfig.navigationBar.renderTitle(route, props);
     }
     return (
@@ -472,20 +495,18 @@ class ExNavigationStack extends PureComponent<any, Props, State> {
   _renderRightComponentForHeader = (props) => {
     const { scene: { route } } = props;
     const routeConfig = route.config;
-    return routeConfig.navigationBar.renderRight && routeConfig.navigationBar.renderRight(route, props);
+    return routeConfig.navigationBar && routeConfig.navigationBar.renderRight && routeConfig.navigationBar.renderRight(route, props);
   };
 
   _renderScene = (props: ExNavigationSceneRendererProps) => {
-    // filter out stale scenes
-    const scenes = props.scenes.filter(scene => !scene.isStale);
     // Determine gesture and animation styles based on the most recent scene in the stack,
     // not based on the scene we're rendering in this method.
-    const latestRoute = this._getRouteAtIndex(scenes, scenes.length - 1);
+    const latestRoute = this._getRouteAtIndex(props.scenes, props.scenes.length - 1);
 
     const latestRouteConfig = latestRoute.config;
     const { sceneAnimations, gestures } = latestRouteConfig.styles || {};
 
-    props = { ...props, latestRouteConfig, latestRoute, scenes };
+    props = { ...props, latestRouteConfig, latestRoute };
 
     const scene: any = props.scene;
     const routeForScene = scene.route;
@@ -576,6 +597,9 @@ export default createNavigatorComponent(ExNavigationStack);
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
+  },
+  scenes: {
     flex: 1,
   },
   defaultSceneStyle: {

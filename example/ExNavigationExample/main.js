@@ -120,6 +120,9 @@ class AnotherRouteScreen extends Component {
         <TouchableOpacity onPress={this.onPressBack} style={{ height: 20, width: 150, backgroundColor: 'yellow' }}>
           <Text>Go back</Text>
         </TouchableOpacity>
+        <TouchableOpacity onPress={this.onPressReplace} style={{ height: 20, width: 150, backgroundColor: 'pink' }}>
+          <Text>Replace</Text>
+        </TouchableOpacity>
         <TouchableOpacity onPress={this.onPressReset} style={{ height: 20, width: 150, backgroundColor: 'purple' }}>
           <Text>Reset!</Text>
         </TouchableOpacity>
@@ -135,6 +138,10 @@ class AnotherRouteScreen extends Component {
 
   onPressBack = () => {
     this.props.navigator.pop();
+  }
+
+  onPressReplace = () => {
+    this.props.navigator.replace(AppRouter.getRoute('tabLanding'));
   }
 
   onPressReset = () => {

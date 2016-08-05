@@ -246,8 +246,6 @@ class ExNavigationDrawer extends PureComponent<any, Props, State> {
     ];
   }
 
-  _onNavigate = () => {};
-
   _parseDrawerItems(props) {
     const drawerItems = Children.map(props.children, (child, index) => {
       invariant(

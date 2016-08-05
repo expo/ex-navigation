@@ -2,7 +2,7 @@
  * @providesModule ExNavigationStackItem
  */
 
-import React from 'react';
+import React, { PropTypes } from 'react';
 import {
   Animated,
   StyleSheet,
@@ -11,6 +11,25 @@ import {
 import PureComponent from 'PureComponent';
 
 import * as NavigationStyles from 'ExNavigationStyles';
+
+class SceneView extends React.Component<any, SceneViewProps, any> {
+
+  static propTypes = {
+    sceneRenderer: PropTypes.func.isRequired,
+    // sceneRendererProps: NavigationPropTypes.SceneRenderer,
+  };
+
+  shouldComponentUpdate(nextProps: SceneViewProps, nextState: any): boolean {
+    return (
+      nextProps.sceneRendererProps.scene.route !==
+        this.props.sceneRendererProps.scene.route
+    );
+  }
+
+  render(): ?ReactElement<any> {
+    return this.props.sceneRenderer(this.props.sceneRendererProps);
+  }
+}
 
 export default class ExNavigationStackItem extends PureComponent {
   render() {
@@ -41,11 +60,15 @@ export default class ExNavigationStackItem extends PureComponent {
     const pointerEvents = interactive ? 'auto' : 'none';
 
     return (
-      <Animated.View {...gestures}
+      <Animated.View
+        {...gestures}
         needsOffscreenAlphaCompositing
         style={[styles.main, style, sceneAnimations]}
         pointerEvents={pointerEvents}>
-        {renderScene(props)}
+        <SceneView
+          sceneRenderer={renderScene}
+          sceneRendererProps={{ ...props, scene }}
+        />
       </Animated.View>
     );
   }

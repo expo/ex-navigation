@@ -283,7 +283,7 @@ export default class ExNavigationBar extends PureComponent {
       return null;
     }
 
-    const pointerEvents = offset !== 0 || isStale ? 'none' : 'auto';
+    const pointerEvents = offset !== 0 || isStale ? 'none' : 'box-none';
     return (
       <Animated.View
         pointerEvents={pointerEvents}
