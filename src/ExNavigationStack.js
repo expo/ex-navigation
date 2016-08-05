@@ -541,7 +541,7 @@ class ExNavigationStack extends PureComponent<any, Props, State> {
     return (
       <View style={styles.routeContainer}>
         <Animated.View style={style}>
-          <View style={{ flex: 1 }}>
+          <View style={{ flex: 1, backgroundColor: 'white' }}>
             {cloneReferencedElement(routeElement, routeElementProps)}
           </View>
         </Animated.View>
@@ -574,7 +574,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   defaultSceneStyle: {
-    backgroundColor: '#fff',
+    // backgroundColor: '#fff',
   },
   routeContainer: {
     flex: 1,
