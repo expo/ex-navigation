@@ -20,9 +20,9 @@
   "author": "Adam Miskiewicz <adam@exponentjs.com>",
   "license": "MIT",
   "peerDependencies": {
-    "react-native": "^0.27.2",
-    "react": "^15.1.0",
-    "exponent": ">=7.0.0"
+    "react-native": "0.27 - 0.31",
+    "react": "15",
+    "exponent": "8"
   },
   "dependencies": {
     "@exponent/react-native-touchable-native-feedback-safe": "^1.0.0",
