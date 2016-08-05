@@ -358,6 +358,10 @@ class ExNavigationStack extends PureComponent<any, Props, State> {
     );
   }
 
+  _onNavigateBack = () => {
+    this._onNavigate({type: 'back'});
+  }
+
   _onNavigate = ({ type } = {}) => {
     if (type === 'back' || type === 'BackAction') {
       this._getNavigatorContext().pop();
@@ -489,6 +493,7 @@ class ExNavigationStack extends PureComponent<any, Props, State> {
     return (
       <NavigationItem
         {...props}
+        onNavigateBack={this._onNavigateBack}
         key={props.scene.key}
         route={routeForScene}
         sceneAnimations={sceneAnimations}
