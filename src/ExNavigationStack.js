@@ -164,7 +164,7 @@ export class ExNavigationStackContext extends ExNavigatorContext {
     });
   }
 
-  showLocalAlert = (message, options) => {
+  showLocalAlert = (message: string, options: mixed) => {
     this.navigationContext.performAction(({ stacks }) => {
       stacks(this.navigatorUID).showLocalAlert(message, options);
     });
