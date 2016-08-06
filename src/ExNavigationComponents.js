@@ -7,13 +7,13 @@ import React, { PropTypes } from 'react';
 
 import UUID from 'uuid-js';
 
-import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import hoistStatics from 'hoist-non-react-statics';
 import PureComponent from 'PureComponent';
 import shallowEqual from 'fbjs/lib/shallowEqual';
 
 import ExNavigationContext from 'ExNavigationContext';
+import connect from 'ExNavigationConnect';
 
 import type {
   ExNavigatorState,

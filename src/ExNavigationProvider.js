@@ -9,7 +9,7 @@ import {
   StyleSheet,
 } from 'react-native';
 
-import { Provider } from 'react-redux';
+import storeShape from 'react-redux/lib/utils/storeShape';
 
 import Actions from 'ExNavigationActions';
 import { createBackButtonManager } from 'ExNavigationBackButtonManager';
@@ -31,11 +31,13 @@ export default class ExNavigationProvider extends React.Component {
   _navigationContext: ExNavigationContext;
 
   static childContextTypes = {
+    navigationStore: storeShape.isRequired,
     navigation: PropTypes.instanceOf(ExNavigationContext),
   };
 
   getChildContext(): Object {
     return {
+      navigationStore: this._navigationContext.store,
       navigation: this._navigationContext,
     };
   }
@@ -64,11 +66,9 @@ export default class ExNavigationProvider extends React.Component {
 
   render(): ReactElement<any> {
     return (
-      <Provider store={this._navigationContext.store}>
-        <View style={styles.container}>
-          {this.props.children}
-        </View>
-      </Provider>
+      <View style={styles.container}>
+        {this.props.children}
+      </View>
     );
   }
 }
