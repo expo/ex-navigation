@@ -29,11 +29,12 @@ import * as Utils from './ExNavigationUtils';
 
 const {
   Transitioner: NavigationTransitioner,
+  NavigationTypeDefinition,
 } = NavigationExperimental;
 
-import type { 
-  NavigationSceneRendererProps, NavigationScene 
-} from NavigationExperimental.NavigationTypeDefinition;
+import type {
+  NavigationSceneRendererProps, NavigationScene,
+} from 'NavigationTypeDefinition';
 import type { ExNavigationRoute } from './ExNavigationRouter';
 import type ExNavigationContext from './ExNavigationContext';
 import type { ExNavigationConfig, ExNavigationState } from './ExNavigationTypeDefinition';
@@ -568,7 +569,7 @@ class ExNavigationStack extends PureComponent<any, Props, State> {
     return (
       <View style={styles.routeContainer}>
         <Animated.View style={style}>
-          <View style={{ flex: 1, backgroundColor: 'white' }}>
+          <View style={{ flex: 1 }}>
             {cloneReferencedElement(routeElement, routeElementProps)}
           </View>
         </Animated.View>
@@ -604,7 +605,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   defaultSceneStyle: {
-    // backgroundColor: '#fff',
+    backgroundColor: '#fff',
   },
   routeContainer: {
     flex: 1,

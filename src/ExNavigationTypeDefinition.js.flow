@@ -7,6 +7,8 @@ import {
    NavigationExperimental,
  } from 'react-native';
 
+const { NavigationTypeDefinition } = NavigationExperimental;
+
 import type { Animated } from 'react-native';
 
 import type { EventEmitter } from 'fbemitter';
@@ -14,7 +16,7 @@ import type { EventEmitter } from 'fbemitter';
 import type { ExNavigationRoute } from './ExNavigationRouter';
 import type {
   NavigationSceneRendererProps,
-} from NavigationExperimental.NavigationTypeDefinition;
+} from 'NavigationTypeDefinition';
 
 export type ExNavigationStyles = {
   applyAnimation: ?((position: Animated.Value, navigationState: Object) => void);
