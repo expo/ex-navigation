@@ -41,6 +41,7 @@ const babelOpts = {
         'react-mixin': 'react-mixin',
         'react-timer-mixin': 'react-timer-mixin',
         'react-redux': 'react-redux',
+        'react-redux/lib/utils/storeShape': 'react-redux/lib/utils/storeShape',
         'reselect': 'reselect',
         'react-static-container': 'react-static-container',
         'react-native-drawer-layout': 'react-native-drawer-layout',
