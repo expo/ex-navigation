@@ -1,5 +1,4 @@
 /**
- * @providesModule ExNavigationTab
  * @flow
  */
 
@@ -10,20 +9,20 @@ import {
   StyleSheet,
   View,
 } from 'react-native';
-import PureComponent from 'PureComponent';
+import PureComponent from '../utils/PureComponent';
 import StaticContainer from 'react-static-container';
 
 import _ from 'lodash';
 import invariant from 'invariant';
 import cloneReferencedElement from 'react-clone-referenced-element';
 
-import Actions from 'ExNavigationActions';
-import ExNavigatorContext from 'ExNavigatorContext';
-import ExNavigationTabBar from 'ExNavigationTabBar';
-import ExNavigationTabItem from 'ExNavigationTabItem';
-import { createNavigatorComponent } from 'ExNavigationComponents';
+import Actions from '../ExNavigationActions';
+import ExNavigatorContext from '../ExNavigatorContext';
+import ExNavigationTabBar from './ExNavigationTabBar';
+import ExNavigationTabItem from './ExNavigationTabItem';
+import { createNavigatorComponent } from '../ExNavigationComponents';
 
-import type ExNavigationContext from 'ExNavigationContext';
+import type ExNavigationContext from '../ExNavigationContext';
 
 export class ExNavigationTabContext extends ExNavigatorContext {
   type = 'tab';

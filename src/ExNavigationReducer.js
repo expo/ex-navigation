@@ -1,7 +1,3 @@
-/**
- * @providesModule ExNavigationReducer
- */
-
 import _ from 'lodash';
 
 import {
@@ -10,7 +6,7 @@ import {
 
 import invariant from 'invariant';
 
-import ActionTypes from 'ExNavigationActionTypes';
+import ActionTypes from './ExNavigationActionTypes';
 
 const {
   StateUtils: NavigationStateUtils,

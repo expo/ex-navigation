@@ -1,7 +1,3 @@
-/**
- * @providesModule PureComponent
- */
-
 import { Component } from 'react';
 import shallowEqual from 'fbjs/lib/shallowEqual';
 

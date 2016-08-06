@@ -1,13 +1,12 @@
 /**
- * @providesModule ExNavigationBackButtonManager
  * @flow
  */
 
 import { BackAndroid } from 'react-native';
 
-import ExNavigationActions from 'ExNavigationActions';
+import ExNavigationActions from './ExNavigationActions';
 
-import type { ExNavigationStore } from 'ExNavigationStore';
+import type { ExNavigationStore } from './ExNavigationStore';
 
 /**
  * Manages a global listener, as well as any custom listeners, on the

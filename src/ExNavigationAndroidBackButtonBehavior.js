@@ -1,12 +1,11 @@
 /**
- * @providesModule ExNavigationAndroidBackButtonBehavior
  * @flow
  */
 
 import React from 'react';
 
-import { withNavigation, createFocusAwareComponent } from 'ExNavigationComponents';
-import { getBackButtonManager } from 'ExNavigationBackButtonManager';
+import { withNavigation, createFocusAwareComponent } from './ExNavigationComponents';
+import { getBackButtonManager } from './ExNavigationBackButtonManager';
 
 type Props = {
   isFocused: boolean,

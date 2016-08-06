@@ -1,7 +1,3 @@
-/**
- * @providesModule ExNavigationBar
- */
-
 import React, { PropTypes } from 'react';
 import {
   Animated,
@@ -12,12 +8,12 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import PureComponent from 'PureComponent';
+import PureComponent from './utils/PureComponent';
 
 import { Components } from 'exponent';
 
-import ExNavigationAlertBar from 'ExNavigationAlertBar';
-import { withNavigation } from 'ExNavigationComponents';
+import ExNavigationAlertBar from './ExNavigationAlertBar';
+import { withNavigation } from './ExNavigationComponents';
 
 const APPBAR_HEIGHT = Platform.OS === 'ios' ? 44 : 55;
 const STATUSBAR_HEIGHT = Platform.OS === 'ios' ? 20 : 24;
@@ -69,7 +65,7 @@ class ExNavigationBarBackButton extends PureComponent {
       <TouchableOpacity style={buttonStyles.buttonContainer} onPress={this._onPress}>
         <Image
           style={[buttonStyles.button, tintColor ? {tintColor} : null]}
-          source={require('ExNavigationAssets').backIcon}
+          source={require('./ExNavigationAssets').backIcon}
         />
       </TouchableOpacity>
     );
@@ -86,7 +82,7 @@ class ExNavigationBarMenuButton extends PureComponent {
       <TouchableOpacity style={buttonStyles.buttonContainer} onPress={() => this.props.navigator.toggleDrawer()}>
         <Image
           style={[buttonStyles.menuButton, tintColor ? {tintColor} : null]}
-          source={require('ExNavigationAssets').menuIcon}
+          source={require('./ExNavigationAssets').menuIcon}
         />
       </TouchableOpacity>
     );

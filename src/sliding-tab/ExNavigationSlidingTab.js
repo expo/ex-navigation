@@ -1,5 +1,4 @@
 /**
- * @providesModule ExNavigationSlidingTab
  * @flow
  */
 
@@ -10,21 +9,21 @@ import {
   StyleSheet,
   View,
 } from 'react-native';
-import PureComponent from 'PureComponent';
+import PureComponent from '../utils/PureComponent';
 import StaticContainer from 'react-static-container';
 
 import invariant from 'invariant';
 import _ from 'lodash';
 
-import Actions from 'ExNavigationActions';
-import ExNavigatorContext from 'ExNavigatorContext';
-import ExNavigationBar from 'ExNavigationBar';
-import ExNavigationSlidingTabItem from 'ExNavigationSlidingTabItem';
-import { ExNavigationTabContext } from 'ExNavigationTab';
+import Actions from '../ExNavigationActions';
+import ExNavigatorContext from '../ExNavigatorContext';
+import ExNavigationBar from '../ExNavigationBar';
+import ExNavigationSlidingTabItem from './ExNavigationSlidingTabItem';
+import { ExNavigationTabContext } from '../tab/ExNavigationTab';
 import { TabViewAnimated, TabViewPage, TabBarTop, TabBar } from 'react-native-tab-view';
-import { createNavigatorComponent } from 'ExNavigationComponents';
+import { createNavigatorComponent } from '../ExNavigationComponents';
 
-import type ExNavigationContext from 'ExNavigationContext';
+import type ExNavigationContext from '../ExNavigationContext';
 
 // TODO: Fill this in
 type SlidingTabItem = {

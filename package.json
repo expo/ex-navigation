@@ -2,15 +2,10 @@
   "name": "@exponent/ex-navigation",
   "version": "1.4.2",
   "description": "Route-centric navigation libary for React Native.",
-  "main": "./lib/ExNavigation.js",
+  "main": "./src/ExNavigation.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "run-example": "gulp && cd example/ExNavigationExample && npm install && react-native start --root ../../ --transformer ./transformer",
-    "prepublish": "gulp"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "files": [
-    "lib/"
-  ],
   "keywords": [
     "react-native",
     "navigation",
@@ -47,16 +42,6 @@
     "reselect": "^2.5.1",
     "uuid-js": "^0.7.5",
     "warning": "^2.1.0"
-  },
-  "devDependencies": {
-    "babel-preset-react-native-stage-0": "^1.0.1",
-    "del": "^2.2.0",
-    "fbjs-scripts": "^0.6.0",
-    "gulp": "^3.9.1",
-    "gulp-babel": "^6.1.2",
-    "gulp-flatten": "^0.2.0",
-    "gulp-watch": "^4.3.6",
-    "run-sequence": "^1.1.5"
   }
 }
 

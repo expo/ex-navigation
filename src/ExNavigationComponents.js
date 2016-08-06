@@ -1,5 +1,4 @@
 /**
- * @providesModule ExNavigationComponents
  * @flow
  */
 
@@ -9,15 +8,15 @@ import UUID from 'uuid-js';
 
 import { createSelector } from 'reselect';
 import hoistStatics from 'hoist-non-react-statics';
-import PureComponent from 'PureComponent';
+import PureComponent from './utils/PureComponent';
 import shallowEqual from 'fbjs/lib/shallowEqual';
 
-import ExNavigationContext from 'ExNavigationContext';
-import connect from 'ExNavigationConnect';
+import ExNavigationContext from './ExNavigationContext';
+import connect from './ExNavigationConnect';
 
 import type {
   ExNavigatorState,
-} from 'ExNavigationStore';
+} from './ExNavigationStore';
 
 function getDisplayName(WrappedComponent: ReactClass<any>): string {
   return WrappedComponent.displayName || WrappedComponent.name || 'Component';
@@ -144,7 +143,7 @@ export function createNavigatorComponent(WrappedComponent: ReactClass<any>) {
   return hoistStatics(ExNavigatorComponent, createFocusableComponent(WrappedComponent));
 }
 
-import { NavigationPropType, StackNavigatorContextType } from 'ExNavigationPropTypes';
+import { NavigationPropType, StackNavigatorContextType } from './ExNavigationPropTypes';
 
 const NavigatorPropType = PropTypes.oneOfType([
   StackNavigatorContextType,

@@ -1,16 +1,12 @@
-/**
- * @providesModule ExNavigationStackItem
- */
-
 import React, { PropTypes } from 'react';
 import {
   Animated,
   StyleSheet,
 } from 'react-native';
 
-import PureComponent from 'PureComponent';
+import PureComponent from './utils/PureComponent';
 
-import * as NavigationStyles from 'ExNavigationStyles';
+import * as NavigationStyles from './ExNavigationStyles';
 
 class SceneView extends React.Component<any, SceneViewProps, any> {
 

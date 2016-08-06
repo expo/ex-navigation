@@ -1,5 +1,4 @@
 /**
- * @providesModule ExNavigationBadge
  * @flow
  */
 
@@ -13,7 +12,7 @@ import {
 type Props = {
   textStyle: StyleSheet,
   onLayout: () => void,
-}
+};
 
 export default class Badge extends React.Component {
   static propTypes = Text.propTypes;

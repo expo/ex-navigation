@@ -1,7 +1,3 @@
-/**
- * @providesModule ExNavigationActionTypes
- */
-
 import mirror from 'mirror-creator';
 
 export default mirror([

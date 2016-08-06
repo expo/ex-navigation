@@ -1,12 +1,8 @@
-/**
- * @providesModule ExNavigationMiddleware
- */
-
 import _ from 'lodash';
 import invariant from 'invariant';
 
-import ExNavigationActionTypes from 'ExNavigationActionTypes';
-import ExNavigationActions from 'ExNavigationActions';
+import ExNavigationActionTypes from './ExNavigationActionTypes';
+import ExNavigationActions from './ExNavigationActions';
 
 export default (navigationStateKey) => ([
   ({ getState, dispatch }) => check(

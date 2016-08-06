@@ -1,5 +1,4 @@
 /**
- * @providesModule ExNavigationProvider
  * @flow
  */
 
@@ -11,10 +10,10 @@ import {
 
 import storeShape from 'react-redux/lib/utils/storeShape';
 
-import Actions from 'ExNavigationActions';
-import { createBackButtonManager } from 'ExNavigationBackButtonManager';
-import ExNavigationContext from 'ExNavigationContext';
-import { ExNavigationRouter } from 'ExNavigationRouter';
+import Actions from './ExNavigationActions';
+import { createBackButtonManager } from './ExNavigationBackButtonManager';
+import ExNavigationContext from './ExNavigationContext';
+import { ExNavigationRouter } from './ExNavigationRouter';
 
 type Props = {
   router: ExNavigationRouter<*>,

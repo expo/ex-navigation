@@ -1,5 +1,4 @@
 /**
- * @providesModule ExNavigationStore
  * @flow
  */
 
@@ -10,8 +9,8 @@ import {
   combineReducers,
 } from 'redux';
 
-import ExNavigationReducer from 'ExNavigationReducer';
-import createExNavigationMiddleware from 'ExNavigationMiddleware';
+import ExNavigationReducer from './ExNavigationReducer';
+import createExNavigationMiddleware from './ExNavigationMiddleware';
 
 export type ExNavigatorState = {
   routes: any,
@@ -32,7 +31,7 @@ export type ExNavigationStore = {
   getState(): ?ExNavigationState,
   dispatch(action: mixed): any,
   subscribe(listener: () => void): () => void,
-}
+};
 
 type Reducer = (state: mixed, action: mixed) => Object;
 type StoreCreator = (reducer: Reducer, initialState: ?Object, enhancer?: Function) => ExNavigationStore;

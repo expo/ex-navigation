@@ -1,5 +1,4 @@
 /**
- * @providesModule ExNavigationRouter
  * @flow
  */
 /* eslint-disable react/display-name */
@@ -12,14 +11,14 @@ import invariant from 'invariant';
 import warning from 'warning';
 import _ from 'lodash';
 
-import NavigationBar from 'ExNavigationBar';
+import NavigationBar from './ExNavigationBar';
 
-import { withNavigation, createFocusableComponent } from 'ExNavigationComponents';
+import { withNavigation, createFocusableComponent } from './ExNavigationComponents';
 
 import type {
   ExNavigationState,
   ExNavigationConfig,
-} from 'ExNavigationTypeDefinition';
+} from './ExNavigationTypeDefinition';
 
 type ExNavigationRouteDefinition = (
   (state: ExNavigationState) => React.Element<{}>
@@ -36,7 +35,7 @@ type RouteConfig = {
   params: Object,
   config: Object,
   _renderRoute: RouteRenderer,
-}
+};
 
 export class ExNavigationRoute {
   key: string;

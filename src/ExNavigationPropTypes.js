@@ -1,7 +1,3 @@
-/**
- * @providesModule ExNavigationPropTypes
- */
-
 import { PropTypes } from 'react';
 
 export const NavigationPropType = PropTypes.shape({

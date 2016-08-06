@@ -1,7 +1,3 @@
-/**
- * @providesModule ExNavigationStyles
- */
-
 import {
   Animated,
   Easing,
@@ -13,7 +9,7 @@ const {
   CardStackPanResponder,
 } = NavigationExperimental.Card;
 
-import type { ExNavigationStyles } from 'ExNavigationTypeDefinition';
+import type { ExNavigationStyles } from './ExNavigationTypeDefinition';
 
 const configureTimingTransition = (transitionProps, previousTransitionProps) => ({
   timing: Animated.spring,

@@ -1,7 +1,3 @@
-/**
- * @providesModule ExNavigationAlertBar
- */
-
 import React from 'react';
 import {
   Animated,
