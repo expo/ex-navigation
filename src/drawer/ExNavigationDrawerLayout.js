@@ -15,7 +15,10 @@ import DrawerLayout from 'react-native-drawer-layout';
 import TouchableNativeFeedbackSafe from '@exponent/react-native-touchable-native-feedback-safe';
 
 type Props = {
-  renderHeader: () => React.Element,
+  renderHeader: () => React.Element<any>,
+  width: number,
+  children: React.Element<any>,
+  selectedItem: any,
 };
 
 type State = {
@@ -25,6 +28,7 @@ type State = {
 export default class ExNavigationDrawerLayout extends React.Component {
   props: Props;
   state: State = { isOpen: false };
+  _component: DrawerLayout;
 
   render() {
     return (
@@ -50,11 +54,11 @@ export default class ExNavigationDrawerLayout extends React.Component {
   _renderNavigationView = () => {
     return (
       <View style={styles.navigationViewContainer}>
-        <View style={styles.navigationViewHeader}>
+        <View>
           {this.props.renderHeader()}
         </View>
 
-        <ScrollView style={styles.navigationViewScrollable} contentContainerStyle={styles.navigationViewScrollableContentContainer}>
+        <ScrollView contentContainerStyle={styles.navigationViewScrollableContentContainer}>
           {this._renderDrawerItems()}
         </ScrollView>
       </View>
@@ -106,12 +110,12 @@ export default class ExNavigationDrawerLayout extends React.Component {
   // TODO(brentvatne):
   // onPress and onLongPress should fire after close drawer!
   //
-  _handlePress = (item) => {
+  _handlePress = (item: any) => {
     item.onPress();
     this._component.closeDrawer();
   }
 
-  _handleLongPress = (item) => {
+  _handleLongPress = (item: any) => {
     if (!item.onLongPress) {
       return;
     }

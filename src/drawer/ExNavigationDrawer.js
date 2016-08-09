@@ -29,6 +29,7 @@ export class ExNavigationDrawerContext extends ExNavigatorContext {
   navigatorId: string;
   dispatch: Function;
   _navigatorItemMap: Object = {};
+  _getNavigatorState: any;
   type: string = 'drawer';
 
   setNavigatorUIDForCurrentItem(navigatorUID: string) {
@@ -60,9 +61,10 @@ type Props = {
   id: string,
   navigatorUID: string,
   initialItem: string,
-  renderHeader: () => React.Element,
+  renderHeader: () => React.Element<any>,
   drawerWidth: 300,
-  children: Array<React.Element>,
+  drawerStyle: any,
+  children: Array<React.Element<any>>,
   navigation: ExNavigationContext,
   onRegisterNavigatorContext: (navigatorUID: string, navigatorContext: ExNavigationDrawerContext) => void,
   navigationState: Object,
@@ -71,7 +73,7 @@ type Props = {
 type State = {
   id: string,
   navigatorUID: string,
-  drawerItems: Array<DrawerItem>,
+  drawerItems: Array<ExNavigationDrawerItem>,
   parentNavigatorUID: string,
   renderedItemKeys: Array<string>,
 };
@@ -79,6 +81,7 @@ type State = {
 class ExNavigationDrawer extends PureComponent<any, Props, State> {
   props: Props;
   state: State;
+  _drawerLayout: ?ExNavigationDrawerLayout;
 
   static route = {
     __isNavigator: true,
@@ -290,7 +293,7 @@ class ExNavigationDrawer extends PureComponent<any, Props, State> {
   }
 
   toggleDrawer = () => {
-    this._drawerLayout.toggle();
+    this._drawerLayout && this._drawerLayout.toggle();
   };
 
   _getNavigationState(props: ?Props): Object {
@@ -314,7 +317,8 @@ class ExNavigationDrawer extends PureComponent<any, Props, State> {
     );
   }
 
-  _getNavigatorContext(): ExNavigationDrawerContext {
+  // TODO: use a proper flow type annotation
+  _getNavigatorContext(): any {
     return this.props.navigation.getNavigatorByUID(this.state.navigatorUID);
   }
 }

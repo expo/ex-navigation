@@ -7,9 +7,9 @@ import {
    NavigationExperimental,
  } from 'react-native';
 
-const { NavigationTypeDefinition } = NavigationExperimental;
+import NavigationTypeDefinition from 'react-native/Libraries/NavigationExperimental/NavigationTypeDefinition';
 
-import type { Animated } from 'react-native';
+import { Animated } from 'react-native';
 
 import type { EventEmitter } from 'fbemitter';
 
@@ -38,7 +38,7 @@ export type ExNavigationBarConfig = {
   tintColor?: string,
   backgroundColor?: string,
   height?: number,
-  statusBarHeight?: number,
+  translucent?: bool,
   renderLeft?: (state: ExNavigationState, props: NavigationSceneRendererProps) => ?React.Element<{}>,
   renderTitle?: (state: ExNavigationState, props: NavigationSceneRendererProps) => ?React.Element<{}>,
   renderRight?: (state: ExNavigationState, props: NavigationSceneRendererProps) => ?React.Element<{}>,

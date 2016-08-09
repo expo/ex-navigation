@@ -29,8 +29,8 @@ import * as Utils from './ExNavigationUtils';
 
 const {
   Transitioner: NavigationTransitioner,
-  NavigationTypeDefinition,
 } = NavigationExperimental;
+import NavigationTypeDefinition from 'react-native/Libraries/NavigationExperimental/NavigationTypeDefinition';
 
 import type {
   NavigationSceneRendererProps, NavigationScene,
@@ -84,6 +84,7 @@ export class ExNavigationStackContext extends ExNavigatorContext {
   parentNavigatorUID: string;
   defaultRouteConfig: ExNavigationConfig;
   componentInstance: ExNavigationStackInstance;
+  _getNavigatorState: any;
 
   constructor(
     navigatorUID: string,
@@ -544,17 +545,16 @@ class ExNavigationStack extends PureComponent<any, Props, State> {
 
     if (routeConfig.navigationBar && routeConfig.navigationBar.visible !== false) {
       let customHeight = 0;
+      let hasCustomHeight = false;
       let isTranslucent = !!routeConfig.navigationBar.translucent;
 
-      if (_.isNumber(routeConfig.navigationBar.height)) {
-        customHeight += routeConfig.height;
-      }
-      if (_.isNumber(routeConfig.navigationBar.statusBarHeight)) {
-        customHeight += routeConfig.statusBarHeight;
+      if (_.isNumber(route.getBarHeight())) {
+        customHeight += route.getBarHeight();
+        hasCustomHeight = true;
       }
 
-      if (_.isNumber(routeConfig.height) || _.isNumber(routeConfig.statusBarHeight)) {
-        style = [...style, {marginTop: customHeight}];
+      if (hasCustomHeight) {
+        style = ([...style, {marginTop: customHeight}] : Array<number|Object>);
       } else {
         style = [...style, isTranslucent ? styles.withNavigationBarTranslucent : styles.withNavigationBarOpaque];
       }
@@ -579,7 +579,7 @@ class ExNavigationStack extends PureComponent<any, Props, State> {
 
   _getRouteAtIndex(scenes: Array<NavigationScene>, index: number): ExNavigationRoute {
     const scene: any = scenes[index];
-    const latestRoute: ExNavigationState = scene.route;
+    const latestRoute: ExNavigationRoute = scene.route;
     return latestRoute;
   }
 
@@ -590,7 +590,8 @@ class ExNavigationStack extends PureComponent<any, Props, State> {
     return _.merge({}, DEFAULT_ROUTE_CONFIG, props.defaultRouteConfig);
   }
 
-  _getNavigatorContext = (): ExNavigationStackContext => {
+  // TODO: fix this type annotation to return the actual type
+  _getNavigatorContext = (): any => {
     return this.props.navigation.getNavigatorByUID(this.state.navigatorUID);
   }
 }

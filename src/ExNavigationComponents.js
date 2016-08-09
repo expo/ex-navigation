@@ -133,6 +133,7 @@ export function createNavigatorComponent(WrappedComponent: ReactClass<any>) {
       if (c == null) {
         this._wrappedInstance = null;
       } else {
+        /* $FlowFixMe */
         this._wrappedInstance = c.refs.wrappedInstance;
       }
     }
@@ -201,6 +202,7 @@ export function withNavigation<T>(WrappedComponent: ReactClass<T>) {
 
 export const createFocusableComponent = (WrappedComponent: ReactClass<any>) => {
   class FocusableComponent extends PureComponent {
+    _unsubcribeFromStore: ?Function;
 
     static childContextTypes = {
       isFocused: React.PropTypes.bool,
@@ -263,7 +265,7 @@ export const createFocusableComponent = (WrappedComponent: ReactClass<any>) => {
     }
 
     componentWillUnmount() {
-      this._unsubcribeFromStore();
+      this._unsubcribeFromStore && this._unsubcribeFromStore();
     }
 
     render() {

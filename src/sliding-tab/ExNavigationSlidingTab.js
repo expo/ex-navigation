@@ -28,16 +28,24 @@ import type ExNavigationContext from '../ExNavigationContext';
 // TODO: Fill this in
 type SlidingTabItem = {
   id: string,
+  element: React.Element<any>,
+  children: Array<React.Element<any>>,
 };
 
 type Props = {
-  initialTab: string,
   barBackgroundColor: ?string,
   indicatorStyle: any,
+  initialTab: string,
+  children: Array<React.Element<any>>,
+  navigation: any,
+  navigationState: any,
   position: "top" | "bottom",
   pressColor: ?string,
+  renderBefore: () => ?ReactElement<any>,
+  style: any,
+  onRegisterNavigatorContext: () => any,
+  tabBarStyle: any,
   tabStyle: any,
-  renderBefore: () => ?ReactElement,
 };
 
 type State = {

@@ -26,7 +26,7 @@ class ExNavigationBackButtonManager {
     this._listeners = [];
   }
 
-  pushListener(listener: () => void) {
+  pushListener(listener: () => Promise<void>) {
     let newListeners = [...this._listeners];
     newListeners.push(listener);
     this._setListeners(newListeners);
@@ -53,7 +53,7 @@ class ExNavigationBackButtonManager {
     this._setListeners([...this._listeners]);
   }
 
-  _setListeners(newListeners: Array<() => void>) {
+  _setListeners(newListeners: Array<() => Promise<void>>) {
     this.disable();
     this._listeners = newListeners;
     BackAndroid.removeEventListener('hardwareBackPress', this._disabledBackButtonPress);

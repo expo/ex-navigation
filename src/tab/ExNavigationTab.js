@@ -31,6 +31,7 @@ export class ExNavigationTabContext extends ExNavigatorContext {
   navigatorId: string;
   dispatch: Function;
   _navigatorTabMap: Object = {};
+  _getNavigatorState: () => any;
 
   setNavigatorUIDForCurrentTab(navigatorUID: string) {
     const navigatorState = this._getNavigatorState();
@@ -70,6 +71,7 @@ type Props = {
   navigation: ExNavigationContext,
   onRegisterNavigatorContext: (navigatorUID: string, navigatorContext: ExNavigationTabContext) => void,
   navigationState: Object,
+  translucent?: bool,
 };
 
 type State = {

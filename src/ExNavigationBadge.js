@@ -10,8 +10,15 @@ import {
 } from 'react-native';
 
 type Props = {
-  textStyle: StyleSheet,
+  textStyle: Object,
   onLayout: () => void,
+};
+
+type State = {
+  computedSize: ?{
+    width: number,
+    height: number,
+  },
 };
 
 export default class Badge extends React.Component {
@@ -24,7 +31,7 @@ export default class Badge extends React.Component {
     this._handleLayout = this._handleLayout.bind(this);
   }
 
-  state = {
+  state: State = {
     computedSize: null,
   };
 
