@@ -175,19 +175,8 @@ export default class ExNavigationBar extends PureComponent {
   }
 
   render() {
-    // We still want to render the alerts even if no navigation bar. For this
-    // reason, it may make sense to refactor alerts to the Stack rather than
-    // the navigation bar
     if (!this.state.visible) {
-      return (
-        <View style={[styles.wrapper, styles.wrapperWithoutAppbar]}>
-          <ExNavigationAlertBar
-            {...this.props}
-            alertState={this.props.navigationState.alert}
-            style={styles.alertBarWithoutAppbar}
-          />
-        </View>
-      );
+      return null;
     }
 
     const { scenes, style } = this.props;
@@ -329,10 +318,6 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
-  },
-
-  alertBarWithoutAppbar: {
-    paddingTop: STATUSBAR_HEIGHT,
   },
 
   appbar: {
