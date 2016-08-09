@@ -205,8 +205,8 @@ export default class ExNavigationBar extends PureComponent {
     let rightComponents = scenesProps.map(this._renderRight, this);
     let titleComponents = scenesProps.map((props, i) => {
       return this._renderTitle(props, {
-        hasLeftComponent: !!leftComponents[i],
-        hasRightComponent: !!rightComponents[i],
+        hasLeftComponent: leftComponents && !!leftComponents[i],
+        hasRightComponent: rightComponents && !!rightComponents[i],
       });
     });
 
@@ -216,8 +216,8 @@ export default class ExNavigationBar extends PureComponent {
 
         <Animated.View style={containerStyle}>
           <View style={[styles.appbarInnerContainer, {top: this.props.statusBarHeight}]}>
-            {leftComponents}
             {titleComponents}
+            {leftComponents}
             {rightComponents}
           </View>
         </Animated.View>
@@ -285,7 +285,7 @@ export default class ExNavigationBar extends PureComponent {
     }
 
     let layoutStyle;
-    if (name === 'title') {
+    if (name === 'title' && Platform.OS === 'android') {
       layoutStyle = {};
 
       if (options.hasLeftComponent) {

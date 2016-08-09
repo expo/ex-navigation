@@ -7,6 +7,8 @@ import {
   View,
 } from 'react-native';
 
+import Exponent from 'exponent';
+
 import {
   createRouter,
   NavigationProvider,
