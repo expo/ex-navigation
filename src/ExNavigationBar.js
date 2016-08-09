@@ -9,11 +9,17 @@ import {
   View,
 } from 'react-native';
 import PureComponent from './utils/PureComponent';
-
-import { Components } from 'exponent';
-
-import ExNavigationAlertBar from './ExNavigationAlertBar';
+import { unsupportedNativeView } from './ExUnsupportedNativeView';
 import { withNavigation } from './ExNavigationComponents';
+
+let Components;
+if (global.__exponent) {
+  Components = global.__exponent.Components;
+} else {
+  Components = {
+    BlurView: unsupportedNativeView('BlurView'),
+  };
+}
 
 const APPBAR_HEIGHT = Platform.OS === 'ios' ? 44 : 55;
 const STATUSBAR_HEIGHT = Platform.OS === 'ios' ? 20 : 24;

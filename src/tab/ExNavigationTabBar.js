@@ -8,7 +8,16 @@ import {
   View,
 } from 'react-native';
 
-import { Components } from 'exponent';
+import { unsupportedNativeView } from '../ExUnsupportedNativeView';
+
+let Components;
+if (global.__exponent) {
+  Components = global.__exponent.Components;
+} else {
+  Components = {
+    BlurView: unsupportedNativeView('BlurView'),
+  };
+}
 
 import TabBadge from '../ExNavigationBadge';
 
