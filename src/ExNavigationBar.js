@@ -201,16 +201,24 @@ export default class ExNavigationBar extends PureComponent {
 
     containerStyle.push(this.props.interpolator.forContainer(this.props, this.state.delta));
 
+    let leftComponents = scenesProps.map(this._renderLeft, this);
+    let rightComponents = scenesProps.map(this._renderRight, this);
+    let titleComponents = scenesProps.map((props, i) => {
+      return this._renderTitle(props, {
+        hasLeftComponent: !!leftComponents[i],
+        hasRightComponent: !!rightComponents[i],
+      });
+    });
+
     return (
       <View pointerEvents={this.props.visible ? 'auto' : 'none'} style={styles.wrapper}>
         {isTranslucent && <Components.BlurView style={[styles.translucentUnderlay, {height}]} />}
-        <ExNavigationAlertBar {...this.props} alertState={this.props.navigationState.alert} />
 
         <Animated.View style={containerStyle}>
           <View style={[styles.appbarInnerContainer, {top: this.props.statusBarHeight}]}>
-            {scenesProps.map(this._renderLeft, this)}
-            {scenesProps.map(this._renderTitle, this)}
-            {scenesProps.map(this._renderRight, this)}
+            {leftComponents}
+            {titleComponents}
+            {rightComponents}
           </View>
         </Animated.View>
       </View>
@@ -226,12 +234,13 @@ export default class ExNavigationBar extends PureComponent {
     );
   }
 
-  _renderTitle(props) {
+  _renderTitle(props, options) {
     return this._renderSubView(
       props,
       'title',
       this.props.renderTitleComponent,
       this.props.interpolator.forCenter,
+      options,
     );
   }
 
@@ -249,6 +258,7 @@ export default class ExNavigationBar extends PureComponent {
     name,
     renderer,
     styleInterpolator,
+    options = {},
   ) {
     const {
       scene,
@@ -274,6 +284,18 @@ export default class ExNavigationBar extends PureComponent {
       return null;
     }
 
+    let layoutStyle;
+    if (name === 'title') {
+      layoutStyle = {};
+
+      if (options.hasLeftComponent) {
+        layoutStyle.left = APPBAR_HEIGHT;
+      }
+      if (options.hasRightComponent) {
+        layoutStyle.right = APPBAR_HEIGHT;
+      }
+    }
+
     const pointerEvents = offset !== 0 || isStale ? 'none' : 'box-none';
     return (
       <Animated.View
@@ -281,6 +303,7 @@ export default class ExNavigationBar extends PureComponent {
         key={name + '_' + key}
         style={[
           styles[name],
+          layoutStyle,
           styleInterpolator(props),
         ]}>
         {subView}
@@ -349,8 +372,9 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 0,
     // NOTE(brentvatne): these hard coded values must change!
-    left: APPBAR_HEIGHT,
-    right: APPBAR_HEIGHT,
+    left: 0,
+    right: 0,
+    backgroundColor: 'transparent',
   },
 
   left: {
