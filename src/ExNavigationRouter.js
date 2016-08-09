@@ -21,9 +21,11 @@ import type {
 } from './ExNavigationTypeDefinition';
 
 type ExNavigationRouteDefinition = (
-  (state: ExNavigationState) => React.Element<{}>
+  ReactClass<any>
+) | (
+  (state: ExNavigationState) => ReactClass<any>
 ) | {
-  render: (state: ExNavigationState) => ReactElement<{}>,
+  render: (state: ExNavigationState) => ReactElement<any>,
   config?: (routeConfig: ExNavigationConfig, routeParams: Object) => ExNavigationConfig,
 };
 
