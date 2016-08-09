@@ -15,7 +15,6 @@
   ],
   "author": "Adam Miskiewicz <adam@exponentjs.com>",
   "license": "MIT",
-  "peerDependencies": {},
   "dependencies": {
     "@exponent/react-native-touchable-native-feedback-safe": "^1.0.0",
     "clamp": "^1.0.1",
@@ -42,8 +41,6 @@
     "warning": "^2.1.0"
   },
   "devDependencies": {
-    "flow-bin": "^0.29.0",
-    "react": "~15.2.1",
-    "react-native": "github:exponentjs/react-native#sdk-8.0.0"
+    "flow-bin": "^0.29.0"
   }
 }
