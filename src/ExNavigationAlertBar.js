@@ -63,12 +63,12 @@ export default class ExNavigationAlertBar extends React.Component {
   };
 
   componentWillReceiveProps(nextProps: Props) {
+    // note(brentvatne): we save this in state so that when the store updates
+    // to hide the alert we don't have to do some janky shouldComponentUpdate
+    // business to make sure that the text/styles remain the same until
+    // the animation is completed
     if (!this.props.alertState && nextProps.alertState ||
-        this.props.alertState !== nextProps.alertState) {
-      // note(brentvatne): we save this in state so that when the store updates
-      // to hide the alert we don't have to do some janky shouldComponentUpdate
-      // business to make sure that the text/styles remain the same until
-      // the animation is completed
+        (this.props.alertState && nextProps.alertState && (this.props.alertState !== nextProps.alertState))) {
       this.setState({currentAlertState: nextProps.alertState});
     }
   }
