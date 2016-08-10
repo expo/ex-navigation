@@ -33,6 +33,13 @@ class LandingScreen extends Component {
     },
   }
 
+  componentDidMount() {
+    this.props.navigator.showLocalAlert('Hello!', {
+      text: {color: '#fff'},
+      container: {backgroundColor: 'red'}
+    });
+  }
+
   render() {
     return (
       <View style={styles.container}>

@@ -14,6 +14,7 @@ const {
 
 const INITIAL_STATE = {
   navigators: {},
+  alerts: {},
   currentNavigatorUID: null,
 };
 
@@ -145,28 +146,21 @@ class ExNavigationReducer {
   }
 
   static [ActionTypes.SHOW_LOCAL_ALERT_BAR](state, { navigatorUID, message, options }) {
-    let navigatorState = {
-      ...state.navigators[navigatorUID],
-      alert: {
-        message,
-        options,
-      },
+    let alertState = {
+      message,
+      options,
     };
 
     return {
-      ..._updateNavigator(state, navigatorUID, navigatorState),
+      ..._updateAlert(state, navigatorUID, alertState),
     };
   }
 
   static [ActionTypes.HIDE_LOCAL_ALERT_BAR](state, { navigatorUID }) {
-    let previousNavigatorState = state.navigators[navigatorUID];
-    let navigatorState = {
-      ...state.navigators[navigatorUID],
-      alert: null,
-    };
+    let alertState = null;
 
     return {
-      ..._updateNavigator(state, navigatorUID, navigatorState),
+      ..._updateAlert(state, navigatorUID, alertState),
     };
   }
 
@@ -263,6 +257,16 @@ function _updateSelectedKey(target, state, navigatorUID) {
   return {
     ..._updateNavigator(state, navigatorUID, newNavigatorState),
     currentNavigatorUID: navigatorUID,
+  };
+}
+
+function _updateAlert(state, navigatorUID, newState) {
+  return {
+    ...state,
+    alerts: {
+      ...state.alerts,
+      [navigatorUID]: newState,
+    },
   };
 }
 

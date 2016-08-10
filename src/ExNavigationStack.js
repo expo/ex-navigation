@@ -24,6 +24,7 @@ import NavigationItem from './ExNavigationStackItem';
 import { getBackButtonManager } from './ExNavigationBackButtonManager';
 import { createNavigatorComponent } from './ExNavigationComponents';
 import ExNavigatorContext from './ExNavigatorContext';
+import ExNavigationAlertBar from './ExNavigationAlertBar';
 import * as NavigationStyles from './ExNavigationStyles';
 import * as Utils from './ExNavigationUtils';
 
@@ -43,6 +44,8 @@ import type { ExNavigationTabContext } from './tab/ExNavigationTab';
 const DEFAULT_ROUTE_CONFIG: ExNavigationConfig = {
   styles: Platform.OS !== 'android' ? NavigationStyles.FloatHorizontal : NavigationStyles.Fade,
 };
+
+const STATUSBAR_HEIGHT = Platform.OS === 'ios' ? 20 : 24;
 
 type Props = {
   id: string,
@@ -371,7 +374,12 @@ class ExNavigationStack extends PureComponent<any, Props, State> {
   };
 
   _renderTransitioner = (props) => {
-    const overlay = this._renderOverlay({
+    const header = this._renderHeader({
+      ...props,
+      scene: props.scene,
+    });
+
+    const alertBar = this._renderAlertBar({
       ...props,
       scene: props.scene,
     });
@@ -384,18 +392,35 @@ class ExNavigationStack extends PureComponent<any, Props, State> {
     );
 
     return (
-      <View
-        style={styles.container}>
-        <View
-          style={styles.scenes}>
+      <View style={styles.container}>
+        <View style={styles.scenes}>
           {scenes}
         </View>
-        {overlay}
+        {header}
+        {alertBar}
       </View>
     );
   }
 
-  _renderOverlay = (props: ExNavigationSceneRendererProps) => {
+  _renderAlertBar = (props: ExNavigationSceneRendererProps) => {
+    const latestRoute = this._getRouteAtIndex(props.scenes, props.scenes.length - 1);
+    const latestRouteConfig: ExNavigationConfig = latestRoute.config;
+    const navigationBarIsVisible =
+      latestRouteConfig.navigationBar &&
+      latestRouteConfig.navigationBar.visible !== false;
+
+    return (
+      <View style={[styles.alertBarContainer, navigationBarIsVisible ? null : {top: 0}]}>
+        <ExNavigationAlertBar
+          style={navigationBarIsVisible ? null : {paddingTop: STATUSBAR_HEIGHT}}
+          getNavigatorContext={this._getNavigatorContext}
+          navigatorUID={this.state.navigatorUID}
+        />
+      </View>
+    );
+  }
+
+  _renderHeader = (props: ExNavigationSceneRendererProps) => {
     // Determine animation styles based on the most recent scene in the stack.
     const latestRoute = this._getRouteAtIndex(props.scenes, props.scenes.length - 1);
     const latestRouteConfig: ExNavigationConfig = latestRoute.config;
@@ -623,5 +648,11 @@ const styles = StyleSheet.create({
   withNavigationBarOpaque: {
     // TODO: needs to be dynamic based off of current navbar height
     paddingTop: NavigationBar.DEFAULT_HEIGHT,
+  },
+  alertBarContainer: {
+    position: 'absolute',
+    top: NavigationBar.DEFAULT_HEIGHT,
+    left: 0,
+    right: 0,
   },
 });

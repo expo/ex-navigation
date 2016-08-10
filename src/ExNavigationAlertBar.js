@@ -1,3 +1,5 @@
+/* @flow */
+
 import React from 'react';
 import {
   Animated,
@@ -11,20 +13,56 @@ import {
 
 import { decorate as reactMixin } from 'react-mixin';
 import TimerMixin from 'react-timer-mixin';
+import exNavConnect from './ExNavigationConnect';
+
+type AlertState = {
+  options: {
+    container: (Object|number),
+    text: (Object|number),
+  },
+  message: string,
+}
+
+type Props = {
+  alertState: ?AlertState,
+  navigatorUID: any,
+}
+
+type State = {
+  isVisible: bool,
+  yOffset: any,
+  currentAlertState: ?AlertState,
+};
 
 const ALERT_DISPLAY_TIME_MS = 6000;
 const ALERT_TEXT_VERTICAL_MARGIN = 12;
 const ALERT_TEXT_HORIZONTAL_MARGIN = 8;
 
+@exNavConnect((data, props) => ExNavigationAlertBar.getDataProps(data, props))
 @reactMixin(TimerMixin)
 export default class ExNavigationAlertBar extends React.Component {
-  state = {
+  _textContainerRef: View;
+  requestAnimationFrame: () => void;
+  setTimeout: () => number;
+  clearTimeout: (timerId: number) => void;
+  _timeout: number;
+
+  static getDataProps(data: any, props: Props) {
+    let { alerts } = data.navigation;
+    let alertState = alerts[props.navigatorUID];
+
+    return {
+      alertState,
+    }
+  }
+
+  state: State = {
     isVisible: false,
     yOffset: new Animated.Value(-500),
     currentAlertState: null,
   };
 
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps(nextProps: Props) {
     if (!this.props.alertState && nextProps.alertState) {
       // note(brentvatne): we save this in state so that when the store updates
       // to hide the alert we don't have to do some janky shouldComponentUpdate
@@ -34,7 +72,7 @@ export default class ExNavigationAlertBar extends React.Component {
     }
   }
 
-  componentDidUpdate(prevProps) {
+  componentDidUpdate(prevProps: Props) {
     if (!prevProps.alertState && this.props.alertState) {
       this._show();
     } else if (prevProps.alertState && !this.props.alertState) {
@@ -84,7 +122,7 @@ export default class ExNavigationAlertBar extends React.Component {
     );
   }
 
-  _onLayout = (e) => {
+  _onLayout = (e: any) => {
     /* a bug in react-native causes measure results to be undefined
      * if we don't call onLayout, but we don't actually need to do
      * anything with these results */
@@ -125,10 +163,12 @@ export default class ExNavigationAlertBar extends React.Component {
   }
 
   _dispatchHide = () => {
-    this.props.getNavigatorContext().hideLocalAlert();
+    if (this._textContainerRef) {
+      this.props.getNavigatorContext().hideLocalAlert();
+    }
   }
 
-  _animateIn(textHeight) {
+  _animateIn(textHeight: number) {
     textHeight += ALERT_TEXT_VERTICAL_MARGIN * 2;
 
     Animated.timing(this.state.yOffset, {
@@ -139,7 +179,7 @@ export default class ExNavigationAlertBar extends React.Component {
     }).start();
   }
 
-  _animateOut(textHeight) {
+  _animateOut(textHeight: number) {
     textHeight += ALERT_TEXT_VERTICAL_MARGIN * 2;
 
     Animated.timing(this.state.yOffset, {
