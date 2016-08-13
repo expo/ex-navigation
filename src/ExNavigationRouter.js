@@ -154,7 +154,10 @@ export class ExNavigationRoute {
     let result = {};
 
     if (this.getTranslucent()) {
-      result.paddingTop = NavigationBar.DEFAULT_HEIGHT;
+      // In order to not break sticky section headers we need to use marginTop
+      // instead of paddingTop, even though it's not desirable because the
+      // scrollbar appears to go underneath the navbar.
+      result.marginTop = NavigationBar.DEFAULT_HEIGHT;
     }
 
     if (this.getTabBarInset()) {
