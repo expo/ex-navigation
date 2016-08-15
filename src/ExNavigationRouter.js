@@ -151,6 +151,10 @@ export class ExNavigationRoute {
   }
 
   getContentContainerStyle = () => {
+    return this.getContentInsetsStyle();
+  };
+
+  getContentInsetsStyle = () => {
     let result = {};
 
     if (this.getTranslucent()) {
