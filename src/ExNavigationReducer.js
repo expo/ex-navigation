@@ -162,8 +162,8 @@ class ExNavigationReducer {
     }
 
     const routes = navigatorState.routes.slice(0, 1);
-    const newState = { ...navigatorState, index: 0, routes };
-    return _updateNavigator(state, navigatorUID, newState);
+    const newNavigatorState = { ...navigatorState, index: 0, routes };
+    return _updateNavigator(state, navigatorUID, newNavigatorState);
   }
 
   static [ActionTypes.SHOW_LOCAL_ALERT_BAR](state, { navigatorUID, message, options }) {
