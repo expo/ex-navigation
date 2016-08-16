@@ -120,6 +120,13 @@ export class ExNavigationStackContext extends ExNavigatorContext {
   }
 
   @debounce(500, true)
+  popToTop() {
+    this.navigationContext.performAction(({ stacks }) => {
+      stacks(this.navigatorUID).popToTop();
+    });
+  }
+
+  @debounce(500, true)
   replace(route: ExNavigationRoute) {
     invariant(route !== null && route.key, 'Route is null or malformed.');
 

@@ -162,6 +162,11 @@ export default class NavigationContext {
             Actions.pop(uid)
           );
         },
+        popToTop: () => {
+          actions.push(
+            Actions.popToTop(uid)
+          );
+        },
         replace: (route) => {
           actions.push(
             Actions.replace(uid, route)
