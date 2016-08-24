@@ -36,7 +36,7 @@ class LandingScreen extends Component {
   componentDidMount() {
     this.props.navigator.showLocalAlert('Hello!', {
       text: {color: '#fff'},
-      container: {backgroundColor: 'red'}
+      container: {backgroundColor: 'red'},
     });
   }
 
