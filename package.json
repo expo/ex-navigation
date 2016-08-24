@@ -30,7 +30,7 @@
     "react-clone-referenced-element": "^1.0.1",
     "react-mixin": "^3.0.5",
     "react-native-drawer-layout": "^1.0.0",
-    "react-native-tab-view": "0.0.25",
+    "react-native-tab-view": "0.0.27",
     "react-addons-shallow-compare": "~15.2.0",
     "react-redux": "^4.4.5",
     "react-static-container": "^1.0.0",
