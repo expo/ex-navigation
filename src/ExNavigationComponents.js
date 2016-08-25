@@ -146,9 +146,7 @@ export function createNavigatorComponent(WrappedComponent: ReactClass<any>) {
 
 import { NavigationPropType, StackNavigatorContextType } from './ExNavigationPropTypes';
 
-const NavigatorPropType = PropTypes.oneOfType([
-  StackNavigatorContextType,
-]);
+const NavigatorPropType = PropTypes.object;
 
 export function withNavigation<T>(WrappedComponent: ReactClass<T>) {
   class WithNavigation extends PureComponent {
