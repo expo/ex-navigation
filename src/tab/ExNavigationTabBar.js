@@ -73,7 +73,7 @@ export default class ExNavigationTabBar extends React.Component {
           <TouchableNativeFeedback
             key={index}
             onPress={item.onPress}
-            onLongPress={item.onPress}
+            onLongPress={item.onLongPress}
             delayPressIn={0}
             style={[styles.tabItem, isSelected ? item.selectedStyle : item.style]}
             background={item.nativeFeedbackBackground}>
@@ -84,7 +84,11 @@ export default class ExNavigationTabBar extends React.Component {
         );
       } else {
         return (
-          <TouchableWithoutFeedback key={index} onPress={item.onPress}>
+          <TouchableWithoutFeedback
+            key={index}
+            onPress={item.onPress}
+            delayPressIn={0}
+            onLongPress={item.onLongPress}>
             <View style={[styles.tabItem, isSelected ? item.selectedStyle : item.style]}>
               {title}
               {icon}

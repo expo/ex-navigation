@@ -294,6 +294,12 @@ class ExNavigationTab extends PureComponent<any, Props, State> {
         tabItem.onPress = tabItemOnPress;
       }
 
+      if (typeof tabItemProps.onLongPress === 'function') {
+        tabItem.onLongPress = tabItem.onLongPress.bind(this, tabItemOnPress);
+      } else {
+        tabItem.onLongPress = tabItem.onPress;
+      }
+
       return tabItem;
     });
 
