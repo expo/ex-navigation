@@ -328,7 +328,9 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     paddingTop: ExNavigationBar.DEFAULT_HEIGHT,
-    paddingBottom: 16,
+    // TODO(brentvatne): come up with a better solution for making the
+    // elevation show up properly on Android
+    paddingBottom: Platform.OS === 'android' ? 16 : 0,
   },
 
   wrapperWithoutAppbar: {
