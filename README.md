@@ -275,3 +275,85 @@ full list of functions that can be called on StackNavigation navigators.
 - `hideLocalAlert`: hide an active alert bar
 - `immediatelyResetStack`: reset the current stack to the given stack
 - `updateCurrentRouteParams`: update route params as in the above example
+
+## Working with the navigation bar
+
+The navigation bar configuration exposes a set of useful options that
+should allow you to do most things that you will want to do with it.
+
+You specify the configuration for the `navigationBar` on the route
+component, or on a `StackNavigation` component.
+
+### On a route component
+
+When you configure the `navigationBar` on a route component, the
+configuration only applies to that specific component. This is
+usually useful for specifying the title or components to render
+on the left or right of the title.
+
+```javascript
+
+ @connect()
+ class SignOutButton extends React.Component {
+   render() {
+      return (
+        <TouchableOpacity onPress={this.props.dispatch(Actions.signOut())}>
+          <Text>Sign out</Text>
+        </TouchableOpacity>
+      );
+   }
+ }
+
+ class AboutScreen extends React.Component {
+   static route = {
+     navigationBar: {
+       title: 'Title goes here',
+       renderRight: (route, props) => <SignOutButton />
+     }
+   }
+
+   // ...
+ }
+```
+
+### On StackNavigation
+
+You can configure the `defaultRouteConfig` for all routes within a
+`StackNavigation` to save you needing to specify properties like
+the `navigationBar` `backgroundColor` and `tintColor` (color to
+use for the title and back button or drawer menu hamburger button).
+
+```javascript
+class App extends React.Component {
+  render() {
+    return (
+      <NavigationProvider router={Router}>
+        <StackNavigation
+          defaultRouteConfig={{
+            navigationBar: {
+              backgroundColor: '#000',
+              tintColor: '#fff',
+            }
+          }}
+          initialRoute={Router.getRoute('home')}
+        />
+      </NavigationProvider>
+    );
+  }
+}
+```
+
+### navigationBar properties
+
+- `title`
+- `visible` - boolean that indicates whether the `navigationBar` should
+be visible for this route.
+- `translucent` - iOS and Exponent only, use background blur on the
+`navigationBar`, like in the Apple Podcasts app, for example.
+- `renderLeft` - a function that should return a React component that
+will be rendered in the left position of the `navigationBar`.
+- `renderTitle` - a function that should return a React component that
+will be rendered in the title position of the `navigationBar`.
+- `renderRight` - a function that should return a React component that
+will be rendered in the right position of the `navigationBar`.
+
