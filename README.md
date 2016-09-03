@@ -346,6 +346,10 @@ class App extends React.Component {
 ### navigationBar properties
 
 - `title`
+- `backgroundColor` - the background color to use for the
+`navigationBar`.
+- `tintColor` - the color to use for the title text and back button or
+drawer button icons.
 - `visible` - boolean that indicates whether the `navigationBar` should
 be visible for this route.
 - `translucent` - iOS and Exponent only, use background blur on the
@@ -356,4 +360,3 @@ will be rendered in the left position of the `navigationBar`.
 will be rendered in the title position of the `navigationBar`.
 - `renderRight` - a function that should return a React component that
 will be rendered in the right position of the `navigationBar`.
-
