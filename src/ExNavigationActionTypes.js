@@ -8,6 +8,7 @@ export default mirror([
   'REMOVE_NAVIGATOR',
   'PUSH',
   'POP',
+  'POP_TO_TOP',
   'REPLACE',
   'IMMEDIATELY_RESET_STACK',
   'UPDATE_CURRENT_ROUTE_PARAMS',

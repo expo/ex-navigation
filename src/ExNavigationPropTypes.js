@@ -7,5 +7,6 @@ export const NavigationPropType = PropTypes.shape({
 export const StackNavigatorContextType = PropTypes.shape({
   push: PropTypes.func.isRequired,
   pop: PropTypes.func.isRequired,
+  popToTop: PropTypes.func.isRequired,
   replace: PropTypes.func.isRequired,
 });
