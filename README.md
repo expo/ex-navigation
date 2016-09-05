@@ -23,11 +23,12 @@ React Native that works seamlessly on Android and iOS.
 
 - `npm i @exponent/ex-navigation babel-preset-react-native-stage-0 --save`
 - Change your `.babelrc` (if you have one, if not, then create one):
-  ```
-  {
-    "presets": ["react-native-stage-0/decorator-support"]
-  }
-  ```
+
+```
+{
+  "presets": ["react-native-stage-0/decorator-support"]
+}
+```
 
 ---
 
