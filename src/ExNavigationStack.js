@@ -479,7 +479,7 @@ class ExNavigationStack extends PureComponent<any, Props, State> {
         break;
       }
 
-      if (currentNavigator.type === 'drawer') {
+      if (currentNavigator && currentNavigator.type === 'drawer') {
         result = currentNavigator;
         break;
       }
@@ -496,15 +496,11 @@ class ExNavigationStack extends PureComponent<any, Props, State> {
       return routeConfig.navigationBar.renderLeft(route, props);
     }
 
-    const drawerNavigatorParent = this._drawerNavigatorParent();
-    if (props.scene.index === 0 && !!drawerNavigatorParent) {
-      return (
-        <NavigationBar.MenuButton
-          navigator={drawerNavigatorParent}
-          tintColor={route.getBarTintColor()}
-        />
-      );
+    let menuButton = this._maybeRenderMenuButton('left', props, route);
+    if (menuButton) {
+      return menuButton;
     }
+
     if (props.scene.index > 0) {
       return (
         <NavigationBar.BackButton tintColor={route.getBarTintColor()} />
@@ -513,6 +509,25 @@ class ExNavigationStack extends PureComponent<any, Props, State> {
       return null;
     }
   };
+
+  _maybeRenderMenuButton = (position, props, route) => {
+    const drawerNavigatorParent = this._drawerNavigatorParent();
+
+    if (props.scene.index === 0 && !!drawerNavigatorParent) {
+      // Don't render the button on the left if the drawerPosition is on the
+      // right, and vice versa
+      if (drawerNavigatorParent.options.drawerPosition !== position) {
+        return;
+      }
+
+      return (
+        <NavigationBar.MenuButton
+          navigator={drawerNavigatorParent}
+          tintColor={route.getBarTintColor()}
+        />
+      );
+    }
+  }
 
   _renderTitleComponentForHeader = (props) => { //eslint-disable-line react/display-name
     const { scene: { route } } = props;
@@ -530,7 +545,15 @@ class ExNavigationStack extends PureComponent<any, Props, State> {
   _renderRightComponentForHeader = (props) => {
     const { scene: { route } } = props;
     const routeConfig = route.config;
-    return routeConfig.navigationBar && routeConfig.navigationBar.renderRight && routeConfig.navigationBar.renderRight(route, props);
+
+    if (routeConfig.navigationBar && typeof routeConfig.navigationBar.renderRight === 'function') {
+      return routeConfig.navigationBar.renderRight(route, props);
+    }
+
+    let menuButton = this._maybeRenderMenuButton('right', props, route);
+    if (menuButton) {
+      return menuButton;
+    }
   };
 
   _renderScene = (props: ExNavigationSceneRendererProps) => {
