@@ -493,10 +493,14 @@ class ExNavigationStack extends PureComponent<any, Props, State> {
     const routeConfig = route.config;
 
     if (routeConfig.navigationBar && typeof routeConfig.navigationBar.renderLeft === 'function') {
-      return routeConfig.navigationBar.renderLeft(route, props);
+      let maybeLeftComponent = routeConfig.navigationBar.renderLeft(route, props);
+
+      if (maybeLeftComponent) {
+        return maybeLeftComponent;
+      }
     }
 
-    let menuButton = this._maybeRenderMenuButton('left', props, route);
+    let menuButton = this._maybeRenderMenuButton('left', route, props);
     if (menuButton) {
       return menuButton;
     }
@@ -510,7 +514,7 @@ class ExNavigationStack extends PureComponent<any, Props, State> {
     }
   };
 
-  _maybeRenderMenuButton = (position, props, route) => {
+  _maybeRenderMenuButton = (position, route, props) => {
     const drawerNavigatorParent = this._drawerNavigatorParent();
 
     if (props.scene.index === 0 && !!drawerNavigatorParent) {
@@ -547,10 +551,14 @@ class ExNavigationStack extends PureComponent<any, Props, State> {
     const routeConfig = route.config;
 
     if (routeConfig.navigationBar && typeof routeConfig.navigationBar.renderRight === 'function') {
-      return routeConfig.navigationBar.renderRight(route, props);
+      let maybeRightComponent = routeConfig.navigationBar.renderRight(route, props);
+
+      if (maybeRightComponent) {
+        return maybeRightComponent;
+      }
     }
 
-    let menuButton = this._maybeRenderMenuButton('right', props, route);
+    let menuButton = this._maybeRenderMenuButton('right', route, props);
     if (menuButton) {
       return menuButton;
     }
