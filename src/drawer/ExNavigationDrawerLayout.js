@@ -32,13 +32,16 @@ export default class ExNavigationDrawerLayout extends React.Component {
   _component: DrawerLayout;
 
   render() {
+    let { drawerPosition } = this.props;
+    let position = drawerPosition[0].toUpperCase() + drawerPosition.substr(1);
+
     return (
       <DrawerLayout
         ref={component => { this._component = component; }}
         onDrawerClose={() => { this.setState({isOpen: false}) }}
         onDrawerOpen={() => { this.setState({isOpen: true}) }}
         drawerWidth={this.props.width}
-        drawerPosition={this.props.drawerPosition}
+        drawerPosition={DrawerLayout.positions[this.props.drawerPosition]}
         renderNavigationView={this._renderNavigationView}>
         {this.props.children}
       </DrawerLayout>
