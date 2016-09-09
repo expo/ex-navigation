@@ -187,10 +187,11 @@ class ExNavigationSlidingTab extends PureComponent<any, Props, State> {
     }
   };
 
-  _renderLabel = ({ route, focused, index }) => {
+  _renderLabel = (options) => {
+    let { route, focused, index } = options;
     let tabItem = this.state.tabItems.find(i => i.id === route.key);
 
-    return tabItem && tabItem.renderLabel ? tabItem.renderLabel() : null;
+    return tabItem && tabItem.renderLabel ? tabItem.renderLabel(options) : null;
   }
 
   _renderHeader = (props) => {
