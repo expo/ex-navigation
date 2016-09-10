@@ -68,6 +68,7 @@ type State = {
 
 type Context = {
   headerComponent: mixed,
+  alertBarComponent: mixed,
   parentNavigatorUID: string,
 };
 
@@ -217,12 +218,14 @@ class ExNavigationStack extends PureComponent<any, Props, State> {
   static contextTypes = {
     parentNavigatorUID: React.PropTypes.string,
     headerComponent: React.PropTypes.func,
+    alertBarComponent: React.PropTypes.func,
   };
 
   static childContextTypes = {
     parentNavigatorUID: React.PropTypes.string,
     navigator: React.PropTypes.instanceOf(ExNavigationStackContext),
     headerComponent: React.PropTypes.func,
+    alertBarComponent: React.PropTypes.func,
   };
 
   getChildContext() {
@@ -231,6 +234,7 @@ class ExNavigationStack extends PureComponent<any, Props, State> {
       navigator: this._getNavigatorContext(),
       parentNavigatorUID: this.state.navigatorUID,
       headerComponent: this.props.headerComponent || this.context.headerComponent,
+      alertBarComponent: this.props.alertBarComponent || this.context.alertBarComponent,
     };
   }
 
@@ -416,9 +420,11 @@ class ExNavigationStack extends PureComponent<any, Props, State> {
       latestRouteConfig.navigationBar &&
       latestRouteConfig.navigationBar.visible !== false;
 
+    const AlertBarComponent = this.props.alertBarComponent || this.context.alertBarComponent || ExNavigationAlertBar;
+
     return (
       <View style={[styles.alertBarContainer, navigationBarIsVisible ? null : {top: 0}]}>
-        <ExNavigationAlertBar
+        <AlertBarComponent
           style={navigationBarIsVisible ? null : {paddingTop: STATUSBAR_HEIGHT}}
           getNavigatorContext={this._getNavigatorContext}
           navigatorUID={this.state.navigatorUID}
