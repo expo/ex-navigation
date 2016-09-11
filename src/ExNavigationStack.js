@@ -213,6 +213,8 @@ class ExNavigationStack extends PureComponent<any, Props, State> {
 
   static defaultProps = {
     defaultRouteConfig: DEFAULT_ROUTE_CONFIG,
+    onTransitionEnd: () => {},
+    onTransitionStart: () => {},
   };
 
   static contextTypes = {
@@ -261,6 +263,7 @@ class ExNavigationStack extends PureComponent<any, Props, State> {
     if (!navigationState) {
       return null;
     }
+    const { onTransitionEnd, onTransitionStart } = this.props;
 
     return (
       <NavigationTransitioner
@@ -268,6 +271,8 @@ class ExNavigationStack extends PureComponent<any, Props, State> {
         navigationState={navigationState}
         render={this._renderTransitioner}
         configureTransition={this._configureTransition}
+        onTransitionEnd={onTransitionEnd}
+        onTransitionStart={onTransitionStart}
       />
     );
   }
@@ -367,6 +372,7 @@ class ExNavigationStack extends PureComponent<any, Props, State> {
       return configureTransition(transitionProps, prevTransitionProps);
     }
   };
+
 
   _registerNavigatorContext() {
     this.props.onRegisterNavigatorContext(this.state.navigatorUID,
