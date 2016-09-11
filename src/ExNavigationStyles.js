@@ -18,11 +18,22 @@ const configureTimingTransition = (transitionProps, previousTransitionProps) => 
   duration: 150,
 });
 
-const configureSpringTransition = (transitionProps, previousTransitionProps) => ({
-  timing: Animated.spring,
-  bounciness: 0,
-  speed: 12,
-});
+const configureSpringTransition = (transitionProps, previousTransitionProps) => {
+  let speed = 15;
+
+  // Popping should be faster than pushing
+  if (previousTransitionProps.navigationState.index >= transitionProps.navigationState.index) {
+    speed = 35;
+  }
+
+  return {
+    timing: Animated.spring,
+    bounciness: 0,
+    speed,
+    restSpeedThreshold: 0.2,
+    restDisplacementThreshold: 0.15,
+  };
+};
 
 const configureNoopTransition = (transitionProps, previousTransitionProps) => ({
   timing: Animated.timing,
