@@ -20,18 +20,22 @@ const configureTimingTransition = (transitionProps, previousTransitionProps) => 
 
 const configureSpringTransition = (transitionProps, previousTransitionProps) => {
   let speed = 15;
+  let restSpeedThreshold = 0.001;
+  let restDisplacementThreshold = 0.001;
 
   // Popping should be faster than pushing
   if (previousTransitionProps.navigationState.index >= transitionProps.navigationState.index) {
-    speed = 35;
+    speed = 40;
+    restSpeedThreshold = 0.2;
+    restDisplacementThreshold = 0.15;
   }
 
   return {
     timing: Animated.spring,
     bounciness: 0,
     speed,
-    restSpeedThreshold: 0.2,
-    restDisplacementThreshold: 0.15,
+    restSpeedThreshold,
+    restDisplacementThreshold,
   };
 };
 
@@ -77,8 +81,8 @@ function customForHorizontal(props: NavigationSceneRendererProps): Object {
   const inputRange = [index - 1, index, index + 1];
   const width = layout.initWidth;
   const outputRange = I18nManager.isRTL ?
-    ([-width, 0, 70]: Array<number>) :
-    ([width, 0, -70]: Array<number>);
+    ([-width, 0, 100]: Array<number>) :
+    ([width, 0, -100]: Array<number>);
 
 
   const opacity = position.interpolate({
