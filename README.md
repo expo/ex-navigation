@@ -360,3 +360,57 @@ will be rendered in the left position of the `navigationBar`.
 will be rendered in the title position of the `navigationBar`.
 - `renderRight` - a function that should return a React component that
 will be rendered in the right position of the `navigationBar`.
+
+## Tabs
+
+A minimal example using tabs:
+
+```
+<TabNavigation
+  id="main"
+  initialTab="more">
+  <TabItem
+    id={'home'}
+    title={'Home'}
+    selectedStyle={styles.selectedTab}
+    renderIcon={(isSelected) => <Image source={'home-icon'} /> }>
+    <StackNavigation
+      id={id}
+      initialRoute={Router.getRoute('home')}
+    />
+  </TabItem>
+  <TabItem
+    id={'posts'}
+    title={'Posts'}
+    selectedStyle={styles.selectedTab}
+    renderIcon={(isSelected) => <Image source={'posts-icon'} /> }>
+    <StackNavigation
+      id={id}
+      initialRoute={Router.getRoute('posts')}
+    />
+  </TabItem>
+  <TabItem
+    id={'profile'}
+    title={'Profile'}
+    selectedStyle={styles.selectedTab}
+    renderIcon={(isSelected) => <Image source={'profile-icon'} /> }>
+    <StackNavigation
+      id={id}
+      initialRoute={Router.getRoute('profile')}
+    />
+  </TabItem>
+</TabNavigation>
+```
+
+If you'd like to switch tabs you can use the `jumpToTab` as below. Be sure to pass in `navigation`.
+
+```
+<TouchableOpacity
+  onPress={() => {
+    navigation.performAction(({ tabs, stacks }) => {
+      tabs('main').jumpToTab('profile');
+      stacks('home').push(route);
+    });
+  }}
+/>
+```
