@@ -366,6 +366,8 @@ will be rendered in the right position of the `navigationBar`.
 A minimal example using tabs:
 
 ```
+import { StackNavigation, TabNavigation, TabNavigationItem as TabItem } from '@exponent/ex-navigation';
+
 <TabNavigation
   id="main"
   initialTab="more">
