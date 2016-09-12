@@ -362,56 +362,82 @@ will be rendered in the title position of the `navigationBar`.
 - `renderRight` - a function that should return a React component that
 will be rendered in the right position of the `navigationBar`.
 
-## Tabs
+## TabNavigation
 
 A minimal example using tabs:
 
-```
-import { StackNavigation, TabNavigation, TabNavigationItem as TabItem } from '@exponent/ex-navigation';
+```javascript
+import {
+  StackNavigation,
+  TabNavigation,
+  TabNavigationItem as TabItem,
+} from '@exponent/ex-navigation';
 
-<TabNavigation
-  id="main"
-  navigatorUID="main"
-  initialTab="more">
-  <TabItem
-    id={'home'}
-    title={'Home'}
-    selectedStyle={styles.selectedTab}
-    renderIcon={(isSelected) => <Image source={'home-icon'} /> }>
-    <StackNavigation
-      id={id}
-      initialRoute={Router.getRoute('home')}
-    />
-  </TabItem>
-  <TabItem
-    id={'posts'}
-    title={'Posts'}
-    selectedStyle={styles.selectedTab}
-    renderIcon={(isSelected) => <Image source={'posts-icon'} /> }>
-    <StackNavigation
-      id={id}
-      initialRoute={Router.getRoute('posts')}
-    />
-  </TabItem>
-  <TabItem
-    id={'profile'}
-    title={'Profile'}
-    selectedStyle={styles.selectedTab}
-    renderIcon={(isSelected) => <Image source={'profile-icon'} /> }>
-    <StackNavigation
-      id={id}
-      initialRoute={Router.getRoute('profile')}
-    />
-  </TabItem>
-</TabNavigation>
+
+// Treat the TabScreen route like any other route -- you may want to set
+// it as the intiial route for a top-level StackNavigation
+class TabScreen extends React.Component {
+  static route = {
+    navigationBar: {
+      visible: false,
+    }
+  }
+
+  render() {
+    <TabNavigation
+      id="main"
+      navigatorUID="main"
+      initialTab="more">
+      <TabItem
+        id="home"
+        title="Home"
+        selectedStyle={styles.selectedTab}
+        renderIcon={(isSelected) => <Image source={require('./assets/images/home.png'} /> }>
+        <StackNavigation
+          id={id}
+          initialRoute={Router.getRoute('home')}
+        />
+      </TabItem>
+
+      <TabItem
+        id="posts"
+        title="Posts"
+        selectedStyle={styles.selectedTab}
+        renderIcon={(isSelected) => <Image source={require('./assets/images/posts.png')} /> }>
+        <StackNavigation
+          id={id}
+          initialRoute={Router.getRoute('posts')}
+        />
+      </TabItem>
+
+      <TabItem
+        id="profile"
+        title="Profile"
+        selectedStyle={styles.selectedTab}
+        renderIcon={(isSelected) => <Image source={require('./assets/images/profile.png')} /> }>
+        <StackNavigation
+          id={id}
+          initialRoute={Router.getRoute('profile')}
+        />
+      </TabItem>
+    </TabNavigation>
+  }
+}
 ```
 
-If you'd like to switch tabs you can use the `jumpToTab` as below. Be sure to pass in `navigation`. For the code below to work, we need `navigatorUID` to be set as in the code snippet above.
+See an example of TabNavigation in a real app
+[here](https://github.com/exponentjs/rnplay/blob/f4d29c4578fb57347afd0d507a036dd232ec6fdb/navigation/TabNavigationLayout.js).
 
-```
+If you'd like to switch tabs programmatically (eg: a notification
+arrives and you want to jump to a notifications tab, or you tap on a
+button to open your profile but within another tab) you can use
+`jumpToTab`. For the code below to work, we need the `navigatorUID` prop
+to be set on TabNavigator, as with the example above.
+
+```javascript
 <TouchableOpacity
   onPress={() => {
-    navigation.performAction(({ tabs, stacks }) => {
+    this.props.navigation.performAction(({ tabs, stacks }) => {
       tabs('main').jumpToTab('profile');
       stacks('home').push(route);
     });
