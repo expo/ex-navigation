@@ -384,43 +384,45 @@ class TabScreen extends React.Component {
   }
 
   render() {
-    <TabNavigation
-      id="main"
-      navigatorUID="main"
-      initialTab="more">
-      <TabItem
-        id="home"
-        title="Home"
-        selectedStyle={styles.selectedTab}
-        renderIcon={(isSelected) => <Image source={require('./assets/images/home.png'} /> }>
-        <StackNavigation
-          id={id}
-          initialRoute={Router.getRoute('home')}
-        />
-      </TabItem>
+    return (
+      <TabNavigation
+        id="main"
+        navigatorUID="main"
+        initialTab="more">
+        <TabItem
+          id="home"
+          title="Home"
+          selectedStyle={styles.selectedTab}
+          renderIcon={(isSelected) => <Image source={require('./assets/images/home.png'} /> }>
+          <StackNavigation
+            id={id}
+            initialRoute={Router.getRoute('home')}
+          />
+        </TabItem>
 
-      <TabItem
-        id="posts"
-        title="Posts"
-        selectedStyle={styles.selectedTab}
-        renderIcon={(isSelected) => <Image source={require('./assets/images/posts.png')} /> }>
-        <StackNavigation
-          id={id}
-          initialRoute={Router.getRoute('posts')}
-        />
-      </TabItem>
+        <TabItem
+          id="posts"
+          title="Posts"
+          selectedStyle={styles.selectedTab}
+          renderIcon={(isSelected) => <Image source={require('./assets/images/posts.png')} /> }>
+          <StackNavigation
+            id={id}
+            initialRoute={Router.getRoute('posts')}
+          />
+        </TabItem>
 
-      <TabItem
-        id="profile"
-        title="Profile"
-        selectedStyle={styles.selectedTab}
-        renderIcon={(isSelected) => <Image source={require('./assets/images/profile.png')} /> }>
-        <StackNavigation
-          id={id}
-          initialRoute={Router.getRoute('profile')}
-        />
-      </TabItem>
-    </TabNavigation>
+        <TabItem
+          id="profile"
+          title="Profile"
+          selectedStyle={styles.selectedTab}
+          renderIcon={(isSelected) => <Image source={require('./assets/images/profile.png')} /> }>
+          <StackNavigation
+            id={id}
+            initialRoute={Router.getRoute('profile')}
+          />
+        </TabItem>
+      </TabNavigation>
+    );
   }
 }
 ```
