@@ -42,6 +42,7 @@ type Props = {
   position: "top" | "bottom",
   pressColor: ?string,
   renderBefore: () => ?ReactElement<any>,
+  renderTabBar: (props: Object) => React.Element<{}>,
   style: any,
   onRegisterNavigatorContext: () => any,
   tabBarStyle: any,
@@ -199,7 +200,12 @@ class ExNavigationSlidingTab extends PureComponent<any, Props, State> {
   }
 
   _renderHeader = (props) => {
-    const TabBarComponent = this.props.position === 'top' ? TabBarTop : TabBar;
+    let TabBarComponent = this.props.position === 'top' ? TabBarTop : TabBar;
+
+    if (this.props.renderTabBar) {
+      TabBarComponent = this.props.renderTabBar;
+    }
+
     const tabBarProps = {
       pressColor: this.props.pressColor,
       indicatorStyle: this.props.indicatorStyle,
