@@ -1,6 +1,7 @@
 import {
   Animated,
   Easing,
+  I18nManager,
   NavigationExperimental,
 } from 'react-native';
 
@@ -17,20 +18,96 @@ const configureTimingTransition = (transitionProps, previousTransitionProps) => 
   duration: 150,
 });
 
-const configureSpringTransition = (transitionProps, previousTransitionProps) => ({
-  timing: Animated.spring,
-  bounciness: 0,
-  speed: 12,
-});
+const configureSpringTransition = (transitionProps, previousTransitionProps) => {
+  let speed = 15;
+  let restSpeedThreshold = 0.001;
+  let restDisplacementThreshold = 0.001;
+
+  // Popping should be faster than pushing
+  if (previousTransitionProps.navigationState.index >= transitionProps.navigationState.index) {
+    speed = 40;
+    restSpeedThreshold = 0.2;
+    restDisplacementThreshold = 0.15;
+  }
+
+  return {
+    timing: Animated.spring,
+    bounciness: 0,
+    speed,
+    restSpeedThreshold,
+    restDisplacementThreshold,
+  };
+};
 
 const configureNoopTransition = (transitionProps, previousTransitionProps) => ({
   timing: Animated.timing,
   duration: 1,
 });
 
+/**
+ * Render the initial style when the initial layout isn't measured yet.
+ */
+function forInitial(props: NavigationSceneRendererProps): Object {
+  const {
+    navigationState,
+    scene,
+  } = props;
+
+  const focused = navigationState.index === scene.index;
+  const opacity = focused ? 1 : 0;
+  // If not focused, move the scene to the far away.
+  const translate = focused ? 0 : 1000000;
+  return {
+    opacity,
+    transform: [
+      { translateX: translate },
+      { translateY: translate },
+    ],
+  };
+}
+
+function customForHorizontal(props: NavigationSceneRendererProps): Object {
+  const {
+    layout,
+    position,
+    scene,
+  } = props;
+
+  if (!layout.isMeasured) {
+    return forInitial(props);
+  }
+
+  const index = scene.index;
+  const inputRange = [index - 1, index, index + 1];
+  const width = layout.initWidth;
+  const outputRange = I18nManager.isRTL ?
+    ([-width, 0, 100]: Array<number>) :
+    ([width, 0, -100]: Array<number>);
+
+
+  const opacity = position.interpolate({
+    inputRange,
+    outputRange: ([1, 1, 0.3]: Array<number>),
+  });
+
+  const translateY = 0;
+  const translateX = position.interpolate({
+    inputRange,
+    outputRange,
+  });
+
+  return {
+    opacity,
+    transform: [
+      { translateX },
+      { translateY },
+    ],
+  };
+}
+
 export const FloatHorizontal: ExNavigationStyles = {
   configureTransition: configureSpringTransition,
-  sceneAnimations: CardStackStyleInterpolator.forHorizontal,
+  sceneAnimations: customForHorizontal,
   navigationBarAnimations: {
     forContainer: (props, delta) => {
       const {

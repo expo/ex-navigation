@@ -23,11 +23,12 @@ React Native that works seamlessly on Android and iOS.
 
 - `npm i @exponent/ex-navigation babel-preset-react-native-stage-0 --save`
 - Change your `.babelrc` (if you have one, if not, then create one):
-  ```
-  {
-    "presets": ["react-native-stage-0/decorator-support"]
-  }
-  ```
+
+```
+{
+  "presets": ["react-native-stage-0/decorator-support"]
+}
+```
 
 ---
 
@@ -345,7 +346,7 @@ class App extends React.Component {
 
 ### navigationBar properties
 
-- `title`
+- `title` - a string or a function that returns a string. The function is provided with the route params as the first argument.
 - `backgroundColor` - the background color to use for the
 `navigationBar`.
 - `tintColor` - the color to use for the title text and back button or

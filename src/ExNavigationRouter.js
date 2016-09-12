@@ -131,7 +131,11 @@ export class ExNavigationRoute {
   };
 
   getBarBackgroundColor = () => {
-    return _.get(this.config, 'navigationBar.backgroundColor');
+    const backgroundColor = _.get(this.config, 'navigationBar.backgroundColor');
+    if (typeof backgroundColor === 'function') {
+      return backgroundColor(this.params, this.config);
+    }
+    return backgroundColor;
   };
 
   getBarTintColor = () => {

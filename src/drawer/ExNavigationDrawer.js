@@ -65,6 +65,7 @@ type Props = {
   drawerWidth: 300,
   drawerStyle: any,
   children: Array<React.Element<any>>,
+  drawerPosition?: 'left' | 'right',
   navigation: ExNavigationContext,
   onRegisterNavigatorContext: (navigatorUID: string, navigatorContext: ExNavigationDrawerContext) => void,
   navigationState: Object,
@@ -88,6 +89,7 @@ class ExNavigationDrawer extends PureComponent<any, Props, State> {
   };
 
   static defaultProps = {
+    drawerPosition: 'left',
     renderHeader() {
       return null;
     },
@@ -137,6 +139,7 @@ class ExNavigationDrawer extends PureComponent<any, Props, State> {
       renderHeader: this.props.renderHeader,
       selectedItem: navigationState.routes[navigationState.index].key,
       items: this.state.drawerItems,
+      drawerPosition: this.props.drawerPosition,
       width: this.props.drawerWidth,
       style: [
         this.props.drawerStyle,
@@ -312,7 +315,10 @@ class ExNavigationDrawer extends PureComponent<any, Props, State> {
         this.state.parentNavigatorUID,
         this.state.id,
         this.props.navigation,
-        { toggleDrawer: this.toggleDrawer }
+        {
+          toggleDrawer: this.toggleDrawer,
+          drawerPosition: this.props.drawerPosition,
+        }
       )
     );
   }

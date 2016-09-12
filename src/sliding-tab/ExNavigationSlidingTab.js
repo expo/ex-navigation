@@ -109,12 +109,16 @@ class ExNavigationSlidingTab extends PureComponent<any, Props, State> {
 
     this._registerNavigatorContext();
 
+    let routes = tabItems.map(i => ({key: i.id}));
+    let routeKeys = routes.map(r => r.key);
+
     this.props.navigation.dispatch(Actions.setCurrentNavigator(
       this.state.navigatorUID,
       this.state.parentNavigatorUID,
       'slidingTab',
       {},
-      tabItems.map(i => ({key: i.id})),
+      routes,
+      this.props.initialTab ? routeKeys.indexOf(this.props.initialTab) : 0,
     ));
   }
 
@@ -187,10 +191,11 @@ class ExNavigationSlidingTab extends PureComponent<any, Props, State> {
     }
   };
 
-  _renderLabel = ({ route, focused, index }) => {
+  _renderLabel = (options) => {
+    let { route, focused, index } = options;
     let tabItem = this.state.tabItems.find(i => i.id === route.key);
 
-    return tabItem && tabItem.renderLabel ? tabItem.renderLabel() : null;
+    return tabItem && tabItem.renderLabel ? tabItem.renderLabel(options) : null;
   }
 
   _renderHeader = (props) => {
