@@ -45,7 +45,7 @@ const DEFAULT_ROUTE_CONFIG: ExNavigationConfig = {
   styles: Platform.OS !== 'android' ? NavigationStyles.FloatHorizontal : NavigationStyles.Fade,
 };
 
-const STATUSBAR_HEIGHT = Platform.OS === 'ios' ? 20 : 24;
+const STATUSBAR_HEIGHT = Platform.OS === 'ios' ? 20 : (global.__exponent ? 24 : 0);
 
 type Props = {
   id: string,

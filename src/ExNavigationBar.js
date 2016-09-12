@@ -21,8 +21,12 @@ if (global.__exponent) {
   };
 }
 
+// Exponent draws under the status bar on Android, but vanilla React Native does not.
+// So we need to factor the status bar height in with Exponent but can ignore it with
+// vanilla React Native
+const STATUSBAR_HEIGHT = Platform.OS === 'ios' ? 20 : (global.__exponent ? 24 : 0);
+
 const APPBAR_HEIGHT = Platform.OS === 'ios' ? 44 : 55;
-const STATUSBAR_HEIGHT = Platform.OS === 'ios' ? 20 : 24;
 const BACKGROUND_COLOR = Platform.OS === 'ios' ? '#EFEFF2' : '#FFF';
 const BORDER_BOTTOM_COLOR = 'rgba(0, 0, 0, .15)';
 const BORDER_BOTTOM_WIDTH = Platform.OS === 'ios' ? StyleSheet.hairlineWidth : 0;
@@ -312,7 +316,12 @@ export default class ExNavigationBar extends PureComponent {
   }
 }
 
-ExNavigationBar.DEFAULT_HEIGHT = APPBAR_HEIGHT + STATUSBAR_HEIGHT;
+
+if (global.__exponent) {
+  ExNavigationBar.DEFAULT_HEIGHT = APPBAR_HEIGHT + STATUSBAR_HEIGHT;
+} else {
+  ExNavigationBar.DEFAULT_HEIGHT = APPBAR_HEIGHT;
+}
 ExNavigationBar.DEFAULT_HEIGHT_WITHOUT_STATUS_BAR = APPBAR_HEIGHT;
 ExNavigationBar.DEFAULT_BACKGROUND_COLOR = BACKGROUND_COLOR;
 ExNavigationBar.DEFAULT_BORDER_BOTTOM_COLOR = BORDER_BOTTOM_COLOR;
