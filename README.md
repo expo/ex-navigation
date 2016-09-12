@@ -370,6 +370,7 @@ import { StackNavigation, TabNavigation, TabNavigationItem as TabItem } from '@e
 
 <TabNavigation
   id="main"
+  navigatorUID="main"
   initialTab="more">
   <TabItem
     id={'home'}
@@ -404,7 +405,7 @@ import { StackNavigation, TabNavigation, TabNavigationItem as TabItem } from '@e
 </TabNavigation>
 ```
 
-If you'd like to switch tabs you can use the `jumpToTab` as below. Be sure to pass in `navigation`.
+If you'd like to switch tabs you can use the `jumpToTab` as below. Be sure to pass in `navigation`. For the code below to work, we need `navigatorUID` to be set as in the code snippet above.
 
 ```
 <TouchableOpacity
