@@ -36,7 +36,7 @@ export type ExNavigationBarConfig = {
   styles?: ExNavigationStyles,
   title?: string | Function,
   tintColor?: string,
-  backgroundColor?: string,
+  backgroundColor?: string | Function,
   height?: number,
   translucent?: bool,
   renderLeft?: (state: ExNavigationState, props: NavigationSceneRendererProps) => ?React.Element<{}>,
