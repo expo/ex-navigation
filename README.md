@@ -446,3 +446,55 @@ to be set on TabNavigator, as with the example above.
   }}
 />
 ```
+
+### Integrate with your existing Redux store
+
+Behind the scenes ExNavigation manages your navigation state using
+Redux in its own store. If you'd like to store the navigation state
+on your app's store, you can use the `createStoreWithNavigation`
+function when creating the store and then manually provide the
+`NavigationContext`, initialized with your app's store.
+
+```
+/* Your store definition, let's say state/Store.js */
+
+import { createStoreWithNavigation } from '@exponent/ex-navigation';
+import { createStore } from 'redux';
+const createStoreWithNavigation = createNavigationEnabledStore({
+  createStore,
+  navigationStateKey: 'navigation',
+});
+const store = createStoreWithNavigation(
+  /* combineReducers and your normal create store things here! */
+);
+
+export default store;
+```
+
+```
+/* The top level of your app, often in main.js or index.[ios/android].js */
+
+import {
+  createRouter,
+  NavigationContext,
+  NavigationProvider,
+  StackNavigation,
+} from '@exponent/ex-navigation';
+
+import AppStore from './state/Store';
+
+const Router = createRouter(() => ({
+  home: () => HomeScreen,
+}));
+
+const navigationContext = new NavigationContext({
+  router: Router,
+  store: Store,
+})
+
+return (
+  <NavigationProvider context={navigationContext}>
+    <StackNavigation yourUsualPropsHere />
+  </NavigationProvider>
+)
+```
