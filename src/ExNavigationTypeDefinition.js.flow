@@ -50,6 +50,9 @@ export type ExNavigationDrawerConfig = {
 
 export type ExNavigationConfig = {
   styles?: ExNavigationStyles,
+  transitionOptions?: {
+    transitionGroup: string,
+  },
   navigationBar?: ExNavigationBarConfig,
   eventEmitter?: EventEmitter,
 };

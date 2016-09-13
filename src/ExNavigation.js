@@ -19,6 +19,10 @@ export { default as DrawerNavigationItem } from './drawer/ExNavigationDrawerItem
 
 export { default as NavigationBar } from './ExNavigationBar';
 
+export { default as SharedElementOverlay } from './shared-element/ExNavigationSharedElementOverlay';
+export { default as SharedElementGroup } from './shared-element/ExNavigationSharedElementGroup';
+export { default as SharedElement } from './shared-element/ExNavigationSharedElement';
+
 export { createNavigationEnabledStore } from './ExNavigationStore';
 
 export { default as NavigationActions } from './ExNavigationActions';
