@@ -13,7 +13,7 @@ const {
 import type { ExNavigationStyles } from './ExNavigationTypeDefinition';
 
 const configureTimingTransition = (transitionProps, previousTransitionProps) => ({
-  timing: Animated.spring,
+  timing: Animated.timing,
   easing: Easing.inOut(Easing.linear),
   duration: 150,
 });
