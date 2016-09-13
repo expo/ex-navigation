@@ -48,14 +48,16 @@ const DEFAULT_ROUTE_CONFIG: ExNavigationConfig = {
 const STATUSBAR_HEIGHT = Platform.OS === 'ios' ? 20 : (global.__exponent ? 24 : 0);
 
 type Props = {
+  defaultRouteConfig?: ExNavigationConfig,
   id: string,
-  navigatorUID: string,
   initialRoute?: ExNavigationRoute,
   initialStack?: Array<ExNavigationRoute>,
   navigation: ExNavigationContext,
-  onRegisterNavigatorContext: (navigatorUID: string, navigatorContext: ExNavigationStackContext) => void,
   navigationState?: Object,
-  defaultRouteConfig?: ExNavigationConfig,
+  navigatorUID: string,
+  onRegisterNavigatorContext: (navigatorUID: string, navigatorContext: ExNavigationStackContext) => void,
+  onTransitionEnd: () => void,
+  onTransitionStart: () => void,
 };
 
 type State = {
