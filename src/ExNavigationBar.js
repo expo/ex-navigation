@@ -317,11 +317,7 @@ export default class ExNavigationBar extends PureComponent {
 }
 
 
-if (global.__exponent) {
-  ExNavigationBar.DEFAULT_HEIGHT = APPBAR_HEIGHT + STATUSBAR_HEIGHT;
-} else {
-  ExNavigationBar.DEFAULT_HEIGHT = APPBAR_HEIGHT;
-}
+ExNavigationBar.DEFAULT_HEIGHT = APPBAR_HEIGHT + STATUSBAR_HEIGHT;
 ExNavigationBar.DEFAULT_HEIGHT_WITHOUT_STATUS_BAR = APPBAR_HEIGHT;
 ExNavigationBar.DEFAULT_BACKGROUND_COLOR = BACKGROUND_COLOR;
 ExNavigationBar.DEFAULT_BORDER_BOTTOM_COLOR = BORDER_BOTTOM_COLOR;
