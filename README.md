@@ -456,7 +456,7 @@ on your app's store, you can use the `createStoreWithNavigation`
 function when creating the store and then manually provide the
 `NavigationContext`, initialized with your app's store.
 
-```
+```javascript
 /* Your store definition, let's say state/Store.js */
 
 import { createStoreWithNavigation } from '@exponent/ex-navigation';
@@ -472,7 +472,7 @@ const store = createStoreWithNavigation(
 export default store;
 ```
 
-```
+```javascript
 /* The top level of your app, often in main.js or index.[ios/android].js */
 
 import {
