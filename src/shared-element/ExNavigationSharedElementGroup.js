@@ -58,6 +58,7 @@ export default class SharedElementGroup extends React.Component {
       visible: false,
       elementStyles: {},
       transitioningElementGroupToUid: null,
+      transitioningElementGroupFromUid: null,
     };
     this._store = context.sharedElementStore;
     this._isMounted = true;
@@ -149,18 +150,30 @@ export default class SharedElementGroup extends React.Component {
     );
   }
 
-  _onTransitionStart = (transitionProps, prevTransitionProps) => {
+  _onTransitionStart = (transitionProps, prevTransitionProps, isTransitionTo = false) => {
+    // TODO: We want some way for the target transition group to be notified that
+    // it is being transitioned to so that it can animated things using hooks like
+    // onTransitionStart and onTransitionEnd. Right now I'm just calling onTransitionStart
+    // on the target group too but we might want to make it a different prop or pass
+    // something to know if the view is being transitioned to or from.
+    if (isTransitionTo) {
+      if (this.props.onTransitionStart) {
+        this.props.onTransitionStart(transitionProps, prevTransitionProps);
+      }
+      return;
+    }
     this.measure(() => {
       const store = this.context.sharedElementStore;
 
       const { scene } = transitionProps;
       const { scene: prevScene } = prevTransitionProps;
+      const state = store.getState();
 
       let possibleOtherGroups;
-      if (scene.index > prevScene.index) { //pushing
-        possibleOtherGroups = _.filter(store.getState().elementGroups, group => group.routeKey === scene.route.key);
+      if (scene.index > prevScene.index) { // pushing
+        possibleOtherGroups = _.filter(state.elementGroups, group => group.routeKey === scene.route.key);
       } else {
-        possibleOtherGroups = _.filter(store.getState().elementGroups, group => group.routeKey === prevScene.route.key);
+        possibleOtherGroups = _.filter(state.elementGroups, group => group.routeKey === prevScene.route.key);
       }
 
       const otherGroup = _.find(possibleOtherGroups, group => group.id === this.props.id);
@@ -178,18 +191,41 @@ export default class SharedElementGroup extends React.Component {
           progress: transitionProps.progress,
         });
       });
-    });
 
-    if (this.props.onTransitionStart) {
-      this.props.onTransitionStart(transitionProps, prevTransitionProps);
-    }
+      if (this.props.onTransitionStart) {
+        this.props.onTransitionStart(transitionProps, prevTransitionProps);
+      }
+      if (otherGroup.style.onTransitionStart) {
+        otherGroup.style.onTransitionStart(transitionProps, prevTransitionProps, true);
+      }
+    });
   }
 
-  _onTransitionEnd = (transitionProps, prevTransitionProps) => {
+  _onTransitionEnd = (transitionProps, prevTransitionProps, isTransitionTo = false) => {
+    if (isTransitionTo) {
+      if (this.props.onTransitionEnd) {
+        this.props.onTransitionEnd(transitionProps, prevTransitionProps);
+      }
+      return;
+    }
+
     const store = this.context.sharedElementStore;
+    const state = store.getState();
+    const otherUid = transitionProps.scene.index > prevTransitionProps.scene.index ?
+      this.state.transitioningElementGroupToUid :
+      this.state.transitioningElementGroupFromUid;
+    const otherGroup = state.elementGroups[otherUid];
+
     store.dispatch({
       type: 'END_TRANSITION_FOR_ELEMENT_GROUPS',
     });
+
+    if (this.props.onTransitionEnd) {
+      this.props.onTransitionEnd(transitionProps, prevTransitionProps);
+    }
+    if (otherGroup.style.onTransitionEnd) {
+      otherGroup.style.onTransitionEnd(transitionProps, prevTransitionProps, true);
+    }
   }
 
   measure = (cb: () => void) => {
@@ -212,7 +248,7 @@ export default class SharedElementGroup extends React.Component {
           },
           metrics: { x, y, width, height },
           elements: Children.map(this.props.children, (child) => {
-            if (child.type.name !== 'SharedElement') {
+            if (__DEV__ && child.type.name !== 'SharedElement') {
               throw new Error('All children of a SharedElementGroup must be SharedElements.');
             }
             return child;

@@ -34,6 +34,7 @@ const INITIAL_DATA = [
     type: 'Entire Home',
     price: 299,
     image: 'https://unsplash.it/350/220/?image=1057',
+    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum maximus sapien felis, eu vestibulum enim maximus id. Phasellus ac lorem id elit laoreet bibendum id ut quam. Nam ligula urna, dapibus nec posuere quis, volutpat vitae ligula. Nunc sed ex tortor. Vivamus in convallis odio, nec dictum turpis. Nulla et turpis non dui sollicitudin faucibus at rhoncus augue. Morbi quis malesuada nisi. Integer non pretium turpis. Nullam vel arcu id lorem dapibus lobortis. Pellentesque volutpat enim sed eros consectetur gravida.\n\nNulla feugiat nisl ligula, at porttitor odio gravida ut. Maecenas congue interdum mauris, id dapibus elit commodo ut. Donec tellus felis, mollis quis faucibus vel, ultrices eget ipsum. Proin sit amet felis accumsan, sollicitudin lacus ut, tempor nulla. Integer eget urna consectetur, condimentum lectus sit amet, convallis sem. Duis nulla sem, pretium non est vitae, varius viverra neque. Vivamus vitae metus vel tortor interdum auctor sit amet et dui. Fusce pellentesque consectetur lobortis. Sed vestibulum placerat rutrum. Quisque molestie leo nec pellentesque interdum. Duis malesuada sapien convallis ante laoreet, quis imperdiet ipsum dictum. Curabitur a ante commodo, dapibus justo in, laoreet odio. Praesent mi diam, aliquet ac magna non, aliquet porta arcu. Fusce ut nulla lorem. Fusce in quam ac ligula feugiat vulputate et vitae nibh. Quisque in finibus arcu.\n\nFusce dignissim nec sem id ullamcorper. Pellentesque accumsan sem vestibulum, cursus est at, consequat ligula. Nulla convallis arcu in suscipit auctor. Duis nulla orci, aliquam sit amet iaculis nec, posuere a nisi. Phasellus congue dapibus libero, ac ullamcorper lectus fringilla in. Curabitur gravida interdum lectus, nec condimentum lectus tristique a. Nunc hendrerit a nunc id fermentum. Praesent ut turpis a ipsum vulputate eleifend. Aenean mollis ipsum nec pretium suscipit. Aliquam erat volutpat.',
   },
   {
     title: `Studio sleeps four at Napa's finest resort`,
@@ -42,6 +43,7 @@ const INITIAL_DATA = [
     type: 'Entire Home',
     price: 130,
     image: 'https://unsplash.it/350/220/?image=1051',
+    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum maximus sapien felis, eu vestibulum enim maximus id. Phasellus ac lorem id elit laoreet bibendum id ut quam. Nam ligula urna, dapibus nec posuere quis, volutpat vitae ligula. Nunc sed ex tortor. Vivamus in convallis odio, nec dictum turpis. Nulla et turpis non dui sollicitudin faucibus at rhoncus augue. Morbi quis malesuada nisi. Integer non pretium turpis. Nullam vel arcu id lorem dapibus lobortis. Pellentesque volutpat enim sed eros consectetur gravida.\n\nNulla feugiat nisl ligula, at porttitor odio gravida ut. Maecenas congue interdum mauris, id dapibus elit commodo ut. Donec tellus felis, mollis quis faucibus vel, ultrices eget ipsum. Proin sit amet felis accumsan, sollicitudin lacus ut, tempor nulla. Integer eget urna consectetur, condimentum lectus sit amet, convallis sem. Duis nulla sem, pretium non est vitae, varius viverra neque. Vivamus vitae metus vel tortor interdum auctor sit amet et dui. Fusce pellentesque consectetur lobortis. Sed vestibulum placerat rutrum. Quisque molestie leo nec pellentesque interdum. Duis malesuada sapien convallis ante laoreet, quis imperdiet ipsum dictum. Curabitur a ante commodo, dapibus justo in, laoreet odio. Praesent mi diam, aliquet ac magna non, aliquet porta arcu. Fusce ut nulla lorem. Fusce in quam ac ligula feugiat vulputate et vitae nibh. Quisque in finibus arcu.\n\nFusce dignissim nec sem id ullamcorper. Pellentesque accumsan sem vestibulum, cursus est at, consequat ligula. Nulla convallis arcu in suscipit auctor. Duis nulla orci, aliquam sit amet iaculis nec, posuere a nisi. Phasellus congue dapibus libero, ac ullamcorper lectus fringilla in. Curabitur gravida interdum lectus, nec condimentum lectus tristique a. Nunc hendrerit a nunc id fermentum. Praesent ut turpis a ipsum vulputate eleifend. Aenean mollis ipsum nec pretium suscipit. Aliquam erat volutpat.',
   },
   {
     title: `LOVELY HOME DOWNTOWN NAPA, POOL and BIKES!`,
@@ -50,6 +52,7 @@ const INITIAL_DATA = [
     type: 'Private Room',
     price: 179,
     image: 'https://unsplash.it/350/220/?image=1040',
+    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum maximus sapien felis, eu vestibulum enim maximus id. Phasellus ac lorem id elit laoreet bibendum id ut quam. Nam ligula urna, dapibus nec posuere quis, volutpat vitae ligula. Nunc sed ex tortor. Vivamus in convallis odio, nec dictum turpis. Nulla et turpis non dui sollicitudin faucibus at rhoncus augue. Morbi quis malesuada nisi. Integer non pretium turpis. Nullam vel arcu id lorem dapibus lobortis. Pellentesque volutpat enim sed eros consectetur gravida.\n\nNulla feugiat nisl ligula, at porttitor odio gravida ut. Maecenas congue interdum mauris, id dapibus elit commodo ut. Donec tellus felis, mollis quis faucibus vel, ultrices eget ipsum. Proin sit amet felis accumsan, sollicitudin lacus ut, tempor nulla. Integer eget urna consectetur, condimentum lectus sit amet, convallis sem. Duis nulla sem, pretium non est vitae, varius viverra neque. Vivamus vitae metus vel tortor interdum auctor sit amet et dui. Fusce pellentesque consectetur lobortis. Sed vestibulum placerat rutrum. Quisque molestie leo nec pellentesque interdum. Duis malesuada sapien convallis ante laoreet, quis imperdiet ipsum dictum. Curabitur a ante commodo, dapibus justo in, laoreet odio. Praesent mi diam, aliquet ac magna non, aliquet porta arcu. Fusce ut nulla lorem. Fusce in quam ac ligula feugiat vulputate et vitae nibh. Quisque in finibus arcu.\n\nFusce dignissim nec sem id ullamcorper. Pellentesque accumsan sem vestibulum, cursus est at, consequat ligula. Nulla convallis arcu in suscipit auctor. Duis nulla orci, aliquam sit amet iaculis nec, posuere a nisi. Phasellus congue dapibus libero, ac ullamcorper lectus fringilla in. Curabitur gravida interdum lectus, nec condimentum lectus tristique a. Nunc hendrerit a nunc id fermentum. Praesent ut turpis a ipsum vulputate eleifend. Aenean mollis ipsum nec pretium suscipit. Aliquam erat volutpat.',
   },
   {
     title: `New - Great Location! Affordable`,
@@ -58,6 +61,7 @@ const INITIAL_DATA = [
     type: 'Entire Home',
     price: 160,
     image: 'https://unsplash.it/350/220/?image=985',
+    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum maximus sapien felis, eu vestibulum enim maximus id. Phasellus ac lorem id elit laoreet bibendum id ut quam. Nam ligula urna, dapibus nec posuere quis, volutpat vitae ligula. Nunc sed ex tortor. Vivamus in convallis odio, nec dictum turpis. Nulla et turpis non dui sollicitudin faucibus at rhoncus augue. Morbi quis malesuada nisi. Integer non pretium turpis. Nullam vel arcu id lorem dapibus lobortis. Pellentesque volutpat enim sed eros consectetur gravida.\n\nNulla feugiat nisl ligula, at porttitor odio gravida ut. Maecenas congue interdum mauris, id dapibus elit commodo ut. Donec tellus felis, mollis quis faucibus vel, ultrices eget ipsum. Proin sit amet felis accumsan, sollicitudin lacus ut, tempor nulla. Integer eget urna consectetur, condimentum lectus sit amet, convallis sem. Duis nulla sem, pretium non est vitae, varius viverra neque. Vivamus vitae metus vel tortor interdum auctor sit amet et dui. Fusce pellentesque consectetur lobortis. Sed vestibulum placerat rutrum. Quisque molestie leo nec pellentesque interdum. Duis malesuada sapien convallis ante laoreet, quis imperdiet ipsum dictum. Curabitur a ante commodo, dapibus justo in, laoreet odio. Praesent mi diam, aliquet ac magna non, aliquet porta arcu. Fusce ut nulla lorem. Fusce in quam ac ligula feugiat vulputate et vitae nibh. Quisque in finibus arcu.\n\nFusce dignissim nec sem id ullamcorper. Pellentesque accumsan sem vestibulum, cursus est at, consequat ligula. Nulla convallis arcu in suscipit auctor. Duis nulla orci, aliquam sit amet iaculis nec, posuere a nisi. Phasellus congue dapibus libero, ac ullamcorper lectus fringilla in. Curabitur gravida interdum lectus, nec condimentum lectus tristique a. Nunc hendrerit a nunc id fermentum. Praesent ut turpis a ipsum vulputate eleifend. Aenean mollis ipsum nec pretium suscipit. Aliquam erat volutpat.',
   },
 ];
 
@@ -69,7 +73,10 @@ export default class PlacesList extends React.Component {
       backgroundColor: 'rgba(255, 255, 255, .5)',
       visible: false,
     },
-  }
+  };
+
+  _placeHeaderGroups = {};
+  _rowAnimations = {};
 
   constructor(props, context) {
     super(props, context);
@@ -79,53 +86,79 @@ export default class PlacesList extends React.Component {
     });
     this.state = {
       dataSource: ds.cloneWithRows(INITIAL_DATA),
+      selectedId: 0,
     };
-    this._cellElements = {};
-    this._placeHeaderGroups = {};
   }
 
   render() {
     return (
       <View style={styles.container}>
         <ListView
-          ref={c => { this._listView = c; }}
           contentContainerStyle={styles.contentContainer}
           dataSource={this.state.dataSource}
           renderRow={this._renderRow}
-          renderSeparator={this._renderSeparator}
         />
       </View>
     );
   }
 
   _renderRow = (rowData, sectionId, rowId) => {
+    this._rowAnimations[rowId] = new Animated.Value(0);
+    const rowStyle = {
+      transform: [{
+        translateY: this._rowAnimations[rowId].interpolate({
+          inputRange: [-1, 0, 1],
+          outputRange: [-200, 0, 200],
+        }),
+      }],
+    };
     return (
       <TouchableWithoutFeedback
         key={sectionId + rowId}
-        ref={c => { this._cellElements[rowId] = c; }}
         onPress={this._onListItemPress.bind(this, rowData, sectionId, rowId)}>
-        <View style={styles.listItem}>
+        <Animated.View style={[styles.listItem, rowStyle]}>
           <SharedElementGroup
             id="place-header"
-            route={this.props.route}
             ref={g => { this._placeHeaderGroups[rowId] = g; }}
+            route={this.props.route}
             configureTransition={() => ({
               timing: Animated.timing,
               easing: Easing.inOut(Easing.ease),
-              duration: 750,
+              duration: 500,
             })}
             sceneAnimations={({ position, scene }) => {
               const index = scene.index;
-              const inputRange = [index - 1, index, index + 1];
 
               const opacity = position.interpolate({
-                inputRange,
-                outputRange: [0, 1, 0],
+                inputRange: [index - 1, index - 0.5, index, index + 0.5, index + 1],
+                outputRange: [0, 0, 1, 0, 0],
               });
 
               return {
                 opacity,
               };
+            }}
+            onTransitionStart={(transitionProps, prevTransitionProps) => {
+              const inverse = transitionProps.scene.index < prevTransitionProps.scene.index;
+              const animations = [];
+              const rowInt = parseInt(rowId, 10);
+              for (let i = rowInt - 2; i <= rowInt + 2; i++) {
+                if (i === rowInt) {
+                  continue;
+                }
+                const anim = this._rowAnimations[i];
+                if (anim) {
+                  animations.push(
+                    Animated.timing(anim, {
+                      toValue: inverse ? 0 : (i < rowInt ? -1 : 1),
+                      duration: 500,
+                      useNativeDriver: true,
+                    })
+                  );
+                }
+              }
+
+              Animated.parallel(animations).start();
             }}>
             <SharedElement id="image">
               {(animation) => (
@@ -149,14 +182,10 @@ export default class PlacesList extends React.Component {
               )}
             </SharedElement>
           </SharedElementGroup>
-        </View>
+        </Animated.View>
       </TouchableWithoutFeedback>
     );
   }
-
-  _renderSeparator = (rowData, sectionId, rowId) => {
-    return <View key={sectionId + rowId} style={styles.listItemBorder} />;
-  };
 
   _onListItemPress = (rowData, sectionId, rowId) => {
     this.props.navigator.push(
@@ -168,24 +197,13 @@ export default class PlacesList extends React.Component {
     );
   };
 
-  _rowsWithPressedRow(rowId) {
-    const rowData = this._getRowData();
-    return this.state.dataSource.cloneWithRows(rowData.map((r, i) => {
-      let newR = { ...r };
-      if (i === parseInt(rowId, 10)) {
-        newR = { ...newR, isSelected: true };
-      }
-      return newR;
-    }));
-  }
-
   _getRowData() {
     return INITIAL_DATA;
   }
 
   _heightForRowAtPath = (sectionId, rowId) => {
     return 216;
-  }
+  };
 }
 
 const styles = StyleSheet.create({
