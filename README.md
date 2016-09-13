@@ -347,6 +347,7 @@ class App extends React.Component {
 ### navigationBar properties
 
 - `title` - a string or a function that returns a string. The function is provided with the route params as the first argument.
+- `titleStyle` - Text.propTypes.style object to use for the title. 
 - `backgroundColor` - the background color to use for the
 `navigationBar`.
 - `tintColor` - the color to use for the title text and back button or
