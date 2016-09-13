@@ -308,5 +308,6 @@ export default createNavigatorComponent(ExNavigationSlidingTab);
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    overflow: 'hidden',
   },
 });
