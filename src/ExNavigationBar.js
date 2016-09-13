@@ -317,7 +317,7 @@ export default class ExNavigationBar extends PureComponent {
 }
 
 
-if (global.__exponent) {
+if (global.__exponent || Platform.OS === 'ios') {
   ExNavigationBar.DEFAULT_HEIGHT = APPBAR_HEIGHT + STATUSBAR_HEIGHT;
 } else {
   ExNavigationBar.DEFAULT_HEIGHT = APPBAR_HEIGHT;
