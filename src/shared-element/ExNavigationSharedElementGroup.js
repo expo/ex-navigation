@@ -101,11 +101,8 @@ export default class SharedElementGroup extends React.Component {
         this.state.transitioningElementGroupFromUid !== nextState.transitioningElementGroupFromUid) {
       if (this._uid === nextState.transitioningElementGroupToUid ||
         this._uid === nextState.transitioningElementGroupFromUid) {
-        // TODO: Figure out a better way to avoid flicker on iOS
-        requestAnimationFrame(() => {
-          this.setState({
-            visible: false,
-          });
+        this.setState({
+          visible: false,
         });
       } else {
         this.setState({
@@ -190,14 +187,14 @@ export default class SharedElementGroup extends React.Component {
           toUid: scene.index > prevScene.index ? otherGroup.uid : this._uid,
           progress: transitionProps.progress,
         });
-      });
 
-      if (this.props.onTransitionStart) {
-        this.props.onTransitionStart(transitionProps, prevTransitionProps);
-      }
-      if (otherGroup.style.onTransitionStart) {
-        otherGroup.style.onTransitionStart(transitionProps, prevTransitionProps, true);
-      }
+        if (this.props.onTransitionStart) {
+          this.props.onTransitionStart(transitionProps, prevTransitionProps);
+        }
+        if (otherGroup.style.onTransitionStart) {
+          otherGroup.style.onTransitionStart(transitionProps, prevTransitionProps, true);
+        }
+      });
     });
   }
 
@@ -220,12 +217,14 @@ export default class SharedElementGroup extends React.Component {
       type: 'END_TRANSITION_FOR_ELEMENT_GROUPS',
     });
 
-    if (this.props.onTransitionEnd) {
-      this.props.onTransitionEnd(transitionProps, prevTransitionProps);
-    }
-    if (otherGroup.style.onTransitionEnd) {
-      otherGroup.style.onTransitionEnd(transitionProps, prevTransitionProps, true);
-    }
+    requestAnimationFrame(() => {
+      if (this.props.onTransitionEnd) {
+        this.props.onTransitionEnd(transitionProps, prevTransitionProps);
+      }
+      if (otherGroup.style.onTransitionEnd) {
+        otherGroup.style.onTransitionEnd(transitionProps, prevTransitionProps, true);
+      }
+    });
   }
 
   measure = (cb: () => void) => {
@@ -274,7 +273,7 @@ export default class SharedElementGroup extends React.Component {
           startCb = cb;
           // TODO: Figure out properly how this work and maybe wait for overlay
           // elements to be rendered before starting the animation.
-          requestAnimationFrame(() => timingFn.start(startCb));
+          setTimeout(() => timingFn.start(startCb), 32);
         },
         ready: () => {
           return timingFn.start(startCb);

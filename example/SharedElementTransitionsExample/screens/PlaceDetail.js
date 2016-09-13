@@ -5,14 +5,15 @@
 import React from 'react';
 import {
   Animated,
-  Easing,
   Dimensions,
+  Easing,
   Image,
-  Text,
-  View,
-  StyleSheet,
-  TouchableOpacity,
+  Platform,
   ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from 'react-native';
 
 import {
@@ -94,7 +95,7 @@ export default class PlaceDetail extends React.Component {
               </SharedElement>
             </SharedElementGroup>
             <Animated.View style={[styles.navbar, { opacity: this.state.navbarAnimation }]}>
-              <TouchableOpacity onPress={this._goBack}>
+              <TouchableOpacity onPress={this._goBack} hitSlop={{ top: 10, right: 10, bottom: 10, left: 10 }}>
                 <Image
                   style={styles.backButton}
                   source={{ uri: 'https://www.android.com/static/img/map/back-arrow.png' }}
@@ -139,12 +140,16 @@ const styles = StyleSheet.create({
   },
   navbar: {
     position: 'absolute',
-    top: 0,
+    top: Platform.select({
+      android: 0,
+      ios: 20,
+    }),
     left: 0,
     right: 0,
     height: 56,
     flexDirection: 'row',
     alignItems: 'center',
+    backgroundColor: 'transparent',
   },
   backButton: {
     tintColor: 'white',
