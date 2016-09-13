@@ -11,7 +11,7 @@ import {
 
 type Props = {
   children: () => React.Element<*>,
-}
+};
 
 export default class SharedElement extends React.Component {
   _el: ?React.Element<*> = null;
@@ -51,7 +51,7 @@ export default class SharedElement extends React.Component {
     const childEl = childFn(animationStyle);
 
     return (
-      <View ref={c => { this._innerViewRef = c; }}>
+      <View style={{ backgroundColor: 'transparent' }} ref={c => { this._innerViewRef = c; }}>
         {cloneElement(childEl, {
           ref: c => { this._el = c; },
           collapsable: false,

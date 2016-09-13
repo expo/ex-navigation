@@ -100,10 +100,15 @@ export default class SharedElementGroup extends React.Component {
     if (this.state.transitioningElementGroupToUid !== nextState.transitioningElementGroupToUid ||
         this.state.transitioningElementGroupFromUid !== nextState.transitioningElementGroupFromUid) {
       if (this._uid === nextState.transitioningElementGroupToUid ||
-        this._uid === nextState.transitioningElementGroupFromUid) {
-        this.setState({
-          visible: false,
-        });
+          this._uid === nextState.transitioningElementGroupFromUid) {
+        // TODO: Ugh, need to add enough delay to prevent image flicker on iOS.
+        // Might want to try to fix image loading to it is sync if the image is
+        // cached.
+        setTimeout(() => {
+          this.setState({
+            visible: false,
+          });
+        }, 32);
       } else {
         this.setState({
           visible: true,
@@ -273,7 +278,7 @@ export default class SharedElementGroup extends React.Component {
           startCb = cb;
           // TODO: Figure out properly how this work and maybe wait for overlay
           // elements to be rendered before starting the animation.
-          setTimeout(() => timingFn.start(startCb), 32);
+          requestAnimationFrame(() => timingFn.start(startCb));
         },
         ready: () => {
           return timingFn.start(startCb);
