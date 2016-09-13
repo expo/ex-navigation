@@ -100,8 +100,11 @@ export default class SharedElementGroup extends React.Component {
         this.state.transitioningElementGroupFromUid !== nextState.transitioningElementGroupFromUid) {
       if (this._uid === nextState.transitioningElementGroupToUid ||
         this._uid === nextState.transitioningElementGroupFromUid) {
-        this.setState({
-          visible: false,
+        // TODO: Figure out a better way to avoid flicker on iOS
+        requestAnimationFrame(() => {
+          this.setState({
+            visible: false,
+          });
         });
       } else {
         this.setState({
