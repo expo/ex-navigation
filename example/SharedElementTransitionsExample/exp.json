@@ -1,7 +1,7 @@
 {
-  name: "SharedElementTransitionsExample",
+  name: "SharedElements",
   description: "Demonstrate usage of shared element transitions in ex-navigation",
-  slug: "shared-element-transitions-example",
+  slug: "shared-elements",
   sdkVersion: "9.0.0",
   version: "1.0.0",
   orientation: "portrait",
