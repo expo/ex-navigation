@@ -245,7 +245,7 @@ export default class SharedElementGroup extends React.Component {
           style: {
             configureTransition: this._configureTransition,
             sceneAnimations: this.props.sceneAnimations,
-            gestures: ExNavigationStyles.FloatVertical.gestures,
+            gestures: null,
             navigationBarAnimations: ExNavigationStyles.Fade.navigationBarAnimations,
             onTransitionStart: this._onTransitionStart,
             onTransitionEnd: this._onTransitionEnd,
@@ -278,7 +278,7 @@ export default class SharedElementGroup extends React.Component {
           startCb = cb;
           // TODO: Figure out properly how this work and maybe wait for overlay
           // elements to be rendered before starting the animation.
-          requestAnimationFrame(() => timingFn.start(startCb));
+          setTimeout(() => timingFn.start(startCb), 32);
         },
         ready: () => {
           return timingFn.start(startCb);

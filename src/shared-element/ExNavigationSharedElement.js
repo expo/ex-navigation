@@ -15,7 +15,6 @@ type Props = {
 
 export default class SharedElement extends React.Component {
   _el: ?React.Element<*> = null;
-  _innerViewRef: ?React.Element<*> = null;
 
   static propTypes = {
     children: PropTypes.func.isRequired,
@@ -50,14 +49,10 @@ export default class SharedElement extends React.Component {
 
     const childEl = childFn(animationStyle);
 
-    return (
-      <View style={{ backgroundColor: 'transparent' }} ref={c => { this._innerViewRef = c; }}>
-        {cloneElement(childEl, {
-          ref: c => { this._el = c; },
-          collapsable: false,
-        })}
-      </View>
-    );
+    return cloneElement(childEl, {
+      ref: c => { this._el = c; },
+      collapsable: false,
+    })
   }
 
   getAnimationStyle = (progress: any, fromMetrics: Object, toMetrics: Object) => {
