@@ -108,7 +108,7 @@ function customForHorizontal(props: NavigationSceneRendererProps): Object {
   };
 }
 
-export const FloatHorizontalIOS: ExNavigationStyles = {
+export const SlideHorizontalIOS: ExNavigationStyles = {
   configureTransition: configureSpringTransition,
   sceneAnimations: customForHorizontal,
   navigationBarAnimations: {
@@ -205,7 +205,7 @@ export const FloatHorizontalIOS: ExNavigationStyles = {
   gestures: CardStackPanResponder.forHorizontal,
 };
 
-export const FloatHorizontal: ExNavigationStyles = {
+export const SlideHorizontal: ExNavigationStyles = {
   configureTransition: configureSpringTransition,
   sceneAnimations: customForHorizontal,
   navigationBarAnimations: {
@@ -312,6 +312,13 @@ export const FloatHorizontal: ExNavigationStyles = {
   },
   gestures: CardStackPanResponder.forHorizontal,
 };
+
+// TODO: this will become the Android style horizontal float transition (see
+// the Twitter Android app for an example)
+//
+// We can bump minor version and indicate breaking change when we implement
+// this, but no need to do that yet.
+export const FloatHorizontal = SlideHorizontal;
 
 export const FloatVertical: ExNavigationStyles = {
   configureTransition: configureSpringTransition,
