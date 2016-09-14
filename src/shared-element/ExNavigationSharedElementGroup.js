@@ -83,7 +83,6 @@ export default class SharedElementGroup extends Component {
   };
 
   _elements: {[key: string]: React.Element<*>} = {};
-  _innerViewRef: ?React.Element<*>;
   _isMounted: bool = true;
   _store = this.context.sharedElementStore;
   _uid = UUID.create(1).toString();
@@ -119,8 +118,27 @@ export default class SharedElementGroup extends Component {
   }
 
   componentDidMount() {
-    this._measure(() => {
-      _.forEach(this._elements, el => el.measure());
+    const store = this.context.sharedElementStore;
+
+    store.dispatch({
+      type: 'REGISTER_GROUP',
+      uid: this._uid,
+      id: this.props.id,
+      routeKey: this.props.route.key,
+      style: {
+        configureTransition: this._configureTransition,
+        sceneAnimations: this.props.sceneAnimations || ExNavigationStyles.Fade.sceneAnimations,
+        gestures: null,
+        navigationBarAnimations: this.props.navigationBarAnimations || ExNavigationStyles.Fade.navigationBarAnimations,
+        onTransitionStart: this._onTransitionStart,
+        onTransitionEnd: this._onTransitionEnd,
+      },
+      elements: Children.map(this.props.children, (child) => {
+        if (__DEV__ && child.type.name !== 'SharedElement') {
+          throw new Error('All children of a SharedElementGroup must be SharedElements.');
+        }
+        return child;
+      }),
     });
   }
 
@@ -164,17 +182,13 @@ export default class SharedElementGroup extends Component {
     });
   }
 
-  getInnerViewNode() {
-    return findNodeHandle(this._innerViewRef);
-  }
-
   render() {
     const style = {
       opacity: this.state.visible ? 1 : 0,
     };
 
     return (
-      <View ref={c => { this._innerViewRef = c; }} style={style}>
+      <View style={style}>
         {Children.map(this.props.children, child =>
           cloneElement(child, {
             ref: c => { this._elements[child.props.id] = c; },
@@ -201,45 +215,41 @@ export default class SharedElementGroup extends Component {
       return;
     }
 
-    this._measure(() => {
-      const store = this.context.sharedElementStore;
+    const store = this.context.sharedElementStore;
 
-      const { scene } = transitionProps;
-      const { scene: prevScene } = prevTransitionProps;
-      const state = store.getState();
+    const { scene } = transitionProps;
+    const { scene: prevScene } = prevTransitionProps;
+    const state = store.getState();
 
-      let possibleOtherGroups;
-      if (scene.index > prevScene.index) { // pushing
-        possibleOtherGroups = _.filter(state.elementGroups, group => group.routeKey === scene.route.key);
-      } else {
-        possibleOtherGroups = _.filter(state.elementGroups, group => group.routeKey === prevScene.route.key);
-      }
+    let possibleOtherGroups;
+    if (scene.index > prevScene.index) { // pushing
+      possibleOtherGroups = _.filter(state.elementGroups, group => group.routeKey === scene.route.key);
+    } else {
+      possibleOtherGroups = _.filter(state.elementGroups, group => group.routeKey === prevScene.route.key);
+    }
 
-      const otherGroup = _.find(possibleOtherGroups, group => group.id === this.props.id);
-      if (!otherGroup) {
-        throw new Error(`Cannot transition this group with id '${this.props.id}'. No matching group found in next route.`);
-      }
+    const otherGroup = _.find(possibleOtherGroups, group => group.id === this.props.id);
+    if (!otherGroup) {
+      throw new Error(`Cannot transition this group with id '${this.props.id}'. No matching group found in next route.`);
+    }
 
-      _.forEach(this._elements, el => el.measure());
-
-      // TODO: Figure out why it doesnt work without this.
-      requestAnimationFrame(() => {
-        store.dispatch({
-          type: 'START_TRANSITION_FOR_ELEMENT_GROUPS',
-          fromUid: scene.index > prevScene.index ? this._uid : otherGroup.uid,
-          toUid: scene.index > prevScene.index ? otherGroup.uid : this._uid,
-          progress: transitionProps.progress,
-        });
-
-        if (this.props.onTransitionStart) {
-          this.props.onTransitionStart(transitionProps, prevTransitionProps);
-        }
-        if (otherGroup.style.onTransitionStart) {
-          otherGroup.style.onTransitionStart(transitionProps, prevTransitionProps, true);
-        }
+    // TODO: This needs to be called after the next scene SharedElements have
+    // rendered and updated their metrics.
+    setTimeout(() => {
+      store.dispatch({
+        type: 'START_TRANSITION_FOR_ELEMENT_GROUPS',
+        fromUid: scene.index > prevScene.index ? this._uid : otherGroup.uid,
+        toUid: scene.index > prevScene.index ? otherGroup.uid : this._uid,
+        progress: transitionProps.progress,
       });
 
-    });
+      if (this.props.onTransitionStart) {
+        this.props.onTransitionStart(transitionProps, prevTransitionProps);
+      }
+      if (otherGroup.style.onTransitionStart) {
+        otherGroup.style.onTransitionStart(transitionProps, prevTransitionProps, true);
+      }
+    }, 50);
   }
 
   _onTransitionEnd = (
@@ -272,38 +282,6 @@ export default class SharedElementGroup extends Component {
       otherGroup.style.onTransitionEnd(transitionProps, prevTransitionProps, true);
     }
   }
-
-  _measure = (cb: () => void): void => {
-    UIManager.measureInWindow(
-      findNodeHandle(this._innerViewRef),
-      (x, y, width, height) => {
-        const store = this.context.sharedElementStore;
-        store.dispatch({
-          type: 'REGISTER_GROUP',
-          uid: this._uid,
-          id: this.props.id,
-          routeKey: this.props.route.key,
-          style: {
-            configureTransition: this._configureTransition,
-            sceneAnimations: this.props.sceneAnimations || ExNavigationStyles.Fade.sceneAnimations,
-            gestures: null,
-            navigationBarAnimations: this.props.navigationBarAnimations || ExNavigationStyles.Fade.navigationBarAnimations,
-            onTransitionStart: this._onTransitionStart,
-            onTransitionEnd: this._onTransitionEnd,
-          },
-          metrics: { x, y, width, height },
-          elements: Children.map(this.props.children, (child) => {
-            if (__DEV__ && child.type.name !== 'SharedElement') {
-              throw new Error('All children of a SharedElementGroup must be SharedElements.');
-            }
-            return child;
-          }),
-        });
-
-        cb();
-      }
-    );
-  };
 
   _configureTransition = (
     a: NavigationTransitionProps,

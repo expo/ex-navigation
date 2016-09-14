@@ -125,6 +125,7 @@ export default class PlacesList extends React.Component {
               timing: Animated.timing,
               easing: Easing.inOut(Easing.ease),
               duration: 500,
+              useNativeDriver: true,
             })}
             sceneAnimations={({ position, scene }) => {
               const index = scene.index;

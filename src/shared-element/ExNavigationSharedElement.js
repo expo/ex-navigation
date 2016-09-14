@@ -13,6 +13,9 @@ import type { TransitionProps, Metrics } from './ExNavigationSharedElementReduce
 type Props = {
   children: () => React.Element<*>,
   id: string,
+
+  // This is not part of the public API and is used by the overlay to pass down
+  // transition info used by the animation.
   transitionProps: ?TransitionProps,
 };
 
@@ -25,13 +28,11 @@ export default class SharedElement extends Component {
   props: Props;
   _el: ?React.Element<*> = null;
 
-  componentDidMount() {
-    this.measure();
-  }
-
   render() {
     const childFn = this.props.children;
     let animationStyle = {};
+    // If transitionProps is set it means this is being rendered from the overlay
+    // for the animation so pass down animation styles.
     if (this.props.transitionProps && this.props.transitionProps.progress &&
         this.props.transitionProps.fromMetrics && this.props.transitionProps.toMetrics) {
       const { progress, fromMetrics, toMetrics } = this.props.transitionProps;
@@ -47,6 +48,7 @@ export default class SharedElement extends Component {
     return cloneElement(childEl, {
       ref: c => { this._el = c; },
       collapsable: false,
+      onLayout: this._onLayout,
     });
   }
 
@@ -93,7 +95,12 @@ export default class SharedElement extends Component {
     };
   }
 
-  measure = () => {
+  _onLayout = () => {
+    // TODO: It would be nice if RN also passed the absolute screen position in
+    // this callback so we can use this instead of having to also call `measureInWindow`.
+
+    // If there is no element group uid it means this is being rendered from the
+    // overlay so we don't do any measurement.
     if (!this.context.elementGroupUid) {
       return;
     }
@@ -110,5 +117,5 @@ export default class SharedElement extends Component {
         });
       }
     );
-  }
+  };
 }
