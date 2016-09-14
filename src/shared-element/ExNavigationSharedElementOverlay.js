@@ -2,7 +2,7 @@
  * @flow
  */
 
-import React, { Children, PropTypes, cloneElement } from 'react';
+import React, { cloneElement } from 'react';
 import findNodeHandle from 'react/lib/findNodeHandle';
 import {
   View,
@@ -21,6 +21,7 @@ type State = {
   elementGroups: Object,
   transitioningElementGroupFromUid: ?string,
   transitioningElementGroupToUid: ?string,
+  progress: ?mixed,
 };
 
 const store = createStore(SharedElementReducer);
@@ -31,7 +32,8 @@ export default class SharedElementOverlay extends React.Component {
     elementGroups: {},
     transitioningElementGroupFromUid: null,
     transitioningElementGroupToUid: null,
-  }
+    progress: null,
+  };
 
   _innerViewRef: React.Element<*>;
 

@@ -3,10 +3,11 @@
  */
 
 import _ from 'lodash';
-import React, { cloneElement, Children, PropTypes } from 'react';
+import React, { cloneElement, Children, Component, PropTypes } from 'react';
 import findNodeHandle from 'react/lib/findNodeHandle';
 import {
   Animated,
+  Easing,
   View,
   UIManager,
 } from 'react-native';
@@ -16,25 +17,48 @@ import UUID from 'uuid-js';
 import * as ExNavigationStyles from '../ExNavigationStyles';
 import SharedElementOverlay from './ExNavigationSharedElementOverlay';
 
+import type {
+  NavigationTransitionProps,
+  NavigationTransitionSpec,
+  NavigationSceneRendererProps,
+} from 'NavigationTypeDefinition';
+import type { ExNavigationRoute } from '../ExNavigationRouter';
+
+const DEFAULT_TRANSITION = {
+  timing: Animated.timing,
+  easing: Easing.inOut(Easing.ease),
+  duration: 500,
+};
+
+type TransitionFn = (
+  transitionProps: NavigationTransitionProps,
+  prevTransitionProps: NavigationTransitionProps
+) => void;
+
 type State = {
   visible: boolean,
   elementStyles: Object,
   transitioningElementGroupToUid: ?string,
+  transitioningElementGroupFromUid: ?string,
 };
 
 type Props = {
   id: string,
+  children: React.Element<*>,
+  configureTransition: ?((
+    a: NavigationTransitionProps,
+    b: ?NavigationTransitionProps,
+  ) => NavigationTransitionSpec),
+  sceneAnimations: ?((props: NavigationSceneRendererProps) => Object),
+  route: ExNavigationRoute,
+  navigationBarAnimations: ?((props: NavigationSceneRendererProps) => Object),
+  onTransitionStart: ?TransitionFn,
+  onTransitionEnd: ?TransitionFn,
 };
 
 // TODO: Fix flow errors all over this file.
 
-export default class SharedElementGroup extends React.Component {
-  _uid: string;
-  _elements: Object;
-  _innerViewRef: React.Element<*>;
-  _store: any;
-  state: State;
-
+export default class SharedElementGroup extends Component {
   static getRouteStyle(transitionGroupEl) {
     const state = SharedElementOverlay.getStore().getState();
     return {
@@ -48,35 +72,22 @@ export default class SharedElementGroup extends React.Component {
 
   static childContextTypes = {
     elementGroupUid: PropTypes.string,
-  }
+  };
 
-  constructor(props: Props, context: any) {
-    super(props);
-    this._uid = UUID.create(1).toString();
-    this._elements = {};
-    this.state = {
-      visible: false,
-      elementStyles: {},
-      transitioningElementGroupToUid: null,
-      transitioningElementGroupFromUid: null,
-    };
-    this._store = context.sharedElementStore;
-    this._isMounted = true;
-    this._unsubscribe = this._store.subscribe(() => {
-      const state = this._store.getState();
-      if (state.transitioningElementGroupFromUid === this.state.transitioningElementGroupFromUid &&
-          state.transitioningElementGroupToUid === this.state.transitioningElementGroupToUid) {
-        return;
-      }
-      if (!this._isMounted) {
-        return;
-      }
-      this.setState({
-        transitioningElementGroupToUid: state.transitioningElementGroupToUid,
-        transitioningElementGroupFromUid: state.transitioningElementGroupFromUid,
-      });
-    });
-  }
+  props: Props;
+  state: State = {
+    visible: false,
+    elementStyles: {},
+    transitioningElementGroupToUid: null,
+    transitioningElementGroupFromUid: null,
+  };
+
+  _elements: {[key: string]: React.Element<*>} = {};
+  _innerViewRef: ?React.Element<*>;
+  _isMounted: bool = true;
+  _store = this.context.sharedElementStore;
+  _uid = UUID.create(1).toString();
+  _unsubscribe: any;
 
   getChildContext() {
     return {
@@ -84,9 +95,20 @@ export default class SharedElementGroup extends React.Component {
     };
   }
 
-  componentDidMount() {
-    this.measure(() => {
-      _.forEach(this._elements, el => el.measure());
+  componentWillMount() {
+    this._unsubscribe = this._store.subscribe(() => {
+      const storeState = this._store.getState();
+      if (storeState.transitioningElementGroupFromUid === this.state.transitioningElementGroupFromUid &&
+          storeState.transitioningElementGroupToUid === this.state.transitioningElementGroupToUid) {
+        return;
+      }
+      if (!this._isMounted) {
+        return;
+      }
+      this.setState({
+        transitioningElementGroupToUid: storeState.transitioningElementGroupToUid,
+        transitioningElementGroupFromUid: storeState.transitioningElementGroupFromUid,
+      });
     });
 
     if (this.state.transitioningElementGroupToUid === null) {
@@ -94,6 +116,12 @@ export default class SharedElementGroup extends React.Component {
         visible: true,
       });
     }
+  }
+
+  componentDidMount() {
+    this._measure(() => {
+      _.forEach(this._elements, el => el.measure());
+    });
   }
 
   componentWillUpdate(nextProps: Props, nextState: State) {
@@ -119,11 +147,15 @@ export default class SharedElementGroup extends React.Component {
 
   componentWillUnmount() {
     this._isMounted = false;
+
     if (this._unsubscribe) {
       this._unsubscribe();
       this._unsubscribe = null;
     }
+
     const store = this.context.sharedElementStore;
+
+    // TODO: Figure out why it doesnt work without this.
     requestAnimationFrame(() => {
       store.dispatch({
         type: 'UNREGISTER_GROUP',
@@ -152,7 +184,11 @@ export default class SharedElementGroup extends React.Component {
     );
   }
 
-  _onTransitionStart = (transitionProps, prevTransitionProps, isTransitionTo = false) => {
+  _onTransitionStart = (
+    transitionProps: NavigationTransitionProps,
+    prevTransitionProps: NavigationTransitionProps,
+    isTransitionTo?: bool = false
+  ): void => {
     // TODO: We want some way for the target transition group to be notified that
     // it is being transitioned to so that it can animated things using hooks like
     // onTransitionStart and onTransitionEnd. Right now I'm just calling onTransitionStart
@@ -164,7 +200,8 @@ export default class SharedElementGroup extends React.Component {
       }
       return;
     }
-    this.measure(() => {
+
+    this._measure(() => {
       const store = this.context.sharedElementStore;
 
       const { scene } = transitionProps;
@@ -185,6 +222,7 @@ export default class SharedElementGroup extends React.Component {
 
       _.forEach(this._elements, el => el.measure());
 
+      // TODO: Figure out why it doesnt work without this.
       requestAnimationFrame(() => {
         store.dispatch({
           type: 'START_TRANSITION_FOR_ELEMENT_GROUPS',
@@ -200,10 +238,15 @@ export default class SharedElementGroup extends React.Component {
           otherGroup.style.onTransitionStart(transitionProps, prevTransitionProps, true);
         }
       });
+
     });
   }
 
-  _onTransitionEnd = (transitionProps, prevTransitionProps, isTransitionTo = false) => {
+  _onTransitionEnd = (
+    transitionProps: NavigationTransitionProps,
+    prevTransitionProps: NavigationTransitionProps,
+    isTransitionTo?: bool = false
+  ) => {
     if (isTransitionTo) {
       if (this.props.onTransitionEnd) {
         this.props.onTransitionEnd(transitionProps, prevTransitionProps);
@@ -222,17 +265,15 @@ export default class SharedElementGroup extends React.Component {
       type: 'END_TRANSITION_FOR_ELEMENT_GROUPS',
     });
 
-    requestAnimationFrame(() => {
-      if (this.props.onTransitionEnd) {
-        this.props.onTransitionEnd(transitionProps, prevTransitionProps);
-      }
-      if (otherGroup.style.onTransitionEnd) {
-        otherGroup.style.onTransitionEnd(transitionProps, prevTransitionProps, true);
-      }
-    });
+    if (this.props.onTransitionEnd) {
+      this.props.onTransitionEnd(transitionProps, prevTransitionProps);
+    }
+    if (otherGroup.style.onTransitionEnd) {
+      otherGroup.style.onTransitionEnd(transitionProps, prevTransitionProps, true);
+    }
   }
 
-  measure = (cb: () => void) => {
+  _measure = (cb: () => void): void => {
     UIManager.measureInWindow(
       findNodeHandle(this._innerViewRef),
       (x, y, width, height) => {
@@ -244,9 +285,9 @@ export default class SharedElementGroup extends React.Component {
           routeKey: this.props.route.key,
           style: {
             configureTransition: this._configureTransition,
-            sceneAnimations: this.props.sceneAnimations,
+            sceneAnimations: this.props.sceneAnimations || ExNavigationStyles.Fade.sceneAnimations,
             gestures: null,
-            navigationBarAnimations: ExNavigationStyles.Fade.navigationBarAnimations,
+            navigationBarAnimations: this.props.navigationBarAnimations || ExNavigationStyles.Fade.navigationBarAnimations,
             onTransitionStart: this._onTransitionStart,
             onTransitionEnd: this._onTransitionEnd,
           },
@@ -259,33 +300,32 @@ export default class SharedElementGroup extends React.Component {
           }),
         });
 
-        if (cb) {
-          cb();
-        }
+        cb();
       }
     );
-  }
+  };
 
-  _configureTransition = (...args) => {
-    const userTransition = this.props.configureTransition(...args);
+  _configureTransition = (
+    a: NavigationTransitionProps,
+    b: ?NavigationTransitionProps
+  ): NavigationTransitionSpec => {
+    const userTransition = this.props.configureTransition ?
+      this.props.configureTransition(a, b) :
+      DEFAULT_TRANSITION;
     const { timing: userTiming } = userTransition;
 
     const timing = (...timingArgs) => {
-      const timingFn = userTiming(...timingArgs);
-      let startCb;
+      const timingFn = userTiming ?
+        userTiming(...timingArgs) :
+        Animated.timing(...timingArgs);
       return {
         start: (cb) => {
-          startCb = cb;
           // TODO: Figure out properly how this work and maybe wait for overlay
           // elements to be rendered before starting the animation.
-          setTimeout(() => timingFn.start(startCb), 32);
-        },
-        ready: () => {
-          return timingFn.start(startCb);
+          setTimeout(() => timingFn.start(cb), 32);
         },
         stop: () => {
-          startCb = null;
-          return timingFn.stop();
+          timingFn.stop();
         },
       };
     };

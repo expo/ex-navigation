@@ -5,7 +5,6 @@
 import React from 'react';
 import {
   Animated,
-  Easing,
   Platform,
   StyleSheet,
   View,
@@ -33,14 +32,13 @@ import SharedElementGroup from './shared-element/ExNavigationSharedElementGroup'
 const {
   Transitioner: NavigationTransitioner,
 } = NavigationExperimental;
-import NavigationTypeDefinition from 'react-native/Libraries/NavigationExperimental/NavigationTypeDefinition';
 
 import type {
-  NavigationSceneRendererProps, NavigationScene,
+  NavigationSceneRendererProps, NavigationScene, NavigationTransitionProps,
 } from 'NavigationTypeDefinition';
 import type { ExNavigationRoute, ExNavigationRouter } from './ExNavigationRouter';
 import type ExNavigationContext from './ExNavigationContext';
-import type { ExNavigationConfig, ExNavigationState } from './ExNavigationTypeDefinition';
+import type { ExNavigationConfig } from './ExNavigationTypeDefinition';
 import type { ExNavigationTabContext } from './tab/ExNavigationTab';
 
 const DEFAULT_ROUTE_CONFIG: ExNavigationConfig = {
@@ -48,6 +46,11 @@ const DEFAULT_ROUTE_CONFIG: ExNavigationConfig = {
 };
 
 const STATUSBAR_HEIGHT = Platform.OS === 'ios' ? 20 : (global.__exponent ? 24 : 0);
+
+type TransitionFn = (
+  transitionProps: NavigationTransitionProps,
+  prevTransitionProps: NavigationTransitionProps
+) => void;
 
 type Props = {
   defaultRouteConfig?: ExNavigationConfig,
@@ -59,8 +62,8 @@ type Props = {
   navigatorUID: string,
   onRegisterNavigatorContext: (navigatorUID: string, navigatorContext: ExNavigationStackContext) => void,
   onUnregisterNavigatorContext: (navigatorUID: string) => void,
-  onTransitionEnd: () => void,
-  onTransitionStart: () => void,
+  onTransitionStart: ?TransitionFn,
+  onTransitionEnd: ?TransitionFn,
 };
 
 type State = {
@@ -87,7 +90,7 @@ type TransitionOptions = {
 
 let ROUTE_LISTENER_INDEX = 0;
 
-type ExNavigationStackInstance = ReactComponent<*, *, *> & { _useAnimation: boolean, _routeListeners: { [listenerId: string]: Function } };
+type ExNavigationStackInstance = React.Component<*, *, *> & { _useAnimation: boolean, _routeListeners: { [listenerId: string]: Function } };
 
 declare var requestAnimationFrame: () => void;
 
@@ -700,6 +703,10 @@ class ExNavigationStack extends PureComponent<any, Props, State> {
       prevRouteConfg.styles.onTransitionStart) {
       prevRouteConfg.styles.onTransitionStart(transitionProps, prevTransitionProps);
     }
+
+    if (this.props.onTransitionStart) {
+      this.props.onTransitionStart(transitionProps, prevTransitionProps);
+    }
   };
 
   _onTransitionEnd = (transitionProps, prevTransitionProps) => {
@@ -716,6 +723,10 @@ class ExNavigationStack extends PureComponent<any, Props, State> {
     if (prevRouteConfg.styles &&
       prevRouteConfg.styles.onTransitionEnd) {
       prevRouteConfg.styles.onTransitionEnd(transitionProps, prevTransitionProps);
+    }
+
+    if (this.props.onTransitionEnd) {
+      this.props.onTransitionEnd(transitionProps, prevTransitionProps);
     }
   };
 

@@ -2,32 +2,28 @@
  * @flow
  */
 
-import React, { Children, PropTypes, cloneElement } from 'react';
+import React, { Component, PropTypes, cloneElement } from 'react';
 import findNodeHandle from 'react/lib/findNodeHandle';
 import {
-  View,
   UIManager,
 } from 'react-native';
 
+import type { TransitionProps, Metrics } from './ExNavigationSharedElementReducer';
+
 type Props = {
   children: () => React.Element<*>,
+  id: string,
+  transitionProps: ?TransitionProps,
 };
 
-export default class SharedElement extends React.Component {
-  _el: ?React.Element<*> = null;
-
-  static propTypes = {
-    children: PropTypes.func.isRequired,
-  }
-
+export default class SharedElement extends Component {
   static contextTypes = {
     sharedElementStore: PropTypes.any,
     elementGroupUid: PropTypes.any,
-  }
+  };
 
-  constructor(props: Props) {
-    super(props);
-  }
+  props: Props;
+  _el: ?React.Element<*> = null;
 
   componentDidMount() {
     this.measure();
@@ -36,9 +32,8 @@ export default class SharedElement extends React.Component {
   render() {
     const childFn = this.props.children;
     let animationStyle = {};
-    // TODO: cleanup this check
     if (this.props.transitionProps && this.props.transitionProps.progress &&
-        this.props.transitionProps.fromMetrics.width) {
+        this.props.transitionProps.fromMetrics && this.props.transitionProps.toMetrics) {
       const { progress, fromMetrics, toMetrics } = this.props.transitionProps;
       animationStyle = this.getAnimationStyle(
         progress,
@@ -52,10 +47,10 @@ export default class SharedElement extends React.Component {
     return cloneElement(childEl, {
       ref: c => { this._el = c; },
       collapsable: false,
-    })
+    });
   }
 
-  getAnimationStyle = (progress: any, fromMetrics: Object, toMetrics: Object) => {
+  getAnimationStyle = (progress: any, fromMetrics: Metrics, toMetrics: Metrics) => {
     const initialScaleX = fromMetrics.width / toMetrics.width;
     const initialScaleY = fromMetrics.height / toMetrics.height;
 
