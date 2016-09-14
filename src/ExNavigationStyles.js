@@ -13,7 +13,7 @@ const {
 import type { ExNavigationStyles } from './ExNavigationTypeDefinition';
 
 const configureTimingTransition = (transitionProps, previousTransitionProps) => ({
-  timing: Animated.spring,
+  timing: Animated.timing,
   easing: Easing.inOut(Easing.linear),
   duration: 150,
 });
@@ -80,10 +80,13 @@ function customForHorizontal(props: NavigationSceneRendererProps): Object {
   const index = scene.index;
   const inputRange = [index - 1, index, index + 1];
   const width = layout.initWidth;
-  const outputRange = I18nManager.isRTL ?
-    ([-width, 0, 100]: Array<number>) :
-    ([width, 0, -100]: Array<number>);
 
+  let outputRange;
+  if (I18nManager && I18nManager.isRTL) {
+    outputRange = [-width, 0, 100];
+  } else {
+    outputRange = [width, 0, -100];
+  }
 
   const opacity = position.interpolate({
     inputRange,

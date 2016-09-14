@@ -1,9 +1,10 @@
 {
   "name": "@exponent/ex-navigation",
-  "version": "1.5.21",
+  "version": "1.5.26",
   "description": "Route-centric navigation libary for React Native.",
   "main": "./src/ExNavigation.js",
   "scripts": {
+    "lint": "eslint ./src ./example",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": "https://github.com/exponentjs/ex-navigation.git",
@@ -30,7 +31,7 @@
     "react-clone-referenced-element": "^1.0.1",
     "react-mixin": "^3.0.5",
     "react-native-drawer-layout": "^1.0.0",
-    "react-native-tab-view": "0.0.27",
+    "react-native-tab-view": "0.0.28",
     "react-addons-shallow-compare": "~15.2.0",
     "react-redux": "^4.4.5",
     "react-static-container": "^1.0.0",
@@ -42,6 +43,12 @@
     "warning": "^2.1.0"
   },
   "devDependencies": {
+    "babel-eslint": "^6.1.0",
+    "eslint": "^3.0.0",
+    "eslint-config-exponent": "^2.0.2",
+    "eslint-plugin-babel": "^3.3.0",
+    "eslint-plugin-flow-vars": "^0.4.0",
+    "eslint-plugin-react": "^5.2.2",
     "flow-bin": "^0.29.0",
     "react": "~15.2.1",
     "react-native": "github:exponentjs/react-native#sdk-8.0.0"

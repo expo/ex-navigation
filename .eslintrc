@@ -1,0 +1,11 @@
+{
+  "extends": "exponent/react",
+  "plugins": [
+    "flow-vars"
+  ],
+  "rules": {
+    "react/no-comment-textnodes": 0,
+    "flow-vars/define-flow-type": 1,
+    "flow-vars/use-flow-type": 1
+  }
+}

@@ -45,17 +45,19 @@ const DEFAULT_ROUTE_CONFIG: ExNavigationConfig = {
   styles: Platform.OS !== 'android' ? NavigationStyles.FloatHorizontal : NavigationStyles.Fade,
 };
 
-const STATUSBAR_HEIGHT = Platform.OS === 'ios' ? 20 : 24;
+const STATUSBAR_HEIGHT = Platform.OS === 'ios' ? 20 : (global.__exponent ? 24 : 0);
 
 type Props = {
+  defaultRouteConfig?: ExNavigationConfig,
   id: string,
-  navigatorUID: string,
   initialRoute?: ExNavigationRoute,
   initialStack?: Array<ExNavigationRoute>,
   navigation: ExNavigationContext,
-  onRegisterNavigatorContext: (navigatorUID: string, navigatorContext: ExNavigationStackContext) => void,
   navigationState?: Object,
-  defaultRouteConfig?: ExNavigationConfig,
+  navigatorUID: string,
+  onRegisterNavigatorContext: (navigatorUID: string, navigatorContext: ExNavigationStackContext) => void,
+  onTransitionEnd: () => void,
+  onTransitionStart: () => void,
 };
 
 type State = {
@@ -213,6 +215,8 @@ class ExNavigationStack extends PureComponent<any, Props, State> {
 
   static defaultProps = {
     defaultRouteConfig: DEFAULT_ROUTE_CONFIG,
+    onTransitionEnd: () => {},
+    onTransitionStart: () => {},
   };
 
   static contextTypes = {
@@ -261,6 +265,7 @@ class ExNavigationStack extends PureComponent<any, Props, State> {
     if (!navigationState) {
       return null;
     }
+    const { onTransitionEnd, onTransitionStart } = this.props;
 
     return (
       <NavigationTransitioner
@@ -268,6 +273,8 @@ class ExNavigationStack extends PureComponent<any, Props, State> {
         navigationState={navigationState}
         render={this._renderTransitioner}
         configureTransition={this._configureTransition}
+        onTransitionEnd={onTransitionEnd}
+        onTransitionStart={onTransitionStart}
       />
     );
   }
@@ -367,6 +374,7 @@ class ExNavigationStack extends PureComponent<any, Props, State> {
       return configureTransition(transitionProps, prevTransitionProps);
     }
   };
+
 
   _registerNavigatorContext() {
     this.props.onRegisterNavigatorContext(this.state.navigatorUID,

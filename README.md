@@ -347,6 +347,7 @@ class App extends React.Component {
 ### navigationBar properties
 
 - `title` - a string or a function that returns a string. The function is provided with the route params as the first argument.
+- `titleStyle` - Text.propTypes.style object to use for the title.
 - `backgroundColor` - the background color to use for the
 `navigationBar`.
 - `tintColor` - the color to use for the title text and back button or
@@ -361,3 +362,140 @@ will be rendered in the left position of the `navigationBar`.
 will be rendered in the title position of the `navigationBar`.
 - `renderRight` - a function that should return a React component that
 will be rendered in the right position of the `navigationBar`.
+
+## TabNavigation
+
+A minimal example using tabs:
+
+```javascript
+import {
+  StackNavigation,
+  TabNavigation,
+  TabNavigationItem as TabItem,
+} from '@exponent/ex-navigation';
+
+
+// Treat the TabScreen route like any other route -- you may want to set
+// it as the intiial route for a top-level StackNavigation
+class TabScreen extends React.Component {
+  static route = {
+    navigationBar: {
+      visible: false,
+    }
+  }
+
+  render() {
+    return (
+      <TabNavigation
+        id="main"
+        navigatorUID="main"
+        initialTab="more">
+        <TabItem
+          id="home"
+          title="Home"
+          selectedStyle={styles.selectedTab}
+          renderIcon={(isSelected) => <Image source={require('./assets/images/home.png'} /> }>
+          <StackNavigation
+            id={id}
+            initialRoute={Router.getRoute('home')}
+          />
+        </TabItem>
+
+        <TabItem
+          id="posts"
+          title="Posts"
+          selectedStyle={styles.selectedTab}
+          renderIcon={(isSelected) => <Image source={require('./assets/images/posts.png')} /> }>
+          <StackNavigation
+            id={id}
+            initialRoute={Router.getRoute('posts')}
+          />
+        </TabItem>
+
+        <TabItem
+          id="profile"
+          title="Profile"
+          selectedStyle={styles.selectedTab}
+          renderIcon={(isSelected) => <Image source={require('./assets/images/profile.png')} /> }>
+          <StackNavigation
+            id={id}
+            initialRoute={Router.getRoute('profile')}
+          />
+        </TabItem>
+      </TabNavigation>
+    );
+  }
+}
+```
+
+See an example of TabNavigation in a real app
+[here](https://github.com/exponentjs/rnplay/blob/f4d29c4578fb57347afd0d507a036dd232ec6fdb/navigation/TabNavigationLayout.js).
+
+If you'd like to switch tabs programmatically (eg: a notification
+arrives and you want to jump to a notifications tab, or you tap on a
+button to open your profile but within another tab) you can use
+`jumpToTab`. For the code below to work, we need the `navigatorUID` prop
+to be set on TabNavigator, as with the example above.
+
+```javascript
+<TouchableOpacity
+  onPress={() => {
+    this.props.navigation.performAction(({ tabs, stacks }) => {
+      tabs('main').jumpToTab('profile');
+      stacks('home').push(route);
+    });
+  }}
+/>
+```
+
+### Integrate with your existing Redux store
+
+Behind the scenes ExNavigation manages your navigation state using
+Redux in its own store. If you'd like to store the navigation state
+on your app's store, you can use the `createStoreWithNavigation`
+function when creating the store and then manually provide the
+`NavigationContext`, initialized with your app's store.
+
+```javascript
+/* Your store definition, let's say state/Store.js */
+
+import { createStoreWithNavigation } from '@exponent/ex-navigation';
+import { createStore } from 'redux';
+const createStoreWithNavigation = createNavigationEnabledStore({
+  createStore,
+  navigationStateKey: 'navigation',
+});
+const store = createStoreWithNavigation(
+  /* combineReducers and your normal create store things here! */
+);
+
+export default store;
+```
+
+```javascript
+/* The top level of your app, often in main.js or index.[ios/android].js */
+
+import {
+  createRouter,
+  NavigationContext,
+  NavigationProvider,
+  StackNavigation,
+} from '@exponent/ex-navigation';
+
+import AppStore from './state/Store';
+
+const Router = createRouter(() => ({
+  home: () => HomeScreen,
+}));
+
+const navigationContext = new NavigationContext({
+  router: Router,
+  store: Store,
+})
+
+return (
+  <NavigationProvider context={navigationContext}>
+    <StackNavigation yourUsualPropsHere />
+  </NavigationProvider>
+)
+```
