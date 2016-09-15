@@ -511,31 +511,28 @@ return (
 )
 ```
 
-### Call route actions from redux-saga middleware
+### Perform navigation actions from outside of a component
 
-Add your saga middleware like normally to redux store and then:
+You might be using some Redux middleware like saga, thunk, promise, or
+effex (we recommend [effex](https://github.com/exponentjs/redux-effex)
+because we love `async/await`). Whatever you're using, you no longer
+have access to `this.props.navigator` and the like. What to do?
+Well as long as you include your navigation state inside of your Redux
+store, you can dispatch a NavigationAction to it -- after all, this is
+what `this.props.navigator.push` etc. do behind the scenes.
+
+In the following example we call `getState` and `dispatch` directly on
+your store -- feel free to change this to whatever the equivalent is
+for your context (eg: if this was effex, `dispatch` and `getState` would
+be passed in to the `goHome` function).
 
 ```javascript
-/* In your saga middleware code */
-import { takeEvery } from 'redux-saga'
-import { put, select } from 'redux-saga/effects'
 import { NavigationActions } from '@exponent/ex-navigation'
+import Store from '../state/Store';
 import Router from './Router'
-import selectors from './selectors'
 
-function* goHome() {
-  const navigatorUID = yield select(selectors.getNavigatorUID)
-  yield put(NavigationActions.push(navigatorUID, Router.getRoute('home')))
+export default function goHome() {
+  let navigatorUID = Store.getState().navigation.currentNavigatorUID;
+  Store.dispatch(NavigationActions.push(navigatorUID, Router.getRoute('home')))
 }
-
-export default function* root() {
-  yield [
-    takeEvery('GO_HOME', goHome)
-  ]
-}
-```
-
-```javascript
-/* Your selectors, selectors.js */
-export const getNavigatorUID = state => state.navigation.currentNavigatorUID
 ```
