@@ -21,6 +21,7 @@ export { default as NavigationBar } from './ExNavigationBar';
 
 export { createNavigationEnabledStore } from './ExNavigationStore';
 
+export { default as NavigationActions } from './ExNavigationActions';
 export { default as NavigationReducer } from './ExNavigationReducer';
 
 export * as NavigationStyles from './ExNavigationStyles';

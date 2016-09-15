@@ -459,7 +459,7 @@ function when creating the store and then manually provide the
 ```javascript
 /* Your store definition, let's say state/Store.js */
 
-import { createStoreWithNavigation } from '@exponent/ex-navigation';
+import { createNavigationEnabledStore, NavigationReducer } from '@exponent/ex-navigation';
 import { createStore } from 'redux';
 const createStoreWithNavigation = createNavigationEnabledStore({
   createStore,
@@ -467,9 +467,21 @@ const createStoreWithNavigation = createNavigationEnabledStore({
 });
 const store = createStoreWithNavigation(
   /* combineReducers and your normal create store things here! */
+  combineReducers({
+    navigation: NavigationReducer,
+    // other reducers
+  })
 );
 
 export default store;
+```
+
+```javascript
+/* Your routes, Router.js */
+
+export const Router = createRouter(() => ({
+  home: () => HomeScreen,
+}));
 ```
 
 ```javascript
@@ -482,11 +494,8 @@ import {
   StackNavigation,
 } from '@exponent/ex-navigation';
 
-import AppStore from './state/Store';
-
-const Router = createRouter(() => ({
-  home: () => HomeScreen,
-}));
+import Store from './state/Store';
+import Router from './Router';
 
 const navigationContext = new NavigationContext({
   router: Router,
@@ -494,8 +503,39 @@ const navigationContext = new NavigationContext({
 })
 
 return (
-  <NavigationProvider context={navigationContext}>
-    <StackNavigation yourUsualPropsHere />
-  </NavigationProvider>
+  <Provider store={Store}>
+    <NavigationProvider context={navigationContext}>
+      <StackNavigation yourUsualPropsHere />
+    </NavigationProvider>
+  </Provider>
 )
+```
+
+### Call route actions from redux-saga middleware
+
+Add your saga middleware like normally to redux store and then:
+
+```javascript
+/* In your saga middleware code */
+import { takeEvery } from 'redux-saga'
+import { put, select } from 'redux-saga/effects'
+import { NavigationActions } from '@exponent/ex-navigation'
+import Router from './Router'
+import selectors from './selectors'
+
+function* goHome() {
+  const navigatorUID = yield select(selectors.getNavigatorUID)
+  yield put(NavigationActions.push(navigatorUID, Router.getRoute('home')))
+}
+
+export default function* root() {
+  yield [
+    takeEvery('GO_HOME', goHome)
+  ]
+}
+```
+
+```javascript
+/* Your selectors, selectors.js */
+export const getNavigatorUID = state => state.navigation.currentNavigatorUID
 ```
