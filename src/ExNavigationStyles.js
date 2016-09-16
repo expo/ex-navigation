@@ -320,9 +320,38 @@ export const SlideHorizontal: ExNavigationStyles = {
 // this, but no need to do that yet.
 export const FloatHorizontal = SlideHorizontal;
 
+function customForVertical(props: NavigationSceneRendererProps): Object {
+  const {
+    layout,
+    position,
+    scene,
+  } = props;
+
+  if (!layout.isMeasured) {
+    return forInitial(props);
+  }
+
+  const index = scene.index;
+  const inputRange = [index - 1, index, index + 1];
+  const height = layout.initHeight;
+
+  const translateX = 0;
+  const translateY = position.interpolate({
+    inputRange,
+    outputRange: ([height, 0, 0]: Array<number>),
+  });
+
+  return {
+    transform: [
+      { translateX },
+      { translateY },
+    ],
+  };
+}
+
 export const FloatVertical: ExNavigationStyles = {
   configureTransition: configureSpringTransition,
-  sceneAnimations: CardStackStyleInterpolator.forVertical,
+  sceneAnimations: customForVertical,
   navigationBarAnimations: {
     forContainer: (props, delta) => {
       const {
