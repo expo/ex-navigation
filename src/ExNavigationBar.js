@@ -59,10 +59,18 @@ const titleStyles = StyleSheet.create({
 
   titleText: {
     flex: 1,
-    fontSize: 18,
-    fontWeight: '500',
     color: 'rgba(0, 0, 0, .9)',
-    textAlign: Platform.OS === 'ios' ? 'center' : 'left',
+    ...Platform.select({
+      ios: {    
+        fontSize: 17,   
+        fontWeight: '500',    
+        textAlign: 'center',    
+      },    
+      android: {    
+        fontSize: 20,   
+        textAlign: 'left',    
+      },    
+    }),
   },
 });
 
@@ -107,10 +115,20 @@ const buttonStyles = StyleSheet.create({
     justifyContent: 'center',
   },
   button: {
-    height: 24,
-    width: 24,
-    margin: Platform.OS === 'ios' ? 10 : 16,
     resizeMode: 'contain',
+    ...Platform.select({
+      ios: {
+        height: 21,
+        width: 13,
+        marginLeft: 8,
+        marginRight: 11,
+      },
+      android: {
+        height: 24,
+        width: 24,
+        margin: 16,
+      },
+    }),
   },
   menuButton: {
     height: 26,
