@@ -56,6 +56,7 @@ type Props = {
   navigationState?: Object,
   navigatorUID: string,
   onRegisterNavigatorContext: (navigatorUID: string, navigatorContext: ExNavigationStackContext) => void,
+  onUnregisterNavigatorContext: (navigatorUID: string) => void,
   onTransitionEnd: () => void,
   onTransitionStart: () => void,
 };
@@ -334,6 +335,7 @@ class ExNavigationStack extends PureComponent<any, Props, State> {
 
   componentWillUnmount() {
     this.props.navigation.dispatch(Actions.removeNavigator(this.state.navigatorUID));
+    this.props.onUnregisterNavigatorContext(this.state.navigatorUID);
   }
 
   componentWillReceiveProps(nextProps: Props) {

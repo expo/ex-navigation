@@ -109,6 +109,7 @@ export function createNavigatorComponent(WrappedComponent: ReactClass<any>) {
           navigatorUID={this.state.navigatorUID}
           navigation={navigation}
           onRegisterNavigatorContext={navigation.registerNavigatorContext}
+          onUnregisterNavigatorContext={navigation.unregisterNavigatorContext}
           {...this.props}
         />
       );

@@ -41,13 +41,12 @@ export default class NavigationContext {
     this._store = store;
     this._router = router;
     this._navigatorContexts = {};
-
-    this.registerNavigatorContext = this.registerNavigatorContext.bind(this);
   }
 
   getNavigator(navigatorId: string): ExNavigatorContext<*> {
     let navigatorContext;
     const contextKeys = Object.keys(this._navigatorContexts);
+
     contextKeys.forEach(contextKey => {
       let c = this._navigatorContexts[contextKey];
       if (c.navigatorId === navigatorId) {
@@ -93,8 +92,12 @@ export default class NavigationContext {
     return currentNavigator.routes[currentNavigator.index];
   }
 
-  registerNavigatorContext(navigatorUID: string, navigatorContext: ExNavigatorContext<*>) {
+  registerNavigatorContext = (navigatorUID: string, navigatorContext: ExNavigatorContext<*>) => {
     this._navigatorContexts[navigatorUID] = navigatorContext;
+  }
+
+  unregisterNavigatorContext = (navigatorUID: string) => {
+    delete this._navigatorContexts[navigatorUID];
   }
 
   get store(): ExNavigationStore {

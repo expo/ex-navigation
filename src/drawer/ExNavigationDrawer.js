@@ -68,6 +68,7 @@ type Props = {
   drawerPosition?: 'left' | 'right',
   navigation: ExNavigationContext,
   onRegisterNavigatorContext: (navigatorUID: string, navigatorContext: ExNavigationDrawerContext) => void,
+  onUnregisterNavigatorContext: (navigatorUID: string) => void,
   navigationState: Object,
 };
 
@@ -207,6 +208,7 @@ class ExNavigationDrawer extends PureComponent<any, Props, State> {
 
   componentWillUnmount() {
     this.props.navigation.dispatch(Actions.removeNavigator(this.state.navigatorUID));
+    this.props.onUnregisterNavigatorContext(this.state.navigatorUID);
   }
 
   componentWillReceiveProps(nextProps) {

@@ -4,7 +4,7 @@
 
 import ExNavigationContext from './ExNavigationContext';
 
-export default class ExNavigatorContext<T: string> {
+export default class ExNavigatorContext<T> {
   type: T;
 
   navigatorUID: string;

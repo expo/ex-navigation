@@ -44,6 +44,7 @@ type Props = {
   renderBefore: () => ?ReactElement<any>,
   style: any,
   onRegisterNavigatorContext: () => any,
+  onUnregisterNavigatorContext: (navigatorUID: string) => void,
   tabBarStyle: any,
   tabStyle: any,
 };
@@ -124,6 +125,7 @@ class ExNavigationSlidingTab extends PureComponent<any, Props, State> {
 
   componentWillUnmount() {
     this.props.navigation.dispatch(Actions.removeNavigator(this.state.navigatorUID));
+    this.props.onUnregisterNavigatorContext(this.state.navigatorUID);
   }
 
   componentWillReceiveProps(nextProps) {
