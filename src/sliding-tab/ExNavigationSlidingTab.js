@@ -41,7 +41,7 @@ type Props = {
   navigationState: any,
   position: "top" | "bottom",
   pressColor: ?string,
-  renderHeader: (props) => ?React.Element<any>,
+  renderHeader: (props: any) => ?React.Element<any>,
   renderBefore: () => ?ReactElement<any>,
   style: any,
   onRegisterNavigatorContext: () => any,
