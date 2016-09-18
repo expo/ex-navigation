@@ -30,7 +30,7 @@ const APPBAR_HEIGHT = Platform.OS === 'ios' ? 44 : 55;
 const BACKGROUND_COLOR = Platform.OS === 'ios' ? '#EFEFF2' : '#FFF';
 const BORDER_BOTTOM_COLOR = 'rgba(0, 0, 0, .15)';
 const BORDER_BOTTOM_WIDTH = Platform.OS === 'ios' ? StyleSheet.hairlineWidth : 0;
-const BACK_BUTTON_HIT_SLOP = { top: 0, bottom: 0, left: 0, right: 20 };
+const BACK_BUTTON_HIT_SLOP = { top: 0, bottom: 0, left: 0, right: 30 };
 
 class ExNavigationBarTitle extends PureComponent {
   render() {
