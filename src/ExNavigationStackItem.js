@@ -41,13 +41,13 @@ export default class ExNavigationStackItem extends PureComponent {
 
     if (sceneAnimations === undefined) {
       // fall back to default style.
-      sceneAnimations = NavigationStyles.FloatHorizontal.sceneAnimations(this.props);
+      sceneAnimations = NavigationStyles.SlideHorizontal.sceneAnimations(this.props);
     } else {
       sceneAnimations = sceneAnimations(this.props);
     }
     if (gestures === undefined) {
       // fall back to default pan handlers.
-      gestures = NavigationStyles.FloatHorizontal.gestures && NavigationStyles.FloatHorizontal.gestures(this.props);
+      gestures = NavigationStyles.SlideHorizontal.gestures && NavigationStyles.SlideHorizontal.gestures(this.props);
     } else if (typeof gestures === 'function') {
       gestures = gestures(this.props);
     }
