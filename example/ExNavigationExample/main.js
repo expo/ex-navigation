@@ -57,11 +57,9 @@ class LandingScreen extends Component {
   }
 
   onPressForward = () => {
-    this.props.navigator.push(
-      AppRouter.getRoute('another', {
+    this.props.navigator.push('another', {
         text: 'Some dynamic text!',
-      })
-    );
+    });
   }
 
   onPressBack = () => {
@@ -73,9 +71,9 @@ class LandingScreen extends Component {
 
   onPressOpenModal = () => {
     const rootNavigator = this.props.navigation.getNavigator('root');
-    rootNavigator.push(AppRouter.getRoute('modal', {
+    rootNavigator.push('modal', {
       initialRoute: 'tabLanding',
-    }));
+    });
   }
 }
 
@@ -140,9 +138,7 @@ class AnotherRouteScreen extends Component {
   }
 
   onPressForward = () => {
-    this.props.navigator.push(
-      AppRouter.getRoute('nestedNav')
-    );
+    this.props.navigator.push('nestedNav');
   }
 
   onPressBack = () => {
@@ -150,7 +146,7 @@ class AnotherRouteScreen extends Component {
   }
 
   onPressReplace = () => {
-    this.props.navigator.replace(AppRouter.getRoute('tabLanding'));
+    this.props.navigator.replace('tabLanding');
   }
 
   onPressReset = () => {

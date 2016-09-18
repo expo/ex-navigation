@@ -5,13 +5,9 @@
   "main": "main.js",
   "dependencies": {
     "@exponent/ex-navigation": "file:../../",
-    "exponent": "^9.0.0",
+    "exponent": "^10.0.1",
     "lodash": "^4.13.1",
-    "react": "~15.2.1",
-    "react-native": "github:exponentjs/react-native#sdk-9.0.0"
-  },
-  "devDependencies": {
-    "babel-plugin-transform-decorators-legacy": "^1.3.4",
-    "babel-preset-react-native-stage-0": "^1.0.1"
+    "react": "~15.3.1",
+    "react-native": "github:exponentjs/react-native#sdk-10.0.1"
   }
 }
