@@ -264,6 +264,11 @@ on `StackNavigation` navigators.
 +
 ```
 
+### Make navigation bar buttons update based on route or app state
+
+See the following example for details on how to connect your buttons to
+the navigator or Redux to perform actions: https://github.com/brentvatne/ex-navigation-conditional-buttons-example
+
 ## StackNavigation actions
 
 As you saw above, you can `push` and `pop` routes. The following is a
