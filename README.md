@@ -394,14 +394,14 @@ class TabScreen extends React.Component {
       <TabNavigation
         id="main"
         navigatorUID="main"
-        initialTab="more">
+        initialTab="home">
         <TabItem
           id="home"
           title="Home"
           selectedStyle={styles.selectedTab}
-          renderIcon={(isSelected) => <Image source={require('./assets/images/home.png'} /> }>
+          renderIcon={(isSelected) => <Image source={require('./assets/images/home.png')} /> }>
           <StackNavigation
-            id={id}
+            id="home"
             initialRoute={Router.getRoute('home')}
           />
         </TabItem>
@@ -412,7 +412,7 @@ class TabScreen extends React.Component {
           selectedStyle={styles.selectedTab}
           renderIcon={(isSelected) => <Image source={require('./assets/images/posts.png')} /> }>
           <StackNavigation
-            id={id}
+            id="posts"
             initialRoute={Router.getRoute('posts')}
           />
         </TabItem>
@@ -423,7 +423,7 @@ class TabScreen extends React.Component {
           selectedStyle={styles.selectedTab}
           renderIcon={(isSelected) => <Image source={require('./assets/images/profile.png')} /> }>
           <StackNavigation
-            id={id}
+            id="profile"
             initialRoute={Router.getRoute('profile')}
           />
         </TabItem>
