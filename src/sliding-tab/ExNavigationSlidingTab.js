@@ -41,6 +41,7 @@ type Props = {
   navigationState: any,
   position: "top" | "bottom",
   pressColor: ?string,
+  renderHeader: (props) => ?React.Element<any>,
   renderBefore: () => ?ReactElement<any>,
   style: any,
   onRegisterNavigatorContext: () => any,
@@ -174,7 +175,7 @@ class ExNavigationSlidingTab extends PureComponent<any, Props, State> {
         style={[styles.container, this.props.style]}
         navigationState={navigationState}
         renderScene={this._renderPage}
-        renderHeader={this._renderHeader}
+        renderHeader={this.props.renderHeader || this._renderHeader}
         onRequestChangeTab={this._setActiveTab}
       />
     );
