@@ -453,6 +453,97 @@ to be set on TabNavigator, as with the example above.
 />
 ```
 
+## DrawerNavigation
+
+A minimal example using the DrawerNavigation:
+
+```javascript
+import {
+  StackNavigation,
+  DrawerNavigation,
+  DrawerNavigationItem,
+} from '@exponent/ex-navigation';
+
+// Treat the DrawerNavigationLayout route like any other route -- you may want to set
+// it as the intiial route for a top-level StackNavigation
+
+class DrawerNavigationLayout extends React.Component {
+  static route = {
+    navigationBar: {
+      visible: false,
+    }
+  };
+  
+  render() {
+    return (
+      <DrawerNavigation
+        id='main'
+        initialItem='home'
+        drawerWidth={300}
+        renderHeader={this._renderHeader}
+      >
+        <DrawerNavigationItem
+          id='home'
+          selectedStyle={styles.selectedItemStyle}
+          renderTitle={isSelected => this._renderTitle('Home', isSelected)}
+        >
+          <StackNavigation
+            id='home'
+            initialRoute={Router.getRoute('home')}
+          />
+        </DrawerNavigationItem>
+        
+        <DrawerNavigationItem
+          id='about'
+          selectedStyle={styles.selectedItemStyle}
+          renderTitle={isSelected => this._renderTitle('About', isSelected)}
+        >
+          <StackNavigation
+            id='about'
+            initialRoute={Router.getRoute('about')}
+          />
+        </DrawerNavigationItem>
+        
+      </DrawerNavigation>
+    );
+  }
+  
+  _renderHeader = () => {
+    return (
+      <View style={styles.header}>
+      </View>
+    );
+  };
+
+  _renderTitle(text: string, isSelected: boolean) {
+    return (
+      <Text style={[styles.titleText, isSelected ? styles.selectedTitleText : {}]}>
+        {text}
+      </Text>
+    );
+  };
+}
+
+const styles = StyleSheet.create({
+  header: {
+    height: 20
+  },
+
+  selectedItemStyle: {
+    backgroundColor: 'blue'
+  },
+  
+  titleText: {
+    fontWeight: 'bold'
+  },
+  
+  selectedTitleText: {
+    color: 'white'
+  }
+});
+```
+
+
 ### Integrate with your existing Redux store
 
 Behind the scenes ExNavigation manages your navigation state using
