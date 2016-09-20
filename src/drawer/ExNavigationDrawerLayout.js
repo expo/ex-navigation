@@ -112,12 +112,9 @@ export default class ExNavigationDrawerLayout extends React.Component {
     });
   }
 
-  // TODO(brentvatne):
-  // onPress and onLongPress should fire after close drawer!
-  //
   _handlePress = (item: any) => {
-    item.onPress();
     this._component.closeDrawer();
+    item.onPress();
   }
 
   _handleLongPress = (item: any) => {
@@ -125,8 +122,8 @@ export default class ExNavigationDrawerLayout extends React.Component {
       return;
     }
 
-    item.onLongPress();
     this._component.closeDrawer();
+    item.onLongPress();
   }
 }
 
