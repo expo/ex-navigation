@@ -240,6 +240,11 @@ class ExNavigationSlidingTab extends PureComponent<any, Props, State> {
         ..._.omit(tabItemProps, ['children']),
       };
 
+      invariant(
+        !tabItem.renderLabel,
+        'renderLabel should be passed to SlidingTabNavigation instead of SlidingTabNavigationItem.',
+      );
+
       if (Children.count(tabItemProps.children) > 0) {
         tabItem.element = Children.only(tabItemProps.children);
       }
