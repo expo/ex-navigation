@@ -42,7 +42,7 @@ import type { ExNavigationConfig, ExNavigationState } from './ExNavigationTypeDe
 import type { ExNavigationTabContext } from './tab/ExNavigationTab';
 
 const DEFAULT_ROUTE_CONFIG: ExNavigationConfig = {
-  styles: Platform.OS !== 'android' ? NavigationStyles.SlideHorizontal : NavigationStyles.Fade,
+  styles: Platform.OS == 'ios' ? NavigationStyles.Fade : NavigationStyles.SlideHorizontal,
 };
 
 const STATUSBAR_HEIGHT = Platform.OS === 'ios' ? 20 : (global.__exponent ? 24 : 0);
