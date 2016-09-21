@@ -349,7 +349,7 @@ function customForVertical(props: NavigationSceneRendererProps): Object {
   };
 }
 
-export const SlideVerticalIOS: ExNavigationStyles = {
+export const SlideVertical: ExNavigationStyles = {
   configureTransition: configureSpringTransition,
   sceneAnimations: customForVertical,
   navigationBarAnimations: {
