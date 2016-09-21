@@ -111,7 +111,7 @@ class ExNavigationSlidingTab extends PureComponent<any, Props, State> {
 
     this._registerNavigatorContext();
 
-    let routes = tabItems.map(i => ({key: i.id}));
+    let routes = tabItems.map(({ id, title }) => ({ title, key: id }));
     let routeKeys = routes.map(r => r.key);
 
     this.props.navigation.dispatch(Actions.setCurrentNavigator(
@@ -172,6 +172,7 @@ class ExNavigationSlidingTab extends PureComponent<any, Props, State> {
 
     return (
       <TabViewAnimated
+        lazy={this.props.lazy}
         style={[styles.container, this.props.style]}
         navigationState={navigationState}
         renderScene={this._renderPage}
@@ -194,19 +195,13 @@ class ExNavigationSlidingTab extends PureComponent<any, Props, State> {
     }
   };
 
-  _renderLabel = (options) => {
-    let { route, focused, index } = options;
-    let tabItem = this.state.tabItems.find(i => i.id === route.key);
-
-    return tabItem && tabItem.renderLabel ? tabItem.renderLabel(options) : null;
-  }
-
   _renderHeader = (props) => {
     const TabBarComponent = this.props.position === 'top' ? TabBarTop : TabBar;
     const tabBarProps = {
       pressColor: this.props.pressColor,
       indicatorStyle: this.props.indicatorStyle,
       tabStyle: this.props.tabStyle,
+      renderLabel: this.props.renderLabel,
       style: [{backgroundColor: this.props.barBackgroundColor}, this.props.tabBarStyle],
     };
 
@@ -216,7 +211,6 @@ class ExNavigationSlidingTab extends PureComponent<any, Props, State> {
         <TabBarComponent
           {...props}
           {...tabBarProps}
-          renderLabel={this._renderLabel}
         />
       </View>
     );
