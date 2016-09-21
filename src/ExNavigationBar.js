@@ -69,6 +69,7 @@ const titleStyles = StyleSheet.create({
       },
       android: {
         fontSize: 20,
+        fontFamily: 'sans-serif-medium',
         textAlign: 'left',
       },
     }),
@@ -377,7 +378,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderBottomColor: ExNavigationBar.DEFAULT_BORDER_BOTTOM_COLOR,
     borderBottomWidth: ExNavigationBar.DEFAULT_BORDER_BOTTOM_WIDTH,
-    elevation: 2,
+    elevation: 4,
     flexDirection: 'row',
     justifyContent: 'flex-start',
     left: 0,
