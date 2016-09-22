@@ -518,12 +518,13 @@ class ExNavigationStack extends PureComponent<any, Props, State> {
       latestRouteConfig.navigationBar &&
       latestRouteConfig.navigationBar.visible !== false;
 
-    // TODO: add height and statusBarHeight options here
+    // pass the statusBarHeight to headerComponent if statusBar is translucent
     let statusBarHeight = STATUSBAR_HEIGHT;
     if (latestRouteConfig.statusBar && latestRouteConfig.statusBar.translucent) {
       statusBarHeight = 24;
     }
 
+    // TODO: add height here
     return (
       <HeaderComponent
         {...props}
