@@ -71,7 +71,7 @@ export default class ExNavigationTabBar extends React.Component {
       const { renderBadge, badgeText } = item;
 
       if (renderBadge) {
-        badge = renderBadge();
+        badge = renderBadge(isSelected, item.title, index);
       } else if (badgeText) {
         badge = (
           <TabBadge style={styles.badge}>{badgeText}</TabBadge>
