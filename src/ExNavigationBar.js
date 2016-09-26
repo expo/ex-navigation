@@ -137,18 +137,20 @@ const buttonStyles = StyleSheet.create({
     }),
   },
   menuButton: {
-    height: 26,
-    width: 26,
+    resizeMode: 'contain',
     ...Platform.select({
       ios: {
-        margin: 10,
+        height: 26,
+        width: 26,
+        marginLeft: 8,
+        marginRight: 6,
       },
       android: {
-        marginLeft: 23,
-        marginTop: -1,
+        height: 24,
+        width: 24,
+        margin: 16,
       },
     }),
-    resizeMode: 'contain',
   },
 });
 
