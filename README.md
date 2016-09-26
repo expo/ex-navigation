@@ -402,6 +402,7 @@ class TabScreen extends React.Component {
           renderIcon={(isSelected) => <Image source={require('./assets/images/home.png')} /> }>
           <StackNavigation
             id="home"
+            navigatorUID="home"
             initialRoute={Router.getRoute('home')}
           />
         </TabItem>
