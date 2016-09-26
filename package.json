@@ -18,10 +18,11 @@
   "license": "MIT",
   "peerDependencies": {},
   "dependencies": {
-    "@exponent/react-native-touchable-native-feedback-safe": "^1.0.0",
+    "@exponent/react-native-touchable-native-feedback-safe": "^1.1.0",
     "clamp": "^1.0.1",
     "core-decorators": "^0.12.2",
     "debug": "^2.2.0",
+    "exponent": "^10.0.4",
     "fbemitter": "^2.0.2",
     "fbjs": "^0.8.3",
     "hoist-non-react-statics": "^1.0.5",
