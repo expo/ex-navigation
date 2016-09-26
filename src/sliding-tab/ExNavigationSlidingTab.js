@@ -33,21 +33,22 @@ type SlidingTabItem = {
 };
 
 type Props = {
-  barBackgroundColor: ?string,
-  indicatorStyle: any,
+  barBackgroundColor?: string,
+  indicatorStyle?: any,
   initialTab: string,
   children: Array<React.Element<any>>,
   navigation: any,
   navigationState: any,
   position: "top" | "bottom",
-  pressColor: ?string,
-  renderHeader: (props: any) => ?React.Element<any>,
-  renderBefore: () => ?ReactElement<any>,
-  style: any,
+  pressColor?: string,
+  renderHeader?: (props: any) => ?React.Element<any>,
+  renderBefore: () => ?React.Element<any>,
+  style?: any,
   onRegisterNavigatorContext: () => any,
   onUnregisterNavigatorContext: (navigatorUID: string) => void,
-  tabBarStyle: any,
-  tabStyle: any,
+  swipeEnabled?: boolean,
+  tabBarStyle?: any,
+  tabStyle?: any,
 };
 
 type State = {
@@ -182,7 +183,13 @@ class ExNavigationSlidingTab extends PureComponent<any, Props, State> {
   }
 
   _renderPage = (props) => {
-    return <TabViewPage {...props} renderScene={this._renderScene} />;
+    return (
+      <TabViewPage
+        {...props}
+        swipeEnabled={this.props.swipeEnabled}
+        renderScene={this._renderScene}
+      />
+    );
   }
 
   _renderScene = ({ route }) => {
