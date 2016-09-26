@@ -320,6 +320,136 @@ export const SlideHorizontal: ExNavigationStyles = {
 // this, but no need to do that yet.
 export const FloatHorizontal = SlideHorizontal;
 
+function customForVertical(props: NavigationSceneRendererProps): Object {
+  const {
+    layout,
+    position,
+    scene,
+  } = props;
+
+  if (!layout.isMeasured) {
+    return forInitial(props);
+  }
+
+  const index = scene.index;
+  const inputRange = [index - 1, index, index + 1];
+  const height = layout.initHeight;
+
+  const translateX = 0;
+  const translateY = position.interpolate({
+    inputRange,
+    outputRange: ([height, 0, 0]: Array<number>),
+  });
+
+  return {
+    transform: [
+      { translateX },
+      { translateY },
+    ],
+  };
+}
+
+export const SlideVertical: ExNavigationStyles = {
+  configureTransition: configureSpringTransition,
+  sceneAnimations: customForVertical,
+  navigationBarAnimations: {
+    forContainer: (props, delta) => {
+      const {
+        layout,
+        position,
+        scene,
+        scenes,
+      } = props;
+
+      const index = scene.index;
+
+      const meVisible = barVisibleForSceneIndex(scenes, index);
+
+      let offset = layout.initHeight;
+      let fadeOffset = 0;
+      if (delta === 0) {
+        // default state
+        offset = meVisible ? offset : 0;
+        fadeOffset = meVisible ? 1 : 0;
+      } else {
+        const prevVisible = barVisibleForSceneIndex(scenes, index + (delta > 0 ? -1 : 1));
+        if (!prevVisible && meVisible) {
+          // if pushing, slide, no fade. If popping, no slide, fade
+          offset = delta > 0 ? offset : 0;
+          fadeOffset = delta > 0 ? 1 : 0;
+        } else {
+          // if pushing, no slide, just fade. If popping, slide, no fade
+          offset = delta > 0 ? 0 : offset;
+          fadeOffset = delta > 0 ? 0 : 1;
+        }
+      }
+
+      return {
+        opacity: position.interpolate({
+          inputRange: [index - 1, index, index + 1],
+          outputRange: [
+            barVisibleForSceneIndex(scenes, index - 1) ? 1 : fadeOffset,
+            barVisibleForSceneIndex(scenes, index) ? 1 : fadeOffset,
+            barVisibleForSceneIndex(scenes, index + 1) ? 1 : fadeOffset,
+          ],
+        }),
+        transform: [
+          {
+            translateY: position.interpolate({
+              inputRange: [index - 1, index, index + 1],
+              outputRange: [
+                barVisibleForSceneIndex(scenes, index - 1) ? 0 : offset,
+                barVisibleForSceneIndex(scenes, index) ? 0 : offset,
+                barVisibleForSceneIndex(scenes, index + 1) ? 0 : offset,
+              ],
+            }),
+          },
+        ],
+      };
+    },
+    /**
+     * Crossfade the left view
+     */
+    forLeft: (props) => {
+      const {position, scene, scenes} = props;
+      const {index} = scene;
+      return {
+        opacity: position.interpolate({
+          inputRange: [index - 1, index, index + 1],
+          outputRange: [0, barVisibleForSceneIndex(scenes, index) ? 1 : 0, 0],
+        }),
+      };
+    },
+    /**
+     * Crossfade the title
+     */
+    forCenter: (props) => {
+      const {position, scene, scenes} = props;
+      const {index} = scene;
+      return {
+        opacity: position.interpolate({
+          inputRange: [index - 1, index, index + 1],
+          outputRange: [0, barVisibleForSceneIndex(scenes, index) ? 1 : 0, 0],
+        }),
+      };
+    },
+    /**
+     * Crossfade the right view
+     */
+    forRight: (props) => {
+      const {position, scene, scenes} = props;
+      const {index} = scene;
+      return {
+        opacity: position.interpolate({
+          inputRange: [index - 1, index, index + 1],
+          outputRange: [0, barVisibleForSceneIndex(scenes, index) ? 1 : 0, 0],
+        }),
+      };
+    },
+  },
+  gestures: CardStackPanResponder.forVertical,
+};
+
 export const FloatVertical: ExNavigationStyles = {
   configureTransition: configureSpringTransition,
   sceneAnimations: CardStackStyleInterpolator.forVertical,
