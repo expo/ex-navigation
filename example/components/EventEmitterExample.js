@@ -162,16 +162,16 @@ const styles = StyleSheet.create({
 
   badge: {
     backgroundColor: '#fff',
-    height: 32,
-    width: 32,
-    borderRadius: 16,
+    height: 28,
+    width: 28,
+    borderRadius: 14,
     margin: 8,
     justifyContent: 'center',
   },
 
   badgeText: {
     backgroundColor: 'transparent',
-    marginTop: -2,
+    marginTop: -1,
     color: '#0084FF',
     fontSize: 13,
     fontWeight: 'bold',
