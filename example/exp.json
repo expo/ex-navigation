@@ -1,6 +1,6 @@
 {
   name: "ExNavigationExample",
-  description: "Demonstrate usage of ex-navigation",
+  description: "Demonstrate usage of ex-navigation: https://github.com/exponentjs/ex-navigation",
   slug: "ex-navigation-example",
   sdkVersion: "10.0.0",
   version: "1.0.0",
