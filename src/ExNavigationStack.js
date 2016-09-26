@@ -45,7 +45,10 @@ const DEFAULT_ROUTE_CONFIG: ExNavigationConfig = {
   styles: Platform.OS === 'ios' ? NavigationStyles.SlideHorizontal : NavigationStyles.Fade,
 };
 
-const STATUSBAR_HEIGHT = Platform.OS === 'ios' ? 20 : (global.__exponent ? 24 : 0);
+const DEFAULT_STATUSBAR_HEIGHT = Platform.OS === 'ios' ? 20 : 25;
+const STATUSBAR_HEIGHT = Platform.OS === 'ios'
+  ? DEFAULT_STATUSBAR_HEIGHT
+  : (global.__exponent ? DEFAULT_STATUSBAR_HEIGHT : 0);
 
 type TransitionFn = (
   transitionProps: NavigationTransitionProps,
@@ -462,7 +465,7 @@ class ExNavigationStack extends PureComponent<any, Props, State> {
     let height = NavigationBar.DEFAULT_HEIGHT;
 
     if (latestRouteConfig.statusBar && latestRouteConfig.statusBar.translucent) {
-      height = NavigationBar.DEFAULT_HEIGHT_WITHOUT_STATUS_BAR + 24;
+      height = NavigationBar.DEFAULT_HEIGHT_WITHOUT_STATUS_BAR + DEFAULT_STATUSBAR_HEIGHT;
     };
 
     return height;
@@ -521,7 +524,7 @@ class ExNavigationStack extends PureComponent<any, Props, State> {
     // pass the statusBarHeight to headerComponent if statusBar is translucent
     let statusBarHeight = STATUSBAR_HEIGHT;
     if (latestRouteConfig.statusBar && latestRouteConfig.statusBar.translucent) {
-      statusBarHeight = 24;
+      statusBarHeight = DEFAULT_STATUSBAR_HEIGHT;
     }
 
     // TODO: add height here
