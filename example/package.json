@@ -4,7 +4,7 @@
   "private": true,
   "main": "main.js",
   "dependencies": {
-    "@exponent/ex-navigation": "file:///Users/brent/universe/libraries/ex-navigation",
+    "@exponent/ex-navigation": "file:../",
     "@exponent/vector-icons": "^1.0.4",
     "exponent": "^10.0.4",
     "lodash": "^4.13.1",
