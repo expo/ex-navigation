@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import {
   StyleSheet,
+  ScrollView,
   View,
   Text,
   TouchableWithoutFeedback,
@@ -69,7 +70,7 @@ export default class TranslucentBarExample extends Component {
   };
 
   state = {
-    buttons: Array.from({ length: 12 }).map((x, i) => ({ key: String(i), selected: false })),
+    buttons: Array.from({ length: 9 }).map((x, i) => ({ key: String(i), selected: false })),
   };
 
   componentWillMount() {
@@ -107,7 +108,7 @@ export default class TranslucentBarExample extends Component {
 
   render() {
     return (
-      <View style={styles.container}>
+      <ScrollView style={styles.container} contentContainerStyle={styles.content}>
         <View style={styles.row}>
           {this.state.buttons.map(button => (
             <TouchableWithoutFeedback key={button.key} onPress={() => this._toggleButton(button.key)}>
@@ -121,7 +122,7 @@ export default class TranslucentBarExample extends Component {
         <Text style={styles.description}>
           Tap on the badge in the navigation bar to reset selection.
         </Text>
-      </View>
+      </ScrollView>
     );
   }
 }
@@ -133,6 +134,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fafafa',
+  },
+
+  content: {
     padding: 4,
     alignItems: 'center',
   },
@@ -140,6 +144,7 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
     flexWrap: 'wrap',
+    paddingVertical: 4,
   },
 
   button: {
@@ -179,7 +184,7 @@ const styles = StyleSheet.create({
   },
 
   description: {
-    margin: 4,
+    margin: 8,
     color: '#222',
     fontSize: 16,
     lineHeight: 24,
