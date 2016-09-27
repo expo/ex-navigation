@@ -41,6 +41,7 @@ type Props = {
   navigation: any,
   navigationState: any,
   onRegisterNavigatorContext: () => any,
+  onChangeTab: (key: string) => any,
   onUnregisterNavigatorContext: (navigatorUID: string) => void,
   position: "top" | "bottom",
   pressColor?: string,
@@ -258,16 +259,6 @@ class ExNavigationSlidingTab extends PureComponent<any, Props, State> {
         tabItem.element = Children.only(tabItemProps.children);
       }
 
-      // const tabItemOnPress = () => {
-      //   this._setActiveTab(tabItemProps.id, index);
-      // };
-
-      // if (typeof tabItemProps.onPress === 'function') {
-      //   tabItem.onPress = tabItem.onPress.bind(this, tabItemOnPress);
-      // } else {
-      //   tabItem.onPress = tabItemOnPress;
-      // }
-
       return tabItem;
     });
 
@@ -283,9 +274,9 @@ class ExNavigationSlidingTab extends PureComponent<any, Props, State> {
     let key = tabItem.id;
     this._getNavigatorContext().jumpToTab(key);
 
-    // if (typeof this.props.onTabPress === 'function') {
-    //   this.props.onTabPress(key);
-    // }
+    if (typeof this.props.onChangeTab === 'function') {
+      this.props.onChangeTab(key);
+    }
   }
 
   _getNavigationState(props: ?Props): Object {
