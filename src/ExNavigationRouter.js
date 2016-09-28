@@ -303,8 +303,8 @@ type RouteCreator = {
   [key: string]: () => ExNavigationRouteDefinition
 }
 
-export function createRouter<RC: RouteCreator>(routesCreator: () => RC): ExNavigationRouter<RC> {
-  return new ExNavigationRouter(routesCreator);
+export function createRouter<RC: RouteCreator>(routesCreator: () => RC, options?: Object): ExNavigationRouter<RC> {
+  return new ExNavigationRouter(routesCreator, options);
 }
 
 function _isSerializable(obj: Object): boolean {
