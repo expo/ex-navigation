@@ -190,17 +190,19 @@ export class ExNavigationRouter<RC: RouteCreator> {
   _routes: { [routeName: string]: () => ExNavigationRouteDefinition };
   _routesCreator: Function;
   _routesCreated: bool;
+  _ignoreSerializableWarnings: bool;
 
-  constructor(routesCreator: Function) {
+  constructor(routesCreator: Function, options: Object = {}) {
     this._routesCreator = routesCreator;
     this._routes = {};
     this._routesCreated = false;
+    this._ignoreSerializableWarnings = !!options.ignoreSerializableWarnings;
   }
 
   getRoute(routeName: $Keys<RC>, routeParams: Object = {}): ExNavigationRoute {
     this._ensureRoute(routeName);
 
-    if (__DEV__) {
+    if (__DEV__ && !this._ignoreSerializableWarnings) {
       warning(
         _isSerializable(routeParams),
         'You passed a non-serializable value as route parameters. This may prevent navigation state ' +
