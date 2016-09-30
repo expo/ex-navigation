@@ -27,18 +27,18 @@ import ExNavigatorContext from './ExNavigatorContext';
 import ExNavigationAlertBar from './ExNavigationAlertBar';
 import * as NavigationStyles from './ExNavigationStyles';
 import * as Utils from './ExNavigationUtils';
+import SharedElementGroup from './shared-element/ExNavigationSharedElementGroup';
 
 const {
   Transitioner: NavigationTransitioner,
 } = NavigationExperimental;
-import NavigationTypeDefinition from 'react-native/Libraries/NavigationExperimental/NavigationTypeDefinition';
 
 import type {
-  NavigationSceneRendererProps, NavigationScene,
+  NavigationSceneRendererProps, NavigationScene, NavigationTransitionProps,
 } from 'NavigationTypeDefinition';
 import type { ExNavigationRoute, ExNavigationRouter } from './ExNavigationRouter';
 import type ExNavigationContext from './ExNavigationContext';
-import type { ExNavigationConfig, ExNavigationState } from './ExNavigationTypeDefinition';
+import type { ExNavigationConfig } from './ExNavigationTypeDefinition';
 import type { ExNavigationTabContext } from './tab/ExNavigationTab';
 
 const DEFAULT_ROUTE_CONFIG: ExNavigationConfig = {
@@ -46,6 +46,11 @@ const DEFAULT_ROUTE_CONFIG: ExNavigationConfig = {
 };
 
 const STATUSBAR_HEIGHT = Platform.OS === 'ios' ? 20 : (global.__exponent ? 24 : 0);
+
+type TransitionFn = (
+  transitionProps: NavigationTransitionProps,
+  prevTransitionProps: NavigationTransitionProps
+) => void;
 
 type Props = {
   defaultRouteConfig?: ExNavigationConfig,
@@ -57,8 +62,8 @@ type Props = {
   navigatorUID: string,
   onRegisterNavigatorContext: (navigatorUID: string, navigatorContext: ExNavigationStackContext) => void,
   onUnregisterNavigatorContext: (navigatorUID: string) => void,
-  onTransitionEnd: () => void,
-  onTransitionStart: () => void,
+  onTransitionStart: ?TransitionFn,
+  onTransitionEnd: ?TransitionFn,
 };
 
 type State = {
@@ -79,9 +84,13 @@ type ExNavigationSceneRendererProps = {
   route: ExNavigationRoute,
 } & NavigationSceneRendererProps;
 
+type TransitionOptions = {
+  transitionGroup?: string,
+};
+
 let ROUTE_LISTENER_INDEX = 0;
 
-type ExNavigationStackInstance = ReactComponent<*, *, *> & { _useAnimation: boolean, _routeListeners: { [listenerId: string]: Function } };
+type ExNavigationStackInstance = React.Component<*, *, *> & { _useAnimation: boolean, _routeListeners: { [listenerId: string]: Function } };
 
 declare var requestAnimationFrame: () => void;
 
@@ -113,12 +122,24 @@ export class ExNavigationStackContext extends ExNavigatorContext {
   }
 
   @debounce(500, true)
-  push(route: (ExNavigationRoute | string), params?: Object) {
+  push(
+    route: (ExNavigationRoute | string),
+    paramsOrOptions?: (Object | TransitionOptions),
+    options?: TransitionOptions
+  ) {
     if (typeof route == 'string') {
-      route = this.router.getRoute(route, params);
+      route = this.router.getRoute(route, paramsOrOptions);
+    } else {
+      options = paramsOrOptions;
     }
+    options = options || {};
 
     invariant(route !== null && route.key, 'Route is null or malformed.');
+
+    if (options.transitionGroup) {
+      route.config.styles = SharedElementGroup.getRouteStyle(options.transitionGroup);
+    }
+
     this.navigationContext.performAction(({ stacks }) => {
       stacks(this.navigatorUID).push(route);
     });
@@ -278,7 +299,6 @@ class ExNavigationStack extends PureComponent<any, Props, State> {
     if (!navigationState) {
       return null;
     }
-    const { onTransitionEnd, onTransitionStart } = this.props;
 
     return (
       <NavigationTransitioner
@@ -286,8 +306,8 @@ class ExNavigationStack extends PureComponent<any, Props, State> {
         navigationState={navigationState}
         render={this._renderTransitioner}
         configureTransition={this._configureTransition}
-        onTransitionEnd={onTransitionEnd}
-        onTransitionStart={onTransitionStart}
+        onTransitionStart={this._onTransitionStart}
+        onTransitionEnd={this._onTransitionEnd}
       />
     );
   }
@@ -380,7 +400,7 @@ class ExNavigationStack extends PureComponent<any, Props, State> {
       return null;
     }
 
-    const latestRoute = navigationState.routes[navigationState.routes.length - 1];
+    const latestRoute = transitionProps.scenes[transitionProps.scenes.length - 1].route;
     const latestRouteConfig = latestRoute.config;
     const { configureTransition } = latestRouteConfig.styles || {};
 
@@ -666,6 +686,48 @@ class ExNavigationStack extends PureComponent<any, Props, State> {
         </Animated.View>
       </View>
     );
+  };
+
+  _onTransitionStart = (transitionProps, prevTransitionProps) => {
+    const { route: nextRoute } = transitionProps.scene;
+    const { route: prevRoute } = prevTransitionProps.scene;
+
+    const nextRouteConfig = nextRoute.config;
+    if (nextRouteConfig.styles &&
+      nextRouteConfig.styles.onTransitionStart) {
+      nextRouteConfig.styles.onTransitionStart(transitionProps, prevTransitionProps);
+    }
+
+    const prevRouteConfg = prevRoute.config;
+    if (prevRouteConfg.styles &&
+      prevRouteConfg.styles.onTransitionStart) {
+      prevRouteConfg.styles.onTransitionStart(transitionProps, prevTransitionProps);
+    }
+
+    if (this.props.onTransitionStart) {
+      this.props.onTransitionStart(transitionProps, prevTransitionProps);
+    }
+  };
+
+  _onTransitionEnd = (transitionProps, prevTransitionProps) => {
+    const { route: nextRoute } = transitionProps.scene;
+    const { route: prevRoute } = prevTransitionProps.scene;
+
+    const nextRouteConfig = nextRoute.config;
+    if (nextRouteConfig.styles &&
+      nextRouteConfig.styles.onTransitionEnd) {
+      nextRouteConfig.styles.onTransitionEnd(transitionProps, prevTransitionProps);
+    }
+
+    const prevRouteConfg = prevRoute.config;
+    if (prevRouteConfg.styles &&
+      prevRouteConfg.styles.onTransitionEnd) {
+      prevRouteConfg.styles.onTransitionEnd(transitionProps, prevTransitionProps);
+    }
+
+    if (this.props.onTransitionEnd) {
+      this.props.onTransitionEnd(transitionProps, prevTransitionProps);
+    }
   };
 
   _getRouteAtIndex(scenes: Array<NavigationScene>, index: number): ExNavigationRoute {

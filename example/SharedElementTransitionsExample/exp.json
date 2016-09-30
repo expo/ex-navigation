@@ -1,0 +1,27 @@
+{
+  name: "SharedElements",
+  description: "Demonstrate usage of shared element transitions in ex-navigation",
+  slug: "shared-elements",
+  sdkVersion: "9.0.0",
+  version: "1.0.0",
+  orientation: "portrait",
+  primaryColor: "#cccccc",
+  androidStatusBarColor: "#cccccc",
+  iconUrl: "https://s3.amazonaws.com/exp-brand-assets/ExponentEmptyManifest_192.png",
+  notification: {
+    iconUrl: "https://s3.amazonaws.com/exp-us-standard/placeholder-push-icon.png",
+    color: "#000000"
+  },
+  loading: {
+    iconUrl: "https://s3.amazonaws.com/exp-brand-assets/ExponentEmptyManifest_192.png",
+  },
+  packagerOpts: {
+    assetExts: ["ttf"]
+  },
+  ios: {
+    bundleIdentifier: "com.getexponent.exnvagiation",
+  },
+  android: {
+    package: "com.getexponent.exnavigation",
+  },
+}
