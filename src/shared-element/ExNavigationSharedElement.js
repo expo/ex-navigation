@@ -48,7 +48,7 @@ export default class SharedElement extends Component {
     return cloneElement(childEl, {
       ref: c => { this._el = c; },
       collapsable: false,
-      onLayout: this._onLayout,
+      onLayout: this.measure,
     });
   }
 
@@ -95,27 +95,28 @@ export default class SharedElement extends Component {
     };
   }
 
-  _onLayout = () => {
-    // TODO: It would be nice if RN also passed the absolute screen position in
-    // this callback so we can use this instead of having to also call `measureInWindow`.
-
-    // If there is no element group uid it means this is being rendered from the
-    // overlay so we don't do any measurement.
-    if (!this.context.elementGroupUid) {
-      return;
-    }
-
-    UIManager.measureInWindow(
-      findNodeHandle(this._el),
-      (x, y, width, height) => {
-        const store = this.context.sharedElementStore;
-        store.dispatch({
-          type: 'UPDATE_METRICS_FOR_ELEMENT',
-          groupUid: this.context.elementGroupUid,
-          id: this.props.id,
-          metrics: { x, y, width, height },
-        });
+  measure = () => {
+    return new Promise((resolve) => {
+      // If there is no element group uid it means this is being rendered from the
+      // overlay so we don't do any measurement.
+      if (!this.context.elementGroupUid) {
+        resolve();
+        return;
       }
-    );
+
+      UIManager.measureInWindow(
+        findNodeHandle(this._el),
+        (x, y, width, height) => {
+          const store = this.context.sharedElementStore;
+          store.dispatch({
+            type: 'UPDATE_METRICS_FOR_ELEMENT',
+            groupUid: this.context.elementGroupUid,
+            id: this.props.id,
+            metrics: { x, y, width, height },
+          });
+          resolve();
+        }
+      );
+    });
   };
 }

@@ -229,23 +229,26 @@ export default class SharedElementGroup extends Component {
       throw new Error(`Cannot transition this group with id '${this.props.id}'. No matching group found in next route.`);
     }
 
-    // TODO: This needs to be called after the next scene SharedElements have
-    // rendered and updated their metrics.
-    setTimeout(() => {
-      store.dispatch({
-        type: 'START_TRANSITION_FOR_ELEMENT_GROUPS',
-        fromUid: scene.index > prevScene.index ? this._uid : otherGroup.uid,
-        toUid: scene.index > prevScene.index ? otherGroup.uid : this._uid,
-        progress: transitionProps.progress,
-      });
+    // $FlowFixMe
+    Promise.all(Object.values(this._elements).map(e => e.measure())).then(() => {
+      // TODO: This needs to be called after the next scene SharedElements have
+      // rendered and updated their metrics.
+      setTimeout(() => {
+        store.dispatch({
+          type: 'START_TRANSITION_FOR_ELEMENT_GROUPS',
+          fromUid: scene.index > prevScene.index ? this._uid : otherGroup.uid,
+          toUid: scene.index > prevScene.index ? otherGroup.uid : this._uid,
+          progress: transitionProps.progress,
+        });
 
-      if (this.props.onTransitionStart) {
-        this.props.onTransitionStart(transitionProps, prevTransitionProps);
-      }
-      if (otherGroup.style.onTransitionStart) {
-        otherGroup.style.onTransitionStart(transitionProps, prevTransitionProps, true);
-      }
-    }, 50);
+        if (this.props.onTransitionStart) {
+          this.props.onTransitionStart(transitionProps, prevTransitionProps);
+        }
+        if (otherGroup.style.onTransitionStart) {
+          otherGroup.style.onTransitionStart(transitionProps, prevTransitionProps, true);
+        }
+      }, 10);
+    });
   }
 
   _onTransitionEnd = (
