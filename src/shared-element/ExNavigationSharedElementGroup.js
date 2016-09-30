@@ -4,12 +4,10 @@
 
 import _ from 'lodash';
 import React, { cloneElement, Children, Component, PropTypes } from 'react';
-import findNodeHandle from 'react/lib/findNodeHandle';
 import {
   Animated,
   Easing,
   View,
-  UIManager,
 } from 'react-native';
 
 import UUID from 'uuid-js';
@@ -55,8 +53,6 @@ type Props = {
   onTransitionStart: ?TransitionFn,
   onTransitionEnd: ?TransitionFn,
 };
-
-// TODO: Fix flow errors all over this file.
 
 export default class SharedElementGroup extends Component {
   static getRouteStyle(transitionGroupEl) {
