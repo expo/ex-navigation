@@ -6,6 +6,7 @@ import {
   Image,
   Dimensions,
   ScrollView,
+  TouchableHighlight,
 } from 'react-native';
 import {
   TabNavigation,
@@ -22,7 +23,19 @@ export default class TabNavigationExample extends Component {
     navigationBar: {
       title: 'Tab Navigation',
     },
-  }
+  };
+
+  _goToFirstTab = () => {
+    this.props.navigation.performAction(({ tabs, stacks }) => {
+      tabs('tab-navigation').jumpToTab('first');
+    });
+  };
+
+  _goToSecondTab = () => {
+    this.props.navigation.performAction(({ tabs, stacks }) => {
+      tabs('tab-navigation').jumpToTab('second');
+    });
+  };
 
   render() {
     return (
@@ -37,7 +50,7 @@ export default class TabNavigationExample extends Component {
             selectedStyle={styles.selectedTab}
             renderTitle={this._renderTitle}
             renderIcon={(isSelected) => <Ionicons name="ios-boat-outline" size={24} color={getColor(isSelected)} />}>
-            <View style={styles.images}>
+            <View style={styles.row}>
               <Image style={styles.image} source={require('../assets/beetle.jpg')} />
               <Image style={styles.image} source={require('../assets/colorful-windows.jpg')} />
               <Image style={styles.image} source={require('../assets/paintbrush.jpg')} />
@@ -61,6 +74,14 @@ export default class TabNavigationExample extends Component {
             <ScrollView>
               <Image style={styles.cover} source={require('../assets/space.jpg')} />
               <View style={styles.article}>
+                <View style={styles.row}>
+                  <TouchableHighlight style={styles.button} onPress={this._goToFirstTab}>
+                    <Text style={styles.buttonText}>FIRST TAB</Text>
+                  </TouchableHighlight>
+                  <TouchableHighlight style={styles.button} onPress={this._goToSecondTab}>
+                    <Text style={styles.buttonText}>SECOND TAB</Text>
+                  </TouchableHighlight>
+                </View>
                 <Text style={styles.heading}>The Hitchhiker's Guide to the Galaxy</Text>
                 <Text style={styles.body}>For instance, on the planet Earth, man had always assumed that he was more intelligent than dolphins because he had achieved so much—the wheel, New York, wars and so on—whilst all the dolphins had ever done was muck about in the water having a good time. But conversely, the dolphins had always believed that they were far more intelligent than man—for precisely the same reasons.</Text>
               </View>
@@ -88,7 +109,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fafafa',
   },
 
-  images: {
+  row: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     padding: 4,
@@ -108,6 +129,19 @@ const styles = StyleSheet.create({
     height: 160,
     width: null,
     resizeMode: 'cover',
+  },
+
+  button: {
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    backgroundColor: '#0084FF',
+    borderRadius: 3,
+    marginRight: 8,
+  },
+
+  buttonText: {
+    fontSize: 13,
+    color: '#fff',
   },
 
   article: {
