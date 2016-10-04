@@ -88,9 +88,8 @@ export default class ExNavigationDrawerLayout extends React.Component {
             onPress={() => { this._handlePress(item); }}
             onLongPress={() => { this._handleLongPress(item); }}
             delayPressIn={0}
-            style={[isSelected ? item.selectedStyle : item.style]}
             background={item.nativeFeedbackBackground}>
-            <View style={styles.buttonContainer}>
+            <View style={[styles.buttonContainer, isSelected ? item.selectedStyle : item.style]}>
               {icon}
               {title}
             </View>
