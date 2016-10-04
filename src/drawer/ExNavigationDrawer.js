@@ -62,6 +62,7 @@ type Props = {
   navigatorUID: string,
   initialItem: string,
   renderHeader: () => React.Element<any>,
+  renderFooter: () => React.Element<any>,
   drawerWidth: 300,
   drawerStyle: any,
   children: Array<React.Element<any>>,
@@ -92,6 +93,9 @@ class ExNavigationDrawer extends PureComponent<any, Props, State> {
   static defaultProps = {
     drawerPosition: 'left',
     renderHeader() {
+      return null;
+    },
+    renderFooter() {
       return null;
     },
   };
@@ -138,6 +142,7 @@ class ExNavigationDrawer extends PureComponent<any, Props, State> {
     const drawerLayoutProps = {
       children: this.renderContent(),
       renderHeader: this.props.renderHeader,
+      renderFooter: this.props.renderFooter,
       selectedItem: navigationState.routes[navigationState.index].key,
       items: this.state.drawerItems,
       drawerPosition: this.props.drawerPosition,
