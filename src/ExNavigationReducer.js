@@ -161,9 +161,9 @@ class ExNavigationReducer {
       );
     }
 
-    const stackSize = n > navigatorState.routes.length ? 1 : -n;
-    const routes = navigatorState.routes.slice(0, stackSize);
-    const newNavigatorState = { ...navigatorState, index: 0, routes };
+    const sliceTo = n > navigatorState.routes.length ? 1 : -n;
+    const routes = navigatorState.routes.slice(0, sliceTo);
+    const newNavigatorState = { ...navigatorState, index: routes.length - 1, routes };
     return _updateNavigator(state, navigatorUID, newNavigatorState);
   }
 
