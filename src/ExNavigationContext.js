@@ -165,6 +165,11 @@ export default class NavigationContext {
             Actions.pop(uid)
           );
         },
+        popN: (n) => {
+          actions.push(
+            Actions.popN(uid, n)
+          );
+        },
         popToTop: () => {
           actions.push(
             Actions.popToTop(uid)

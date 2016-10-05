@@ -153,6 +153,13 @@ export class ExNavigationStackContext extends ExNavigatorContext {
   }
 
   @debounce(500, true)
+  popN(n: number) {
+    this.navigationContext.performAction(({ stacks }) => {
+      stacks(this.navigatorUID).popN(n);
+    });
+  }
+
+  @debounce(500, true)
   popToTop() {
     this.navigationContext.performAction(({ stacks }) => {
       stacks(this.navigatorUID).popToTop();

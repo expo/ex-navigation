@@ -43,6 +43,14 @@ export default class ExNavigationActions {
     };
   }
 
+  static popN(navigatorUID, n) {
+    return {
+      type: ActionTypes.POP_N,
+      navigatorUID,
+      n
+    };
+  }
+
   static popToTop(navigatorUID) {
     return {
       type: ActionTypes.POP_TO_TOP,
