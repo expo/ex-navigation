@@ -47,7 +47,7 @@ export default class ExNavigationActions {
     return {
       type: ActionTypes.POP_N,
       navigatorUID,
-      n
+      n,
     };
   }
 

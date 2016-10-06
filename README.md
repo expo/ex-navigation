@@ -275,8 +275,7 @@ As you saw above, you can `push` and `pop` routes. The following is a
 full list of functions that can be called on StackNavigation navigators.
 
 - `push`: add a route to the top of the stack
-- `pop`: remove the route at the top of the stack
-- `popN`: remove N routes from the top of the stack
+- `pop(n)`: remove n routes from the top of the stack, defaults to 1
 - `popToTop`: remove all but the first route from the stack
 - `replace`: replace the current route with a given route
 - `showLocalAlert`: show an alert bar with given text and styles

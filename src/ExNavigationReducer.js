@@ -161,7 +161,16 @@ class ExNavigationReducer {
       );
     }
 
-    const sliceTo = n > navigatorState.routes.length ? 1 : -n;
+    let sliceTo;
+    if (n > navigatorState.routes.length) {
+      if (__DEV__) {
+        console.warn('Tried to pop ' + n + ' routes, but only ' + navigatorState.routes.length + ' routes are available on the stack.');
+      }
+      sliceTo = 1;
+    } else {
+      sliceTo = -n;
+    }
+
     const routes = navigatorState.routes.slice(0, sliceTo);
     const newNavigatorState = { ...navigatorState, index: routes.length - 1, routes };
     return _updateNavigator(state, navigatorUID, newNavigatorState);
