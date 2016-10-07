@@ -62,7 +62,7 @@ import {
 } from 'react-native';
 
 /**
- *If you're using Exponent, uncomment the line below to import Exponent
+ * If you're using Exponent, uncomment the line below to import Exponent
  * BEFORE importing `@exponent/ex-navigation`. This sets the status bar
  * offsets properly.
  */
