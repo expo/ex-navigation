@@ -58,7 +58,7 @@ export default class ExNavigationDrawerLayout extends React.Component {
 
   _renderNavigationView = () => {
     return (
-      <View style={styles.navigationViewContainer}>
+      <View style={[styles.navigationViewContainer, this.props.style]}>
         <View>
           {this.props.renderHeader()}
         </View>
