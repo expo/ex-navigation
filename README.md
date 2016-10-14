@@ -564,11 +564,13 @@ function when creating the store and then manually provide the
 /* Your store definition, let's say state/Store.js */
 
 import { createNavigationEnabledStore, NavigationReducer } from '@exponent/ex-navigation';
-import { createStore } from 'redux';
+import { combineReducers, createStore } from 'redux';
+
 const createStoreWithNavigation = createNavigationEnabledStore({
   createStore,
   navigationStateKey: 'navigation',
 });
+
 const store = createStoreWithNavigation(
   /* combineReducers and your normal create store things here! */
   combineReducers({
@@ -583,6 +585,9 @@ export default store;
 ```javascript
 /* Your routes, Router.js */
 
+import { createRouter } from '@exponent/ex-navigation';
+import HomeScreen from './HomeScreen';
+
 export const Router = createRouter(() => ({
   home: () => HomeScreen,
 }));
@@ -592,7 +597,6 @@ export const Router = createRouter(() => ({
 /* The top level of your app, often in main.js or index.[ios/android].js */
 
 import {
-  createRouter,
   NavigationContext,
   NavigationProvider,
   StackNavigation,
