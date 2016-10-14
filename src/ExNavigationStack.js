@@ -546,8 +546,6 @@ class ExNavigationStack extends PureComponent<any, Props, State> {
       if (maybeLeftComponent) {
         return maybeLeftComponent;
       }
-
-      return null;
     }
 
     let menuButton = this._maybeRenderMenuButton('left', route, props);
@@ -606,8 +604,6 @@ class ExNavigationStack extends PureComponent<any, Props, State> {
       if (maybeRightComponent) {
         return maybeRightComponent;
       }
-
-      return null;
     }
 
     let menuButton = this._maybeRenderMenuButton('right', route, props);
