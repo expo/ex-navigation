@@ -139,7 +139,11 @@ export class ExNavigationRoute {
   };
 
   getBarTintColor = () => {
-    return _.get(this.config, 'navigationBar.tintColor');
+    const tintColor = _.get(this.config, 'navigationBar.tintColor');
+    if (typeof tintColor === 'function') {
+      return tintColor(this.params, this.config);
+    }
+    return tintColor;
   };
 
   getTitleStyle = () => {
