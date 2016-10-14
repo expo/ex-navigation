@@ -37,8 +37,8 @@ React Native that works seamlessly on Android and iOS.
 
 ## How to run the example project
 
-- `cd example/ExNavigationExample && npm install`
-- [Install the Exponent client and XDE](https://docs.getexponent.com/versions/v8.0.0/introduction/installation.html)
+- `cd example && npm install`
+- [Install the Exponent client and XDE](https://docs.getexponent.com/versions/v10.0.0/introduction/installation.html)
 - Open the project in XDE and open it in the Exponent client
 
 ## How is this different from what is built into React Native?
