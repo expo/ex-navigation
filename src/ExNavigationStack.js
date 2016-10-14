@@ -694,7 +694,6 @@ class ExNavigationStack extends PureComponent<any, Props, State> {
 
   _onTransitionStart = (transitionProps, prevTransitionProps) => {
     const { route: nextRoute } = transitionProps.scene;
-    const { route: prevRoute } = prevTransitionProps.scene;
 
     const nextRouteConfig = nextRoute.config;
     if (nextRouteConfig.styles &&
@@ -702,10 +701,13 @@ class ExNavigationStack extends PureComponent<any, Props, State> {
       nextRouteConfig.styles.onTransitionStart(transitionProps, prevTransitionProps);
     }
 
-    const prevRouteConfg = prevRoute.config;
-    if (prevRouteConfg.styles &&
-      prevRouteConfg.styles.onTransitionStart) {
-      prevRouteConfg.styles.onTransitionStart(transitionProps, prevTransitionProps);
+    if (prevTransitionProps) {
+      const { route: prevRoute } = prevTransitionProps.scene;
+      const prevRouteConfg = prevRoute.config;
+      if (prevRouteConfg.styles &&
+        prevRouteConfg.styles.onTransitionStart) {
+        prevRouteConfg.styles.onTransitionStart(transitionProps, prevTransitionProps);
+      }
     }
 
     if (this.props.onTransitionStart) {
@@ -715,7 +717,6 @@ class ExNavigationStack extends PureComponent<any, Props, State> {
 
   _onTransitionEnd = (transitionProps, prevTransitionProps) => {
     const { route: nextRoute } = transitionProps.scene;
-    const { route: prevRoute } = prevTransitionProps.scene;
 
     const nextRouteConfig = nextRoute.config;
     if (nextRouteConfig.styles &&
@@ -723,10 +724,13 @@ class ExNavigationStack extends PureComponent<any, Props, State> {
       nextRouteConfig.styles.onTransitionEnd(transitionProps, prevTransitionProps);
     }
 
-    const prevRouteConfg = prevRoute.config;
-    if (prevRouteConfg.styles &&
-      prevRouteConfg.styles.onTransitionEnd) {
-      prevRouteConfg.styles.onTransitionEnd(transitionProps, prevTransitionProps);
+    if (prevTransitionProps) {
+      const { route: prevRoute } = prevTransitionProps.scene;
+      const prevRouteConfg = prevRoute.config;
+      if (prevRouteConfg.styles &&
+        prevRouteConfg.styles.onTransitionEnd) {
+        prevRouteConfg.styles.onTransitionEnd(transitionProps, prevTransitionProps);
+      }
     }
 
     if (this.props.onTransitionEnd) {
