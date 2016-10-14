@@ -1,0 +1,9 @@
+{
+  "ignore_dirs": [
+    "node_modules",
+    "example-shared-element-transitions",
+    "example",
+    "__internal__",
+    "__github__"
+  ]
+}
