@@ -359,6 +359,9 @@ class ExNavigationStack extends PureComponent<any, Props, State> {
       if (parentNavigator.type === 'tab') {
         ((parentNavigator: any): ExNavigationTabContext).setNavigatorUIDForCurrentTab(this.state.navigatorUID);
       }
+      else if(parentNavigator.type === 'drawer') {
+        ((parentNavigator: any): ExNavigationDrawerContext).setNavigatorUIDForCurrentItem(this.state.navigatorUID);
+      }
     }
 
 
