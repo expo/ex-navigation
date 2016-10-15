@@ -1,6 +1,6 @@
 {
   "name": "@exponent/ex-navigation",
-  "version": "1.7.0-rc-3",
+  "version": "1.7.0",
   "description": "Route-centric navigation libary for React Native.",
   "main": "./src/ExNavigation.js",
   "scripts": {
@@ -33,7 +33,7 @@
     "react-clone-referenced-element": "^1.0.1",
     "react-mixin": "^3.0.5",
     "react-native-drawer-layout": "^1.0.0",
-    "react-native-tab-view": "0.0.29",
+    "react-native-tab-view": "^0.0.33",
     "react-redux": "^4.4.5",
     "react-static-container": "^1.0.0",
     "react-timer-mixin": "^0.13.3",

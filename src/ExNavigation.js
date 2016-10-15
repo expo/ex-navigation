@@ -9,6 +9,7 @@ export { default as StackNavigation } from './ExNavigationStack';
 
 export { default as TabNavigation } from './tab/ExNavigationTab';
 export { default as TabNavigationItem } from './tab/ExNavigationTabItem';
+export { default as TabBar } from './tab/ExNavigationTabBar';
 export { default as TabBadge } from './ExNavigationBadge';
 
 export { default as SlidingTabNavigation } from './sliding-tab/ExNavigationSlidingTab';

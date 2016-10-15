@@ -20,7 +20,7 @@ import ExNavigatorContext from '../ExNavigatorContext';
 import ExNavigationBar from '../ExNavigationBar';
 import ExNavigationSlidingTabItem from './ExNavigationSlidingTabItem';
 import { ExNavigationTabContext } from '../tab/ExNavigationTab';
-import { TabViewAnimated, TabViewPage, TabBarTop, TabBar } from 'react-native-tab-view';
+import { TabViewAnimated, TabViewPagerPan, TabBarTop, TabBar } from 'react-native-tab-view';
 import { createNavigatorComponent } from '../ExNavigationComponents';
 
 import type ExNavigationContext from '../ExNavigationContext';
@@ -179,19 +179,19 @@ class ExNavigationSlidingTab extends PureComponent<any, Props, State> {
         lazy={this.props.lazy}
         style={[styles.container, this.props.style]}
         navigationState={navigationState}
-        renderScene={this._renderPage}
+        renderScene={this._renderScene}
+        renderPager={this._renderPager}
         renderHeader={this.props.renderHeader || this._renderHeader}
         onRequestChangeTab={this._setActiveTab}
       />
     );
   }
 
-  _renderPage = (props) => {
+  _renderPager = (props) => {
     return (
-      <TabViewPage
+      <TabViewPagerPan
         {...props}
         swipeEnabled={this.props.swipeEnabled}
-        renderScene={this._renderScene}
       />
     );
   }
