@@ -16,6 +16,7 @@ import TouchableNativeFeedbackSafe from '@exponent/react-native-touchable-native
 
 type Props = {
   renderHeader: () => React.Element<any>,
+  renderFooter: () => Reac.Element<any>,
   width: number,
   children: React.Element<any>,
   drawerPosition: 'left' | 'right',
@@ -66,6 +67,10 @@ export default class ExNavigationDrawerLayout extends React.Component {
         <ScrollView contentContainerStyle={styles.navigationViewScrollableContentContainer}>
           {this._renderDrawerItems()}
         </ScrollView>
+
+        <View>
+          {this.props.renderFooter()}
+        </View>
       </View>
     );
   }
