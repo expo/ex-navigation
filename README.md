@@ -37,8 +37,8 @@ React Native that works seamlessly on Android and iOS.
 
 ## How to run the example project
 
-- `cd example/ExNavigationExample && npm install`
-- [Install the Exponent client and XDE](https://docs.getexponent.com/versions/v8.0.0/introduction/installation.html)
+- `cd example && npm install`
+- [Install the Exponent client and XDE](https://docs.getexponent.com/versions/v10.0.0/introduction/installation.html)
 - Open the project in XDE and open it in the Exponent client
 
 ## How is this different from what is built into React Native?
@@ -60,6 +60,13 @@ import {
   Text,
   View,
 } from 'react-native';
+
+/**
+ * If you're using Exponent, uncomment the line below to import Exponent
+ * BEFORE importing `@exponent/ex-navigation`. This sets the status bar
+ * offsets properly.
+ */
+// import Exponent from 'exponent';
 
 import {
   createRouter,
@@ -557,11 +564,13 @@ function when creating the store and then manually provide the
 /* Your store definition, let's say state/Store.js */
 
 import { createNavigationEnabledStore, NavigationReducer } from '@exponent/ex-navigation';
-import { createStore } from 'redux';
+import { combineReducers, createStore } from 'redux';
+
 const createStoreWithNavigation = createNavigationEnabledStore({
   createStore,
   navigationStateKey: 'navigation',
 });
+
 const store = createStoreWithNavigation(
   /* combineReducers and your normal create store things here! */
   combineReducers({
@@ -576,6 +585,9 @@ export default store;
 ```javascript
 /* Your routes, Router.js */
 
+import { createRouter } from '@exponent/ex-navigation';
+import HomeScreen from './HomeScreen';
+
 export const Router = createRouter(() => ({
   home: () => HomeScreen,
 }));
@@ -585,7 +597,6 @@ export const Router = createRouter(() => ({
 /* The top level of your app, often in main.js or index.[ios/android].js */
 
 import {
-  createRouter,
   NavigationContext,
   NavigationProvider,
   StackNavigation,
