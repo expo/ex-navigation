@@ -25,12 +25,8 @@ export default class CustomBarExample extends Component {
     navigationBar: {
       title: 'Custom Bars',
       renderBackground: (props) => <Components.LinearGradient
-        colors={['#4c669f', '#3b5998', '#192f6a']}
-        style={{
-            flex: 1, 
-            width: Dimensions.get('window').width 
-            //NOTE(cem2ran): haven't been able to determine the correct styling to fill width  
-        }}>
+        colors={['#c11f1e', '#b31217']}
+        style={{flex: 1}}>
       </Components.LinearGradient>
     },
   }

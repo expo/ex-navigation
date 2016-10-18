@@ -242,7 +242,7 @@ export default class ExNavigationBar extends PureComponent {
     });
 
     let backgroundComponents = scenesProps.map(this._renderBackground, this);
-    console.log(containerStyle);
+
     return (
       <View pointerEvents={this.props.visible ? 'auto' : 'none'} style={styles.wrapper}>
         {isTranslucent && <Components.BlurView style={[styles.translucentUnderlay, {height}]} />}
@@ -281,7 +281,7 @@ export default class ExNavigationBar extends PureComponent {
   _renderBackground(props, options) {
     return this._renderSubView(
       props,
-      'background',
+      'backgroundUnderlay',
       this.props.renderBackgroundComponent,
       this.props.interpolator.forCenter,
       options,
@@ -383,6 +383,14 @@ const styles = StyleSheet.create({
   },
 
   translucentUnderlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+  },
+
+  backgroundUnderlay: {
     position: 'absolute',
     top: 0,
     left: 0,
