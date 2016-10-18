@@ -169,6 +169,7 @@ export default class ExNavigationBar extends PureComponent {
     renderLeftComponent: PropTypes.func,
     renderRightComponent: PropTypes.func,
     renderTitleComponent: PropTypes.func,
+    renderBackgroundComponent: PropTypes.func,
     barHeight: PropTypes.number.isRequired,
     statusBarHeight: PropTypes.number.isRequired,
     style: View.propTypes.style,
@@ -240,11 +241,14 @@ export default class ExNavigationBar extends PureComponent {
       });
     });
 
+    let backgroundComponents = scenesProps.map(this._renderBackground, this);
+    console.log(containerStyle);
     return (
       <View pointerEvents={this.props.visible ? 'auto' : 'none'} style={styles.wrapper}>
         {isTranslucent && <Components.BlurView style={[styles.translucentUnderlay, {height}]} />}
 
         <Animated.View style={containerStyle}>
+          {backgroundComponents}
           <View style={[styles.appbarInnerContainer, {top: this.props.statusBarHeight}]}>
             {titleComponents}
             {leftComponents}
@@ -269,6 +273,16 @@ export default class ExNavigationBar extends PureComponent {
       props,
       'title',
       this.props.renderTitleComponent,
+      this.props.interpolator.forCenter,
+      options,
+    );
+  }
+
+  _renderBackground(props, options) {
+    return this._renderSubView(
+      props,
+      'background',
+      this.props.renderBackgroundComponent,
       this.props.interpolator.forCenter,
       options,
     );

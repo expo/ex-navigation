@@ -8,6 +8,7 @@ import TabNavigationExample from './components/TabNavigationExample';
 import SlidingTabNavigationExample from './components/SlidingTabNavigationExample';
 import AlertBarsExample from './components/AlertBarsExample';
 import TranslucentBarExample from './components/TranslucentBarExample';
+import CustomBarExample from './components/CustomBarExample';
 import EventEmitterExample from './components/EventEmitterExample';
 
 import {
@@ -36,6 +37,7 @@ export const Router = createRouter(() => ({
   slidingTabNavigationExample: () => SlidingTabNavigationExample,
   alertBarsExample: () => AlertBarsExample,
   translucentBarExample: () => TranslucentBarExample,
+  customBarExample: () => CustomBarExample,
   eventEmitterExample: () => EventEmitterExample,
 }));
 

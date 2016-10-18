@@ -46,6 +46,11 @@ export default class HomeScreen extends Component {
           onPress={this._goToScreen('translucentBarExample')}
         />
         <ListItem
+          title="Custom Background Bars"
+          description="Custom backgrounds bars"
+          onPress={this._goToScreen('customBarExample')}
+        />
+        <ListItem
           title="Event Emitter"
           description="Communication with navigation bar using events"
           onPress={this._goToScreen('eventEmitterExample')}

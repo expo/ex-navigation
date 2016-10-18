@@ -47,6 +47,7 @@ export type ExNavigationBarConfig = {
   translucent?: bool,
   renderLeft?: (state: ExNavigationState, props: NavigationSceneRendererProps) => ?React.Element<{}>,
   renderTitle?: (state: ExNavigationState, props: NavigationSceneRendererProps) => ?React.Element<{}>,
+  renderBackground?: (state: ExNavigationState, props: NavigationSceneRendererProps) => ?React.Element<{}>,
   renderRight?: (state: ExNavigationState, props: NavigationSceneRendererProps) => ?React.Element<{}>,
 };
 
