@@ -40,7 +40,6 @@ export type ExNavigationBarConfig = {
   titleStyle?: Object | number,
   tintColor?: string,
   backgroundColor?: string | Function,
-  backgroundImage?: string | Function,
   borderBottomWidth?: number,
   elevation?: number,
   borderBottomColor?: string,
@@ -49,6 +48,7 @@ export type ExNavigationBarConfig = {
   renderLeft?: (state: ExNavigationState, props: NavigationSceneRendererProps) => ?React.Element<{}>,
   renderTitle?: (state: ExNavigationState, props: NavigationSceneRendererProps) => ?React.Element<{}>,
   renderRight?: (state: ExNavigationState, props: NavigationSceneRendererProps) => ?React.Element<{}>,
+  renderBackground?: (state: ExNavigationState, props: NavigationSceneRendererProps) => ?React.Element<{}>,
 };
 
 export type ExNavigationDrawerConfig = {

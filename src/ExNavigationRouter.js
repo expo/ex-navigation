@@ -179,14 +179,6 @@ export class ExNavigationRoute {
     return result;
   };
 
-  getBarBackgroundImage = () => {
-    const backgroundImage = _.get(this.config, 'navigationBar.backgroundImage');
-    if (typeof backgroundImage === 'function') {
-      return backgroundImage(this.params, this.config);
-    }
-    return backgroundImage;
-  };
-
   clone() {
     return new ExNavigationRoute({
       key: this.key,

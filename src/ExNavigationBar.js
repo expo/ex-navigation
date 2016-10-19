@@ -7,7 +7,6 @@ import {
   Text,
   TouchableOpacity,
   View,
-  Dimensions,
 } from 'react-native';
 import PureComponent from './utils/PureComponent';
 import { unsupportedNativeView } from './ExUnsupportedNativeView';
@@ -32,8 +31,6 @@ const BACKGROUND_COLOR = Platform.OS === 'ios' ? '#EFEFF2' : '#FFF';
 const BORDER_BOTTOM_COLOR = 'rgba(0, 0, 0, .15)';
 const BORDER_BOTTOM_WIDTH = Platform.OS === 'ios' ? StyleSheet.hairlineWidth : 0;
 const BACK_BUTTON_HIT_SLOP = { top: 0, bottom: 0, left: 0, right: 30 };
-
-const window = Dimensions.get('window');
 
 class ExNavigationBarTitle extends PureComponent {
   render() {
@@ -172,6 +169,7 @@ export default class ExNavigationBar extends PureComponent {
     renderLeftComponent: PropTypes.func,
     renderRightComponent: PropTypes.func,
     renderTitleComponent: PropTypes.func,
+    renderBackgroundComponent: PropTypes.func,
     barHeight: PropTypes.number.isRequired,
     statusBarHeight: PropTypes.number.isRequired,
     style: View.propTypes.style,
@@ -222,7 +220,6 @@ export default class ExNavigationBar extends PureComponent {
 
     // TODO: this should come from the latest scene config
     const height = this.props.barHeight + this.props.statusBarHeight;
-    const backgroundImage = this.props.backgroundImage;
 
     let styleFromRouteConfig = this.props.latestRoute.getBarStyle();
     let isTranslucent = !!this.props.latestRoute.getTranslucent();
@@ -244,12 +241,14 @@ export default class ExNavigationBar extends PureComponent {
       });
     });
 
+    let backgroundComponents = scenesProps.map(this._renderBackground, this);
+
     return (
       <View pointerEvents={this.props.visible ? 'auto' : 'none'} style={styles.wrapper}>
         {isTranslucent && <Components.BlurView style={[styles.translucentUnderlay, {height}]} />}
 
         <Animated.View style={containerStyle}>
-          {isTranslucent ? null : <Image style={[styles.backgroundImage, {height}]} source={backgroundImage} />}
+            {isTranslucent ? null : backgroundComponents}
           <View style={[styles.appbarInnerContainer, {top: this.props.statusBarHeight}]}>
             {titleComponents}
             {leftComponents}
@@ -257,6 +256,15 @@ export default class ExNavigationBar extends PureComponent {
           </View>
         </Animated.View>
       </View>
+    );
+  }
+
+  _renderBackground(props, options) {
+    return this._renderSubView(
+      props,
+      'background',
+      this.props.renderBackgroundComponent,
+      options,
     );
   }
 
@@ -332,6 +340,21 @@ export default class ExNavigationBar extends PureComponent {
     }
 
     const pointerEvents = offset !== 0 || isStale ? 'none' : 'box-none';
+
+    if (name === 'background') {
+      return (
+        <View
+          pointerEvents={pointerEvents}
+          key={name + '_' + key}
+          style={[
+            styles[name],
+            layoutStyle,
+          ]}>
+          {subView}
+        </View>
+      );
+    }
+
     return (
       <Animated.View
         pointerEvents={pointerEvents}
@@ -399,14 +422,6 @@ const styles = StyleSheet.create({
   appbarTranslucent: {
     backgroundColor: 'rgba(255,255,255,0.7)',
   },
-  backgroundImage: {
-    top:0,
-    left:0,
-    right:0,
-    position: 'absolute',
-    resizeMode: 'cover', 
-    width: window.width,
-  },
   appbarInnerContainer: {
     position: 'absolute',
     left: 0,
@@ -435,6 +450,13 @@ const styles = StyleSheet.create({
     position: 'absolute',
     right: 0,
     top: 0,
+  },
+
+  background: {
+    top: 0,
+    left: 0,
+    right: 0,
+    position: 'absolute',
   },
 });
 

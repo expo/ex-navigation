@@ -500,9 +500,6 @@ class ExNavigationStack extends PureComponent<any, Props, State> {
       latestRouteConfig.navigationBar &&
       latestRouteConfig.navigationBar.visible !== false;
 
-    // Get backgroundImage from props
-    const backgroundImage = latestRouteConfig.navigationBar.backgroundImage;  
-
     // TODO: add height and statusBarHeight options here
 
     return (
@@ -515,7 +512,7 @@ class ExNavigationStack extends PureComponent<any, Props, State> {
         renderLeftComponent={this._renderLeftComponentForHeader}
         renderTitleComponent={this._renderTitleComponentForHeader}
         renderRightComponent={this._renderRightComponentForHeader}
-        backgroundImage={backgroundImage}
+        renderBackgroundComponent={this._renderBackgroundComponentForHeader}
       />
     );
   };
@@ -538,6 +535,17 @@ class ExNavigationStack extends PureComponent<any, Props, State> {
     }
 
     return result;
+  }
+
+  _renderBackgroundComponentForHeader = (props) => { //eslint-disable-line react/display-name
+    const { scene: { route } } = props;
+    const routeConfig = route.config;
+
+     if (routeConfig.navigationBar && typeof routeConfig.navigationBar.renderBackground === 'function') {
+      return routeConfig.navigationBar.renderBackground(route, props);
+    }
+
+    return null;
   }
 
   _renderLeftComponentForHeader = (props) => { //eslint-disable-line react/display-name
