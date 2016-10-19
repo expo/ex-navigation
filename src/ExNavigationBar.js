@@ -7,6 +7,7 @@ import {
   Text,
   TouchableOpacity,
   View,
+  Dimensions,
 } from 'react-native';
 import PureComponent from './utils/PureComponent';
 import { unsupportedNativeView } from './ExUnsupportedNativeView';
@@ -31,6 +32,8 @@ const BACKGROUND_COLOR = Platform.OS === 'ios' ? '#EFEFF2' : '#FFF';
 const BORDER_BOTTOM_COLOR = 'rgba(0, 0, 0, .15)';
 const BORDER_BOTTOM_WIDTH = Platform.OS === 'ios' ? StyleSheet.hairlineWidth : 0;
 const BACK_BUTTON_HIT_SLOP = { top: 0, bottom: 0, left: 0, right: 30 };
+
+const window = Dimensions.get('window');
 
 class ExNavigationBarTitle extends PureComponent {
   render() {
@@ -219,6 +222,7 @@ export default class ExNavigationBar extends PureComponent {
 
     // TODO: this should come from the latest scene config
     const height = this.props.barHeight + this.props.statusBarHeight;
+    const backgroundImage = this.props.backgroundImage;
 
     let styleFromRouteConfig = this.props.latestRoute.getBarStyle();
     let isTranslucent = !!this.props.latestRoute.getTranslucent();
@@ -245,6 +249,7 @@ export default class ExNavigationBar extends PureComponent {
         {isTranslucent && <Components.BlurView style={[styles.translucentUnderlay, {height}]} />}
 
         <Animated.View style={containerStyle}>
+          {isTranslucent ? null : <Image style={[styles.backgroundImage, {height}]} source={backgroundImage} />}
           <View style={[styles.appbarInnerContainer, {top: this.props.statusBarHeight}]}>
             {titleComponents}
             {leftComponents}
@@ -393,6 +398,14 @@ const styles = StyleSheet.create({
   },
   appbarTranslucent: {
     backgroundColor: 'rgba(255,255,255,0.7)',
+  },
+  backgroundImage: {
+    top:0,
+    left:0,
+    right:0,
+    position: 'absolute',
+    resizeMode: 'cover', 
+    width: window.width,
   },
   appbarInnerContainer: {
     position: 'absolute',
