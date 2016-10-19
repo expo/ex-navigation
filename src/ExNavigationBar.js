@@ -169,6 +169,7 @@ export default class ExNavigationBar extends PureComponent {
     renderLeftComponent: PropTypes.func,
     renderRightComponent: PropTypes.func,
     renderTitleComponent: PropTypes.func,
+    renderBackgroundComponent: PropTypes.func,
     barHeight: PropTypes.number.isRequired,
     statusBarHeight: PropTypes.number.isRequired,
     style: View.propTypes.style,
@@ -240,11 +241,14 @@ export default class ExNavigationBar extends PureComponent {
       });
     });
 
+    let backgroundComponents = scenesProps.map(this._renderBackground, this);
+
     return (
       <View pointerEvents={this.props.visible ? 'auto' : 'none'} style={styles.wrapper}>
         {isTranslucent && <Components.BlurView style={[styles.translucentUnderlay, {height}]} />}
 
         <Animated.View style={containerStyle}>
+            {isTranslucent ? null : backgroundComponents}
           <View style={[styles.appbarInnerContainer, {top: this.props.statusBarHeight}]}>
             {titleComponents}
             {leftComponents}
@@ -252,6 +256,15 @@ export default class ExNavigationBar extends PureComponent {
           </View>
         </Animated.View>
       </View>
+    );
+  }
+
+  _renderBackground(props, options) {
+    return this._renderSubView(
+      props,
+      'background',
+      this.props.renderBackgroundComponent,
+      options,
     );
   }
 
@@ -327,6 +340,21 @@ export default class ExNavigationBar extends PureComponent {
     }
 
     const pointerEvents = offset !== 0 || isStale ? 'none' : 'box-none';
+
+    if (name === 'background') {
+      return (
+        <View
+          pointerEvents={pointerEvents}
+          key={name + '_' + key}
+          style={[
+            styles[name],
+            layoutStyle,
+          ]}>
+          {subView}
+        </View>
+      );
+    }
+
     return (
       <Animated.View
         pointerEvents={pointerEvents}
@@ -422,6 +450,13 @@ const styles = StyleSheet.create({
     position: 'absolute',
     right: 0,
     top: 0,
+  },
+
+  background: {
+    top: 0,
+    left: 0,
+    right: 0,
+    position: 'absolute',
   },
 });
 

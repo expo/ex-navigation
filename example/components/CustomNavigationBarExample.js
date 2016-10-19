@@ -1,12 +1,18 @@
 import React, { Component } from 'react';
 import {
   View,
+  Text,
   StyleSheet,
+  Platform,
+  Dimensions,
+  Image,
 } from 'react-native';
-import ListItem from './ListItem';
 import { Router } from '../main';
+import ListItem from './ListItem';
 
-export default class HomeScreen extends Component {
+const window = Dimensions.get('window');
+
+export default class CustomNavigationBarExample extends Component {
   /**
     * This is where we can define any route configuration for this
     * screen. For example, in addition to the navigationBar title we
@@ -14,7 +20,9 @@ export default class HomeScreen extends Component {
     */
   static route = {
     navigationBar: {
-      title: 'Examples',
+      title: 'Custom NavigationBar',
+      tintColor: "#FFF",
+      renderBackground: (props) => <View style={[{width: window.width }]}><Image style={[styles.bgImage]} source={{uri: 'http://il9.picdn.net/shutterstock/videos/3951179/thumb/1.jpg'}} resizeMode={'cover'} /></View>,
     },
   }
 
@@ -25,6 +33,7 @@ export default class HomeScreen extends Component {
   render() {
     return (
       <View style={styles.container}>
+        <Text style={styles.title}>Examples</Text>
         <ListItem
           title="Tab Navigation"
           description="iOS style tab bar based navigation"
@@ -40,21 +49,6 @@ export default class HomeScreen extends Component {
           description="Local alert bars for showing temporary messages"
           onPress={this._goToScreen('alertBarsExample')}
         />
-        <ListItem
-          title="Translucent Bars"
-          description="Blurred translucent navigation and tab bar on iOS"
-          onPress={this._goToScreen('translucentBarExample')}
-        />
-        <ListItem
-          title="Event Emitter"
-          description="Communication with navigation bar using events"
-          onPress={this._goToScreen('eventEmitterExample')}
-        />
-        <ListItem
-          title="Custom NavigationBar"
-          description="Custom Navigationbar background using renderBackground"
-          onPress={this._goToScreen('customNavigationBarExample')}
-        />
       </View>
     );
   }
@@ -64,5 +58,20 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fafafa',
+  },
+  title: {
+    fontWeight: 'bold',
+    fontSize: 32,
+    margin: 8,
+  },
+  version: {
+    fontSize: 18,
+  },
+  bgImage: {
+    top: 0,
+    left: 0,
+    right: 0,
+    height: Platform.OS === 'ios' ? 64 : 65,
+    width: window.width,   
   },
 });
