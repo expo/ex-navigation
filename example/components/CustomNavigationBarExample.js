@@ -22,7 +22,7 @@ export default class CustomNavigationBarExample extends Component {
     navigationBar: {
       title: 'Custom NavigationBar',
       tintColor: "#FFF",
-      renderBackground: (props) => <View style={[{width: window.width }]}><Image style={[styles.bgImage]} source={{uri: 'http://il9.picdn.net/shutterstock/videos/3951179/thumb/1.jpg'}} resizeMode={'cover'} /></View>,
+      renderBackground: (props) => <View><Image style={[styles.bgImage]} source={{uri: 'http://il9.picdn.net/shutterstock/videos/3951179/thumb/1.jpg'}} resizeMode={'cover'} /></View>,
     },
   }
 
@@ -72,6 +72,5 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     height: Platform.OS === 'ios' ? 64 : 65,
-    width: window.width,   
   },
 });

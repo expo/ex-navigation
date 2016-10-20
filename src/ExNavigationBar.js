@@ -241,14 +241,14 @@ export default class ExNavigationBar extends PureComponent {
       });
     });
 
-    let backgroundComponents = scenesProps.map(this._renderBackground, this);
+    const backgroundComponents = scenesProps.map(this._renderBackground, this);
 
     return (
       <View pointerEvents={this.props.visible ? 'auto' : 'none'} style={styles.wrapper}>
         {isTranslucent && <Components.BlurView style={[styles.translucentUnderlay, {height}]} />}
 
         <Animated.View style={containerStyle}>
-            {isTranslucent ? null : backgroundComponents}
+            {backgroundComponents}
           <View style={[styles.appbarInnerContainer, {top: this.props.statusBarHeight}]}>
             {titleComponents}
             {leftComponents}
@@ -344,7 +344,7 @@ export default class ExNavigationBar extends PureComponent {
     if (name === 'background') {
       return (
         <View
-          pointerEvents={pointerEvents}
+          pointerEvents={'none'}
           key={name + '_' + key}
           style={[
             styles[name],
@@ -456,6 +456,7 @@ const styles = StyleSheet.create({
     top: 0,
     left: 0,
     right: 0,
+    bottom: 0,
     position: 'absolute',
   },
 });
