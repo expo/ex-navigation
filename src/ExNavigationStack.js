@@ -545,7 +545,7 @@ class ExNavigationStack extends PureComponent<any, Props, State> {
       let maybeBackgroundComponent = routeConfig.navigationBar.renderBackground(route, props);
 
       if (maybeBackgroundComponent) {
-        return maybeBackgroundComponent
+        return maybeBackgroundComponent;
       }
 
       return null;
