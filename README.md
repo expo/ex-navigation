@@ -374,6 +374,8 @@ will be rendered in the left position of the `navigationBar`.
 will be rendered in the title position of the `navigationBar`.
 - `renderRight` - a function that should return a React component that
 will be rendered in the right position of the `navigationBar`.
+- `renderBackground` - a function that should return a React component that 
+will be rendered in the background of the `navigationBar`.
 
 ## TabNavigation
 
