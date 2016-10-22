@@ -41,6 +41,8 @@ React Native that works seamlessly on Android and iOS.
 - [Install the Exponent client and XDE](https://docs.getexponent.com/versions/v10.0.0/introduction/installation.html)
 - Open the project in XDE and open it in the Exponent client
 
+or use this link in your mobile phone: https://getexponent.com/@community/ex-navigation-example
+
 ## How is this different from what is built into React Native?
 
 `NavigationExperimental` ships with React Native, it is powerful and
@@ -483,7 +485,7 @@ class DrawerNavigationLayout extends React.Component {
       visible: false,
     }
   };
-  
+
   render() {
     return (
       <DrawerNavigation
@@ -502,7 +504,7 @@ class DrawerNavigationLayout extends React.Component {
             initialRoute={Router.getRoute('home')}
           />
         </DrawerNavigationItem>
-        
+
         <DrawerNavigationItem
           id='about'
           selectedStyle={styles.selectedItemStyle}
@@ -513,11 +515,11 @@ class DrawerNavigationLayout extends React.Component {
             initialRoute={Router.getRoute('about')}
           />
         </DrawerNavigationItem>
-        
+
       </DrawerNavigation>
     );
   }
-  
+
   _renderHeader = () => {
     return (
       <View style={styles.header}>
@@ -542,11 +544,11 @@ const styles = StyleSheet.create({
   selectedItemStyle: {
     backgroundColor: 'blue'
   },
-  
+
   titleText: {
     fontWeight: 'bold'
   },
-  
+
   selectedTitleText: {
     color: 'white'
   }
