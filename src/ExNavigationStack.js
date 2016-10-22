@@ -542,11 +542,15 @@ class ExNavigationStack extends PureComponent<any, Props, State> {
     const routeConfig = route.config;
 
      if (routeConfig.navigationBar && typeof routeConfig.navigationBar.renderBackground === 'function') {
-      return routeConfig.navigationBar.renderBackground(route, props);
-    }
+      let maybeBackgroundComponent = routeConfig.navigationBar.renderBackground(route, props);
 
-    return null;
-  }
+      if (maybeBackgroundComponent) {
+        return maybeBackgroundComponent
+      }
+
+      return null;
+    }
+  };
 
   _renderLeftComponentForHeader = (props) => { //eslint-disable-line react/display-name
     const { scene: { route } } = props;
