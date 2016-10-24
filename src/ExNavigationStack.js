@@ -512,6 +512,7 @@ class ExNavigationStack extends PureComponent<any, Props, State> {
         renderLeftComponent={this._renderLeftComponentForHeader}
         renderTitleComponent={this._renderTitleComponentForHeader}
         renderRightComponent={this._renderRightComponentForHeader}
+        renderBackgroundComponent={this._renderBackgroundComponentForHeader}
       />
     );
   };
@@ -535,6 +536,21 @@ class ExNavigationStack extends PureComponent<any, Props, State> {
 
     return result;
   }
+
+  _renderBackgroundComponentForHeader = (props) => { //eslint-disable-line react/display-name
+    const { scene: { route } } = props;
+    const routeConfig = route.config;
+
+     if (routeConfig.navigationBar && typeof routeConfig.navigationBar.renderBackground === 'function') {
+      let maybeBackgroundComponent = routeConfig.navigationBar.renderBackground(route, props);
+
+      if (maybeBackgroundComponent) {
+        return maybeBackgroundComponent;
+      }
+
+      return null;
+    }
+  };
 
   _renderLeftComponentForHeader = (props) => { //eslint-disable-line react/display-name
     const { scene: { route } } = props;

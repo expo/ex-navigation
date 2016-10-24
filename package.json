@@ -1,6 +1,6 @@
 {
   "name": "@exponent/ex-navigation",
-  "version": "1.7.0",
+  "version": "1.7.1",
   "description": "Route-centric navigation libary for React Native.",
   "main": "./src/ExNavigation.js",
   "scripts": {
@@ -50,8 +50,8 @@
     "eslint-plugin-babel": "^3.3.0",
     "eslint-plugin-flow-vars": "^0.4.0",
     "eslint-plugin-react": "^5.2.2",
-    "flow-bin": "^0.29.0",
-    "react": "~15.2.1",
-    "react-native": "github:exponentjs/react-native#sdk-8.0.0"
+    "flow-bin": "^0.30.0",
+    "react": "15.3.1",
+    "react-native": "github:exponentjs/react-native#exp-latest"
   }
 }
