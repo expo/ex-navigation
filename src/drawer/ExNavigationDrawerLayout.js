@@ -76,10 +76,11 @@ export default class ExNavigationDrawerLayout extends React.Component {
     }
 
     return this.props.items.map((item, index) => {
-      let { renderIcon, renderTitle } = item;
+      let { renderIcon, renderTitle, renderRight } = item;
       let isSelected = this.props.selectedItem === item.id;
       const icon = renderIcon && renderIcon(isSelected);
       const title = renderTitle && renderTitle(isSelected);
+      const rightElement = renderRight && renderRight(isSelected);
 
       if (item.showsTouches !== false) {
         return (
@@ -91,8 +92,15 @@ export default class ExNavigationDrawerLayout extends React.Component {
             style={[isSelected ? item.selectedStyle : item.style]}
             background={item.nativeFeedbackBackground}>
             <View style={styles.buttonContainer}>
-              {icon}
-              {title}
+              {
+                icon && <View style={[styles.elementContainer]}>{icon}</View>
+              }
+              {
+                title && <View style={[styles.elementContainer]}>{title}</View>
+              }
+              {
+                rightElement && <View style={[styles.elementContainer, styles.rightElementContainer]}>{rightElement}</View>
+              }
             </View>
           </TouchableNativeFeedbackSafe>
         );
@@ -103,8 +111,15 @@ export default class ExNavigationDrawerLayout extends React.Component {
             onPress={() => { this._handlePress(item); }}
             onLongPress={() => { this._handleLongPress(item); }}>
             <View style={[styles.buttonContainer, isSelected ? item.selectedStyle : item.style]}>
-              {icon}
-              {title}
+              {
+                icon && <View style={[styles.elementContainer]}>{icon}</View>
+              }
+              {
+                title && <View style={[styles.elementContainer]}>{title}</View>
+              }
+              {
+                rightElement && <View style={[styles.elementContainer, styles.rightElementContainer]}>{rightElement}</View>
+              }
             </View>
           </TouchableWithoutFeedback>
         );
@@ -141,8 +156,18 @@ const styles = StyleSheet.create({
   buttonContainer: {
     flex: 1,
     flexDirection: 'row',
+    justifyContent: 'flex-start',
     alignItems: 'center',
     paddingVertical: 10,
     paddingHorizontal: 15,
   },
+  elementContainer: {
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+  },
+  rightElementContainer: {
+    flex: 1,
+    justifyContent: 'flex-end'
+  }
 });
