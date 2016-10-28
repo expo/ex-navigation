@@ -13,7 +13,7 @@ import {
 import { Ionicons } from '@exponent/vector-icons';
 import { Router } from '../main';
 
-export default class SlidingTabNavigationExample extends Component {
+export default class DrawerNavigationExample extends Component {
 
   _renderHeader = () => {
     return <Image source={require('../assets/sparkles.jpg')} style={styles.header} />;

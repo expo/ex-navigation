@@ -512,6 +512,7 @@ class ExNavigationStack extends PureComponent<any, Props, State> {
         renderLeftComponent={this._renderLeftComponentForHeader}
         renderTitleComponent={this._renderTitleComponentForHeader}
         renderRightComponent={this._renderRightComponentForHeader}
+        renderBackgroundComponent={this._renderBackgroundComponentForHeader}
       />
     );
   };
@@ -536,6 +537,21 @@ class ExNavigationStack extends PureComponent<any, Props, State> {
     return result;
   }
 
+  _renderBackgroundComponentForHeader = (props) => { //eslint-disable-line react/display-name
+    const { scene: { route } } = props;
+    const routeConfig = route.config;
+
+     if (routeConfig.navigationBar && typeof routeConfig.navigationBar.renderBackground === 'function') {
+      let maybeBackgroundComponent = routeConfig.navigationBar.renderBackground(route, props);
+
+      if (maybeBackgroundComponent) {
+        return maybeBackgroundComponent;
+      }
+
+      return null;
+    }
+  };
+
   _renderLeftComponentForHeader = (props) => { //eslint-disable-line react/display-name
     const { scene: { route } } = props;
     const routeConfig = route.config;
@@ -546,6 +562,8 @@ class ExNavigationStack extends PureComponent<any, Props, State> {
       if (maybeLeftComponent) {
         return maybeLeftComponent;
       }
+
+      return null;
     }
 
     let menuButton = this._maybeRenderMenuButton('left', route, props);
@@ -604,6 +622,8 @@ class ExNavigationStack extends PureComponent<any, Props, State> {
       if (maybeRightComponent) {
         return maybeRightComponent;
       }
+
+      return null;
     }
 
     let menuButton = this._maybeRenderMenuButton('right', route, props);
@@ -690,7 +710,6 @@ class ExNavigationStack extends PureComponent<any, Props, State> {
 
   _onTransitionStart = (transitionProps, prevTransitionProps) => {
     const { route: nextRoute } = transitionProps.scene;
-    const { route: prevRoute } = prevTransitionProps.scene;
 
     const nextRouteConfig = nextRoute.config;
     if (nextRouteConfig.styles &&
@@ -698,10 +717,13 @@ class ExNavigationStack extends PureComponent<any, Props, State> {
       nextRouteConfig.styles.onTransitionStart(transitionProps, prevTransitionProps);
     }
 
-    const prevRouteConfg = prevRoute.config;
-    if (prevRouteConfg.styles &&
-      prevRouteConfg.styles.onTransitionStart) {
-      prevRouteConfg.styles.onTransitionStart(transitionProps, prevTransitionProps);
+    if (prevTransitionProps) {
+      const { route: prevRoute } = prevTransitionProps.scene;
+      const prevRouteConfg = prevRoute.config;
+      if (prevRouteConfg.styles &&
+        prevRouteConfg.styles.onTransitionStart) {
+        prevRouteConfg.styles.onTransitionStart(transitionProps, prevTransitionProps);
+      }
     }
 
     if (this.props.onTransitionStart) {
@@ -711,7 +733,6 @@ class ExNavigationStack extends PureComponent<any, Props, State> {
 
   _onTransitionEnd = (transitionProps, prevTransitionProps) => {
     const { route: nextRoute } = transitionProps.scene;
-    const { route: prevRoute } = prevTransitionProps.scene;
 
     const nextRouteConfig = nextRoute.config;
     if (nextRouteConfig.styles &&
@@ -719,10 +740,13 @@ class ExNavigationStack extends PureComponent<any, Props, State> {
       nextRouteConfig.styles.onTransitionEnd(transitionProps, prevTransitionProps);
     }
 
-    const prevRouteConfg = prevRoute.config;
-    if (prevRouteConfg.styles &&
-      prevRouteConfg.styles.onTransitionEnd) {
-      prevRouteConfg.styles.onTransitionEnd(transitionProps, prevTransitionProps);
+    if (prevTransitionProps) {
+      const { route: prevRoute } = prevTransitionProps.scene;
+      const prevRouteConfg = prevRoute.config;
+      if (prevRouteConfg.styles &&
+        prevRouteConfg.styles.onTransitionEnd) {
+        prevRouteConfg.styles.onTransitionEnd(transitionProps, prevTransitionProps);
+      }
     }
 
     if (this.props.onTransitionEnd) {

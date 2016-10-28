@@ -62,6 +62,7 @@ type Props = {
   navigatorUID: string,
   initialItem: string,
   renderHeader: () => React.Element<any>,
+  renderNavigationView: () => React.Element<any>,
   drawerWidth: 300,
   drawerStyle: any,
   children: Array<React.Element<any>>,
@@ -142,6 +143,7 @@ class ExNavigationDrawer extends PureComponent<any, Props, State> {
       items: this.state.drawerItems,
       drawerPosition: this.props.drawerPosition,
       width: this.props.drawerWidth,
+      renderNavigationView: this.props.renderNavigationView,
       style: [
         this.props.drawerStyle,
       ],
