@@ -578,9 +578,9 @@ class ExNavigationStack extends PureComponent<any, Props, State> {
       return (
         <NavigationBar.BackButton tintColor={route.getBarTintColor()} />
       );
-    } else {
-      return null;
     }
+
+    return null;
   };
 
   _maybeRenderMenuButton = (position, route, props) => {
@@ -633,6 +633,8 @@ class ExNavigationStack extends PureComponent<any, Props, State> {
     if (menuButton) {
       return menuButton;
     }
+
+    return null;
   };
 
   _renderScene = (props: ExNavigationSceneRendererProps) => {
