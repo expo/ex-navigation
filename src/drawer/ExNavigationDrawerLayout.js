@@ -109,8 +109,9 @@ export default class ExNavigationDrawerLayout extends React.Component {
           <TouchableWithoutFeedback
             key={index}
             onPress={() => { this._handlePress(item); }}
-            onLongPress={() => { this._handleLongPress(item); }}>
-            <View style={[styles.buttonContainer, isSelected ? item.selectedStyle : item.style]}>
+            onLongPress={() => { this._handleLongPress(item); }}
+            style={[isSelected ? item.selectedStyle : item.style]}>
+            <View style={styles.buttonContainer}>
               {
                 icon && <View style={[styles.elementContainer]}>{icon}</View>
               }
