@@ -199,41 +199,40 @@ export default class SharedElementGroup extends Component {
     prevTransitionProps: NavigationTransitionProps,
     isTransitionTo?: bool = false
   ): void => {
-    // TODO: We want some way for the target transition group to be notified that
-    // it is being transitioned to so that it can animated things using hooks like
-    // onTransitionStart and onTransitionEnd. Right now I'm just calling onTransitionStart
-    // on the target group too but we might want to make it a different prop or pass
-    // something to know if the view is being transitioned to or from.
-    if (isTransitionTo) {
-      if (this.props.onTransitionStart) {
-        this.props.onTransitionStart(transitionProps, prevTransitionProps);
-      }
-      return;
-    }
-
-    const store = this.context.sharedElementStore;
-
-    const { scene } = transitionProps;
-    const { scene: prevScene } = prevTransitionProps;
-    const state = store.getState();
-
-    let possibleOtherGroups;
-    if (scene.index > prevScene.index) { // pushing
-      possibleOtherGroups = _.filter(state.elementGroups, group => group.routeKey === scene.route.key);
-    } else {
-      possibleOtherGroups = _.filter(state.elementGroups, group => group.routeKey === prevScene.route.key);
-    }
-
-    const otherGroup = _.find(possibleOtherGroups, group => group.id === this.props.id);
-    if (!otherGroup) {
-      throw new Error(`Cannot transition this group with id '${this.props.id}'. No matching group found in next route.`);
-    }
-
     // $FlowFixMe
     Promise.all(Object.values(this._elements).map(e => e.measure())).then(() => {
       // TODO: This needs to be called after the next scene SharedElements have
       // rendered and updated their metrics.
       setTimeout(() => {
+        // TODO: We want some way for the target transition group to be notified that
+        // it is being transitioned to so that it can animated things using hooks like
+        // onTransitionStart and onTransitionEnd. Right now I'm just calling onTransitionStart
+        // on the target group too but we might want to make it a different prop or pass
+        // something to know if the view is being transitioned to or from.
+        if (isTransitionTo) {
+          if (this.props.onTransitionStart) {
+            this.props.onTransitionStart(transitionProps, prevTransitionProps);
+          }
+          return;
+        }
+
+        const store = this.context.sharedElementStore;
+
+        const { scene } = transitionProps;
+        const { scene: prevScene } = prevTransitionProps;
+        const state = store.getState();
+
+        let possibleOtherGroups;
+        if (scene.index > prevScene.index) { // pushing
+          possibleOtherGroups = _.filter(state.elementGroups, group => group.routeKey === scene.route.key);
+        } else {
+          possibleOtherGroups = _.filter(state.elementGroups, group => group.routeKey === prevScene.route.key);
+        }
+        const otherGroup = _.find(possibleOtherGroups, group => group.id === this.props.id);
+        if (!otherGroup) {
+          return;
+        }
+
         store.dispatch({
           type: 'START_TRANSITION_FOR_ELEMENT_GROUPS',
           fromUid: scene.index > prevScene.index ? this._uid : otherGroup.uid,
@@ -269,6 +268,9 @@ export default class SharedElementGroup extends Component {
       this.state.transitioningElementGroupToUid :
       this.state.transitioningElementGroupFromUid;
     const otherGroup = state.elementGroups[otherUid];
+    if (!otherGroup) {
+      return;
+    }
 
     store.dispatch({
       type: 'END_TRANSITION_FOR_ELEMENT_GROUPS',
