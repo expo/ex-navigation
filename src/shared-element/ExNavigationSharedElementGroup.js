@@ -14,14 +14,12 @@ import UUID from 'uuid-js';
 
 import * as ExNavigationStyles from '../ExNavigationStyles';
 import SharedElementOverlay from './ExNavigationSharedElementOverlay';
-import { ExNavigationStackContext } from '../ExNavigationStack';
 
 import type {
   NavigationTransitionProps,
   NavigationTransitionSpec,
   NavigationSceneRendererProps,
 } from 'NavigationTypeDefinition';
-import type { ExNavigationRoute } from '../ExNavigationRouter';
 
 const DEFAULT_TRANSITION = {
   timing: Animated.timing,
@@ -153,7 +151,7 @@ export default class SharedElementGroup extends Component {
           this.setState({
             visible: false,
           });
-        }, 32);
+        }, 100);
       } else {
         this.setState({
           visible: true,
@@ -327,7 +325,7 @@ export default class SharedElementGroup extends Component {
         start: (cb) => {
           // TODO: Figure out properly how this work and maybe wait for overlay
           // elements to be rendered before starting the animation.
-          setTimeout(() => timingFn.start(cb), 32);
+          setTimeout(() => timingFn.start(cb), 100);
         },
         stop: () => {
           timingFn.stop();
