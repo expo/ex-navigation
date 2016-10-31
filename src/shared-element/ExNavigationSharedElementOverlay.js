@@ -54,7 +54,8 @@ export default class SharedElementOverlay extends React.Component {
       const state = this._store.getState();
       this.setState({
         ...state,
-        visible: state.transitioningElementGroupFromUid && state.transitioningElementGroupToUid,
+        visible: state.transitioningElementGroupFromUid &&
+          state.transitioningElementGroupToUid && state.toViewReady,
       });
     });
   }
@@ -63,6 +64,10 @@ export default class SharedElementOverlay extends React.Component {
     return {
       sharedElementStore: this._store,
     };
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    return nextState.visible !== this.state.visible;
   }
 
   componentDidMount() {

@@ -98,11 +98,19 @@ class SharedElementReducer {
     };
   }
 
+  static TRANSITION_TO_VIEW_READY(state) {
+    return {
+      ...state,
+      toViewReady: true,
+    };
+  }
+
   static END_TRANSITION_FOR_ELEMENT_GROUPS(state) {
     return {
       ...state,
       transitioningElementGroupFromUid: null,
       transitioningElementGroupToUid: null,
+      toViewReady: false,
       progress: null,
     };
   }
