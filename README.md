@@ -555,6 +555,8 @@ const styles = StyleSheet.create({
 });
 ```
 
+See [ExNavigationDrawerLayout](https://github.com/exponentjs/ex-navigation/blob/master/src/drawer/ExNavigationDrawerLayout.js)
+to discover which props you can pass to `DrawerNavigationItem`.
 
 ### Integrate with your existing Redux store
 
