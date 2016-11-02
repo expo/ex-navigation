@@ -554,7 +554,27 @@ const styles = StyleSheet.create({
   }
 });
 ```
+#### Toggling the drawer
+If you want to toggle the drawer from one of your components, make sure you have navigation in your props. Or else, add `@withNavigation` to your component. 
+```javascript
 
+@withNavigation
+class MenuButton extends React.Component {
+  constructor(props) {
+    super(props)
+  }
+  render() {
+    // main is the id given to DrawerNavigation
+    const navigator = this.props.navigation.getNavigator('main');
+      return(
+        <TouchableOpacity onPress={()=>{ navigator.toggleDrawer() }}>
+          <Text>Menu</Text>
+        </TouchableOpacity>
+      )
+
+  }
+}
+```
 
 ### Integrate with your existing Redux store
 
