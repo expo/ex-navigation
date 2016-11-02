@@ -315,7 +315,8 @@ class ExNavigationStack extends PureComponent<any, Props, State> {
   componentWillMount() {
     this._registerNavigatorContext();
 
-    const { initialStack, initialRoute } = this.props;
+    const { initialStack } = this.props;
+    let { initialRoute } = this.props;
 
     invariant(
       initialRoute || initialStack,
@@ -331,6 +332,10 @@ class ExNavigationStack extends PureComponent<any, Props, State> {
     if (initialStack) {
       routes = initialStack;
     } else if (initialRoute) {
+      // initialRoute can be passed in as strings
+      if (typeof initialRoute === 'string') {
+        initialRoute = this._getNavigatorContext().router.getRoute(initialRoute, {});
+      }
       routes = [
         initialRoute,
       ];
@@ -411,7 +416,6 @@ class ExNavigationStack extends PureComponent<any, Props, State> {
       return configureTransition(transitionProps, prevTransitionProps);
     }
   };
-
 
   _registerNavigatorContext() {
     this.props.onRegisterNavigatorContext(this.state.navigatorUID,
