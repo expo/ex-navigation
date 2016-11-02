@@ -76,13 +76,13 @@ export default class ExNavigationDrawerLayout extends React.Component {
     }
 
     return this.props.items.map((item, index) => {
-      let { renderIcon, renderTitle, renderRight } = item;
+      let { renderIcon, renderTitle, renderRight, disabled } = item;
       let isSelected = this.props.selectedItem === item.id;
-      const icon = renderIcon && renderIcon(isSelected);
-      const title = renderTitle && renderTitle(isSelected);
-      const rightElement = renderRight && renderRight(isSelected);
+      const icon = renderIcon && renderIcon(isSelected, disabled);
+      const title = renderTitle && renderTitle(isSelected, disabled);
+      const rightElement = renderRight && renderRight(isSelected, disabled);
 
-      if (item.showsTouches !== false) {
+      if (item.showsTouches !== false && !disabled) {
         return (
           <TouchableNativeFeedbackSafe
             key={index}
@@ -108,6 +108,7 @@ export default class ExNavigationDrawerLayout extends React.Component {
         return (
           <TouchableWithoutFeedback
             key={index}
+            disabled={disabled}
             onPress={() => { this._handlePress(item); }}
             onLongPress={() => { this._handleLongPress(item); }}>
             <View style={[styles.buttonContainer, isSelected ? item.selectedStyle : item.style]}>
