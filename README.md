@@ -597,30 +597,30 @@ export const Router = createRouter(() => ({
 }));
 ```
 
-```javascript
-/* The top level of your app, often in main.js or index.[ios/android].js */
-
-import {
-  NavigationContext,
-  NavigationProvider,
-  StackNavigation,
-} from '@exponent/ex-navigation';
-
-import Store from './state/Store';
-import Router from './Router';
-
-const navigationContext = new NavigationContext({
-  router: Router,
-  store: Store,
-})
-
-return (
-  <Provider store={Store}>
-    <NavigationProvider context={navigationContext}>
-      <StackNavigation yourUsualPropsHere />
-    </NavigationProvider>
-  </Provider>
-)
+```diff
+ /* The top level of your app, often in main.js or index.[ios/android].js */
+ 
+ import {
+   NavigationContext,
+   NavigationProvider,
+   StackNavigation,
+ } from '@exponent/ex-navigation';
+ 
+ import Store from './state/Store';
+ import Router from './Router';
+ 
++const navigationContext = new NavigationContext({
++  router: Router,
++  store: Store,
++})
+ 
+ return (
+   <Provider store={Store}>
++    <NavigationProvider context={navigationContext}>
+       <StackNavigation yourUsualPropsHere />
+     </NavigationProvider>
+   </Provider>
+ )
 ```
 
 ### Perform navigation actions from outside of a component
