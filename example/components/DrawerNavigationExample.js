@@ -44,6 +44,7 @@ export default class DrawerNavigationExample extends Component {
   render() {
     return (
       <DrawerNavigation
+        drawerPosition="right"
         renderHeader={this._renderHeader}
         drawerWidth={300}
         initialItem="home">

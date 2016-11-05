@@ -3,6 +3,10 @@
   "version": "1.8.3",
   "description": "Route-centric navigation libary for React Native.",
   "main": "./src/ExNavigation.js",
+  "files": [
+    "src",
+    "README.md"
+  ],
   "scripts": {
     "lint": "eslint ./src ./example",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -32,7 +36,7 @@
     "react-clone-referenced-element": "^1.0.1",
     "react-mixin": "^3.0.5",
     "react-native-drawer-layout": "^1.0.0",
-    "react-native-tab-view": "^0.0.33",
+    "react-native-tab-view": "^0.0.37",
     "react-redux": "^4.4.5",
     "react-static-container": "^1.0.0",
     "react-timer-mixin": "^0.13.3",
@@ -50,7 +54,7 @@
     "eslint-plugin-flow-vars": "^0.4.0",
     "eslint-plugin-react": "^5.2.2",
     "flow-bin": "^0.30.0",
-    "react": "15.3.1",
-    "react-native": "github:exponentjs/react-native#exp-latest"
+    "react": "15.3.2",
+    "react-native": "git+https://github.com/exponentjs/react-native#exp-latest"
   }
 }
