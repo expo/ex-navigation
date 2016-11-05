@@ -1,6 +1,6 @@
 {
   "name": "@exponent/ex-navigation",
-  "version": "1.8.1",
+  "version": "1.8.3",
   "description": "Route-centric navigation libary for React Native.",
   "main": "./src/ExNavigation.js",
   "scripts": {
@@ -22,7 +22,6 @@
     "clamp": "^1.0.1",
     "core-decorators": "^0.12.2",
     "debug": "^2.2.0",
-    "exponent": "^10.0.4",
     "fbemitter": "^2.0.2",
     "fbjs": "^0.8.3",
     "hoist-non-react-statics": "^1.0.5",
