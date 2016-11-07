@@ -396,7 +396,7 @@ import {
 
 
 // Treat the TabScreen route like any other route -- you may want to set
-// it as the intiial route for a top-level StackNavigation
+// it as the initial route for a top-level StackNavigation
 class TabScreen extends React.Component {
   static route = {
     navigationBar: {
