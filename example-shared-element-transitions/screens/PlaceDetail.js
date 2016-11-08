@@ -29,7 +29,7 @@ export default class PlaceDetail extends React.Component {
       backgroundColor: 'rgba(255, 255, 255, 1)',
       visible: false,
     },
-  }
+  };
 
   state = {
     contentAnimation: new Animated.Value(0),
@@ -50,12 +50,10 @@ export default class PlaceDetail extends React.Component {
           <View style={styles.imageContainer}>
             <SharedElementGroup
               id="place-header"
-              route={this.props.route}
               configureTransition={() => ({
                 timing: Animated.timing,
                 easing: Easing.inOut(Easing.ease),
                 duration: 500,
-                useNativeDriver: true,
               })}
               onTransitionStart={(transitionProps, prevTransitionProps) => {
                 const inverse = transitionProps.scene.index < prevTransitionProps.scene.index;
