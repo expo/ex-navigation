@@ -8,7 +8,7 @@ import {
   StatusBar,
 } from 'react-native';
 
-import 'exponent';
+import Exponent from 'exponent';
 
 import {
   NavigationProvider,
@@ -40,4 +40,4 @@ class AppContainer extends React.Component {
   }
 }
 
-AppRegistry.registerComponent('main', () => AppContainer);
+Exponent.registerRootComponent(AppContainer);
