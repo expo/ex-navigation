@@ -20,7 +20,6 @@ import type {
   NavigationTransitionSpec,
   NavigationSceneRendererProps,
 } from 'NavigationTypeDefinition';
-import type { ExNavigationRoute } from '../ExNavigationRouter';
 
 const DEFAULT_TRANSITION = {
   timing: Animated.timing,
@@ -48,7 +47,6 @@ type Props = {
     b: ?NavigationTransitionProps,
   ) => NavigationTransitionSpec),
   sceneAnimations: ?((props: NavigationSceneRendererProps) => Object),
-  route: ExNavigationRoute,
   navigationBarAnimations: ?((props: NavigationSceneRendererProps) => Object),
   onTransitionStart: ?TransitionFn,
   onTransitionEnd: ?TransitionFn,
@@ -64,6 +62,7 @@ export default class SharedElementGroup extends Component {
 
   static contextTypes = {
     sharedElementStore: PropTypes.any,
+    scene: PropTypes.object,
   };
 
   static childContextTypes = {
@@ -83,6 +82,7 @@ export default class SharedElementGroup extends Component {
   _store = this.context.sharedElementStore;
   _uid = UUID.create(1).toString();
   _unsubscribe: any;
+  _sceneIndex = this.context.scene.index;
 
   getChildContext() {
     return {
@@ -114,13 +114,14 @@ export default class SharedElementGroup extends Component {
   }
 
   componentDidMount() {
-    const store = this.context.sharedElementStore;
+    const { sharedElementStore: store, scene } = this.context;
 
     store.dispatch({
       type: 'REGISTER_GROUP',
       uid: this._uid,
       id: this.props.id,
-      routeKey: this.props.route.key,
+      routeKey: scene.route.key,
+      sceneIndex: scene.index,
       style: {
         configureTransition: this._configureTransition,
         sceneAnimations: this.props.sceneAnimations || ExNavigationStyles.Fade.sceneAnimations,
@@ -150,7 +151,7 @@ export default class SharedElementGroup extends Component {
           this.setState({
             visible: false,
           });
-        }, 32);
+        }, 100);
       } else {
         this.setState({
           visible: true,
@@ -199,55 +200,70 @@ export default class SharedElementGroup extends Component {
     prevTransitionProps: NavigationTransitionProps,
     isTransitionTo?: bool = false
   ): void => {
-    // TODO: We want some way for the target transition group to be notified that
-    // it is being transitioned to so that it can animated things using hooks like
-    // onTransitionStart and onTransitionEnd. Right now I'm just calling onTransitionStart
-    // on the target group too but we might want to make it a different prop or pass
-    // something to know if the view is being transitioned to or from.
-    if (isTransitionTo) {
-      if (this.props.onTransitionStart) {
-        this.props.onTransitionStart(transitionProps, prevTransitionProps);
-      }
+    const { scene } = transitionProps;
+    const { scene: prevScene } = prevTransitionProps;
+
+    if (scene.index !== this._sceneIndex && prevScene.index !== this._sceneIndex) {
       return;
     }
 
-    const store = this.context.sharedElementStore;
+    requestAnimationFrame(() => {
+      const store = this.context.sharedElementStore;
 
-    const { scene } = transitionProps;
-    const { scene: prevScene } = prevTransitionProps;
-    const state = store.getState();
+      // TODO: We want some way for the target transition group to be notified that
+      // it is being transitioned to so that it can animated things using hooks like
+      // onTransitionStart and onTransitionEnd. Right now I'm just calling onTransitionStart
+      // on the target group too but we might want to make it a different prop or pass
+      // something to know if the view is being transitioned to or from.
+      if (isTransitionTo) {
+        // $FlowFixMe
+        Promise.all(Object.values(this._elements).map(e => e.measure())).then(() => {
+          store.dispatch({
+            type: 'TRANSITION_TO_VIEW_READY',
+          });
+        });
 
-    let possibleOtherGroups;
-    if (scene.index > prevScene.index) { // pushing
-      possibleOtherGroups = _.filter(state.elementGroups, group => group.routeKey === scene.route.key);
-    } else {
-      possibleOtherGroups = _.filter(state.elementGroups, group => group.routeKey === prevScene.route.key);
-    }
+        if (this.props.onTransitionStart) {
+          this.props.onTransitionStart(transitionProps, prevTransitionProps);
+        }
+        return;
+      }
 
-    const otherGroup = _.find(possibleOtherGroups, group => group.id === this.props.id);
-    if (!otherGroup) {
-      throw new Error(`Cannot transition this group with id '${this.props.id}'. No matching group found in next route.`);
-    }
+      const state = store.getState();
 
-    // $FlowFixMe
-    Promise.all(Object.values(this._elements).map(e => e.measure())).then(() => {
-      // TODO: This needs to be called after the next scene SharedElements have
-      // rendered and updated their metrics.
-      setTimeout(() => {
+      let possibleOtherGroups;
+      if (scene.index > prevScene.index) { // pushing
+        possibleOtherGroups = _.filter(
+          state.elementGroups,
+          group => group.routeKey === scene.route.key && group.sceneIndex === scene.index,
+        );
+      } else {
+        possibleOtherGroups = _.filter(
+          state.elementGroups,
+          group => group.routeKey === prevScene.route.key && group.sceneIndex === prevScene.index,
+        );
+      }
+      const otherGroup = _.find(possibleOtherGroups, group => group.id === this.props.id);
+      if (!otherGroup) {
+        return;
+      }
+
+      if (this.props.onTransitionStart) {
+        this.props.onTransitionStart(transitionProps, prevTransitionProps);
+      }
+      if (otherGroup.style.onTransitionStart) {
+        otherGroup.style.onTransitionStart(transitionProps, prevTransitionProps, true);
+      }
+
+      // $FlowFixMe
+      Promise.all(Object.values(this._elements).map(e => e.measure())).then(() => {
         store.dispatch({
           type: 'START_TRANSITION_FOR_ELEMENT_GROUPS',
           fromUid: scene.index > prevScene.index ? this._uid : otherGroup.uid,
           toUid: scene.index > prevScene.index ? otherGroup.uid : this._uid,
           progress: transitionProps.progress,
         });
-
-        if (this.props.onTransitionStart) {
-          this.props.onTransitionStart(transitionProps, prevTransitionProps);
-        }
-        if (otherGroup.style.onTransitionStart) {
-          otherGroup.style.onTransitionStart(transitionProps, prevTransitionProps, true);
-        }
-      }, 10);
+      });
     });
   }
 
@@ -256,6 +272,13 @@ export default class SharedElementGroup extends Component {
     prevTransitionProps: NavigationTransitionProps,
     isTransitionTo?: bool = false
   ) => {
+    const { scene } = transitionProps;
+    const { scene: prevScene } = prevTransitionProps;
+
+    if (scene.index !== this._sceneIndex && prevScene.index !== this._sceneIndex) {
+      return;
+    }
+
     if (isTransitionTo) {
       if (this.props.onTransitionEnd) {
         this.props.onTransitionEnd(transitionProps, prevTransitionProps);
@@ -265,10 +288,13 @@ export default class SharedElementGroup extends Component {
 
     const store = this.context.sharedElementStore;
     const state = store.getState();
-    const otherUid = transitionProps.scene.index > prevTransitionProps.scene.index ?
+    const otherUid = scene.index > prevScene.index ?
       this.state.transitioningElementGroupToUid :
       this.state.transitioningElementGroupFromUid;
     const otherGroup = state.elementGroups[otherUid];
+    if (!otherGroup) {
+      return;
+    }
 
     store.dispatch({
       type: 'END_TRANSITION_FOR_ELEMENT_GROUPS',
@@ -299,7 +325,7 @@ export default class SharedElementGroup extends Component {
         start: (cb) => {
           // TODO: Figure out properly how this work and maybe wait for overlay
           // elements to be rendered before starting the animation.
-          setTimeout(() => timingFn.start(cb), 32);
+          setTimeout(() => timingFn.start(cb), 100);
         },
         stop: () => {
           timingFn.stop();

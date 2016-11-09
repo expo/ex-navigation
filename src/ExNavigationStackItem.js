@@ -15,6 +15,16 @@ class SceneView extends React.Component<any, SceneViewProps, any> {
     // sceneRendererProps: NavigationPropTypes.SceneRenderer,
   };
 
+  static childContextTypes = {
+    scene: PropTypes.object,
+  };
+
+  getChildContext() {
+    return {
+      scene: this.props.sceneRendererProps.scene,
+    };
+  }
+
   shouldComponentUpdate(nextProps: SceneViewProps, nextState: any): boolean {
     return (
       nextProps.sceneRendererProps.scene.route !==

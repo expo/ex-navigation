@@ -3,7 +3,6 @@
  */
 
 import React from 'react';
-import findNodeHandle from 'react/lib/findNodeHandle';
 import {
   Animated,
   Easing,
@@ -14,8 +13,6 @@ import {
   Image,
   Text,
   TouchableWithoutFeedback,
-  UIManager,
-  LayoutAnimation,
 } from 'react-native';
 
 import {
@@ -120,25 +117,11 @@ export default class PlacesList extends React.Component {
           <SharedElementGroup
             id="place-header"
             ref={g => { this._placeHeaderGroups[rowId] = g; }}
-            route={this.props.route}
             configureTransition={() => ({
               timing: Animated.timing,
               easing: Easing.inOut(Easing.ease),
               duration: 500,
-              useNativeDriver: true,
             })}
-            sceneAnimations={({ position, scene }) => {
-              const index = scene.index;
-
-              const opacity = position.interpolate({
-                inputRange: [index - 1, index - 0.5, index, index + 0.5, index + 1],
-                outputRange: [0, 0, 1, 0, 0],
-              });
-
-              return {
-                opacity,
-              };
-            }}
             onTransitionStart={(transitionProps, prevTransitionProps) => {
               const inverse = transitionProps.scene.index < prevTransitionProps.scene.index;
               const animations = [];
