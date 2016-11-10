@@ -78,11 +78,15 @@ export default class ExNavigationDrawerLayout extends React.Component {
     }
 
     return this.props.items.map((item, index) => {
-      let { renderIcon, renderTitle, renderRight } = item;
+      let { drawerChildren, renderIcon, renderTitle, renderRight } = item;
       let isSelected = this.props.selectedItem === item.id;
       const icon = renderIcon && renderIcon(isSelected);
       const title = renderTitle && renderTitle(isSelected);
       const rightElement = renderRight && renderRight(isSelected);
+
+      if (drawerChildren) {
+        return React.createElement(View, {key: index}, drawerChildren);
+      }
 
       if (item.showsTouches !== false) {
         return (
