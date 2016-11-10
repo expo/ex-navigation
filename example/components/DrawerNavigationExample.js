@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import {
   StyleSheet,
-  View,
   Text,
   Image,
 } from 'react-native';
@@ -13,6 +12,14 @@ import {
 } from '@exponent/ex-navigation';
 import { Ionicons } from '@exponent/vector-icons';
 import { Router } from '../main';
+
+class Heading extends DrawerNavigationChild {
+  renderDrawerItem() {
+    return (
+      <Text style={styles.headingText}>{this.props.title}</Text>
+    );
+  }
+}
 
 export default class DrawerNavigationExample extends Component {
 
@@ -69,9 +76,7 @@ export default class DrawerNavigationExample extends Component {
             initialRoute={Router.getRoute('home')}
           />
         </DrawerNavigationItem>
-        <DrawerNavigationChild>
-          <Text style={styles.headingText}>Meta</Text>
-        </DrawerNavigationChild>
+        <Heading title='Meta' />
         <DrawerNavigationItem
           id="another"
           selectedStyle={styles.selectedItemStyle}
