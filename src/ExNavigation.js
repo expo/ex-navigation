@@ -17,6 +17,7 @@ export { default as SlidingTabNavigationItem } from './sliding-tab/ExNavigationS
 
 export { default as DrawerNavigation } from './drawer/ExNavigationDrawer';
 export { default as DrawerNavigationItem } from './drawer/ExNavigationDrawerItem';
+export { default as DrawerNavigationChild } from './drawer/ExNavigationDrawerChild';
 
 export { default as NavigationBar } from './ExNavigationBar';
 
