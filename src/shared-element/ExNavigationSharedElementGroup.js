@@ -24,7 +24,7 @@ import type {
 const DEFAULT_TRANSITION = {
   timing: Animated.timing,
   easing: Easing.inOut(Easing.ease),
-  duration: 500,
+  duration: 400,
 };
 
 type TransitionFn = (
@@ -41,15 +41,15 @@ type State = {
 
 type Props = {
   id: string,
-  children: React.Element<*>,
-  configureTransition: ?((
+  children?: React.Element<*>,
+  configureTransition?: ?((
     a: NavigationTransitionProps,
     b: ?NavigationTransitionProps,
   ) => NavigationTransitionSpec),
-  sceneAnimations: ?((props: NavigationSceneRendererProps) => Object),
-  navigationBarAnimations: ?((props: NavigationSceneRendererProps) => Object),
-  onTransitionStart: ?TransitionFn,
-  onTransitionEnd: ?TransitionFn,
+  sceneAnimations?: ?((props: NavigationSceneRendererProps) => Object),
+  navigationBarAnimations?: ?((props: NavigationSceneRendererProps) => Object),
+  onTransitionStart?: ?TransitionFn,
+  onTransitionEnd?: ?TransitionFn,
 };
 
 export default class SharedElementGroup extends Component {

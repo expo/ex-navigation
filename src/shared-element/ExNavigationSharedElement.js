@@ -16,7 +16,7 @@ type Props = {
 
   // This is not part of the public API and is used by the overlay to pass down
   // transition info used by the animation.
-  transitionProps: ?TransitionProps,
+  transitionProps?: ?TransitionProps,
 };
 
 export default class SharedElement extends Component {
