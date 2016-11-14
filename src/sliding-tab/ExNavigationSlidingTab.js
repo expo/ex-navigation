@@ -181,7 +181,8 @@ class ExNavigationSlidingTab extends PureComponent<any, Props, State> {
         navigationState={navigationState}
         renderScene={this._renderScene}
         renderPager={this._renderPager}
-        renderHeader={this.props.renderHeader || this._renderHeader}
+        renderHeader={this.props.renderHeader || (this.props.position !== 'bottom' ? this._renderHeader : undefined)}
+        renderFooter={this.props.renderFooter || (this.props.position === 'bottom' ? this._renderHeader : undefined)}
         onRequestChangeTab={this._setActiveTab}
       />
     );
