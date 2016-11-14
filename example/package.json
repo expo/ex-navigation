@@ -5,11 +5,10 @@
   "main": "main.js",
   "dependencies": {
     "@exponent/ex-navigation": "file:../",
-    "@exponent/vector-icons": "^1.0.4",
-    "exponent": "^11.0.0",
+    "@exponent/vector-icons": "~2.0.0",
+    "exponent": "~11.0.2",
     "lodash": "^4.13.1",
     "react": "~15.3.2",
-    "react-native": "git+https://github.com/exponentjs/react-native#sdk-11.0.0",
-    "react-native-vector-icons": "git+https://github.com/exponentjs/react-native-vector-icons"
+    "react-native": "git+https://github.com/exponentjs/react-native#sdk-11.0.3"
   }
 }

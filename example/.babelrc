@@ -1,5 +1,5 @@
 {
-  "presets": ["react-native-stage-0/decorator-support"],
+  "presets": ["babel-preset-exponent"],
   "env": {
     "development": {
       "plugins": ["transform-react-jsx-source"]
