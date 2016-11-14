@@ -210,7 +210,8 @@ export class ExNavigationRouter<RC: RouteCreator> {
       warning(
         _isSerializable(routeParams),
         'You passed a non-serializable value as route parameters. This may prevent navigation state ' +
-        'from being saved and restored properly.'
+        'from being saved and restored properly. This is only relevant if you would like to be able to' +
+        'save and reload your navigation state.'
       );
     }
 
