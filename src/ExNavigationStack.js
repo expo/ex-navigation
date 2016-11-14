@@ -56,6 +56,7 @@ type TransitionFn = (
 ) => void;
 
 type Props = {
+  augmentScene?: (scene: ReactElement<any>, route: Object) => ReactElement<any>,
   defaultRouteConfig?: ExNavigationConfig,
   id: string,
   initialRoute?: ExNavigationRoute,
@@ -693,7 +694,10 @@ class ExNavigationStack extends PureComponent<any, Props, State> {
 
   _renderRoute = (props: ExNavigationSceneRendererProps) => {
     const route: ExNavigationRoute = props.route;
-    const routeElement = route.render();
+    let routeElement = route.render();
+    if (this.props.augmentScene) {
+      routeElement = this.props.augmentScene(routeElement, route);
+    }
 
     let routeElementProps = {};
 
