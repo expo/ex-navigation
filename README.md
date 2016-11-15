@@ -191,7 +191,7 @@ from the stack by calling those functions on the `navigator` prop. This
 is a prop that is passed into all components that you registered with
 the router. If you need to access the `navigator` on a component that
 is not a route, you can either pass it in manually from your route
-component use `withNavigation` as a decorator on the component:
+component or use `withNavigation` as a decorator on the component:
 
 ```javascript
 import React from 'react';
