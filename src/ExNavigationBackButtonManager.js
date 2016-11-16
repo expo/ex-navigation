@@ -18,12 +18,21 @@ import type { ExNavigationStore } from './ExNavigationStore';
  */
 class ExNavigationBackButtonManager {
   _listeners = [];
-  store: ExNavigationStore;
+  _store: ?ExNavigationStore;
   _onHardwareBackPress: Function;
 
-  constructor(store: ExNavigationStore) {
-    this.store = store;
+  constructor() {
     this._listeners = [];
+  }
+
+  setStore(store: ExNavigationStore) {
+    this._store = store;
+  }
+
+  unsetStore(store: ExNavigationStore) {
+    if (this._store === store) {
+      this._store = null;
+    }
   }
 
   pushListener(listener: () => Promise<void>) {
@@ -61,7 +70,10 @@ class ExNavigationBackButtonManager {
   }
 
   _onHardwareBackPress = async () => {
-    const moreRoutes = await this.store.dispatch(ExNavigationActions.goBack());
+    if (!this._store) {
+      return;
+    }
+    const moreRoutes = await this._store.dispatch(ExNavigationActions.goBack());
     if (moreRoutes === false) {
       BackAndroid.exitApp();
     }
@@ -74,9 +86,9 @@ class ExNavigationBackButtonManager {
 
 let manager;
 
-export function createBackButtonManager(store: ExNavigationStore) {
+export function createBackButtonManager() {
   if (!manager) {
-    manager = new ExNavigationBackButtonManager(store);
+    manager = new ExNavigationBackButtonManager();
   }
   return manager;
 }
