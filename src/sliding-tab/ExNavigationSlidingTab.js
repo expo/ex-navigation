@@ -208,7 +208,7 @@ class ExNavigationSlidingTab extends PureComponent<any, Props, State> {
   };
 
   _renderTabBar = (props) => {
-    const TabBarComponent = this.props.position === 'top' || 'bottom' ? TabBarTop : TabBar;
+    const TabBarComponent = this.props.position === 'top' ? TabBarTop : TabBar;
     const tabBarProps = {
       pressColor: this.props.pressColor,
       indicatorStyle: this.props.indicatorStyle,
