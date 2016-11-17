@@ -10,9 +10,19 @@ import {
 } from 'react-native';
 import DrawerLayout from 'react-native-drawer-layout';
 
+type NavigationViewOptions = {
+  renderHeader: () => React.Element<any>,
+  renderDrawerItems: (items: Array<React.Element<any>>) => Array<React.Element<any>>,
+  items: Array<React.Element<any>>,
+  containerStyle: Array<any>,
+  scrollableContentContainerStyle: Array<any>,
+};
+
 type Props = {
   renderHeader: () => React.Element<any>,
+  renderNavigationView: (options:NavigationViewOptions) => React.Element<any>,
   width: number,
+  items: Array<React.Element<any>>,
   children: React.Element<any>,
   drawerBackgroundColor: string,
   drawerPosition: 'left' | 'right',
@@ -41,7 +51,7 @@ export default class ExNavigationDrawerLayout extends React.Component {
         drawerBackgroundColor={this.props.drawerBackgroundColor}
         drawerWidth={this.props.width}
         drawerPosition={DrawerLayout.positions[position]}
-        renderNavigationView={this.props.renderNavigationView || this._renderNavigationView}>
+        renderNavigationView={this._renderNavigationView}>
         {this.props.children}
       </DrawerLayout>
     );
@@ -56,25 +66,36 @@ export default class ExNavigationDrawerLayout extends React.Component {
   }
 
   _renderNavigationView = () => {
+    const renderNavigationView = this.props.renderNavigationView || this.renderNavigationView;
+    return renderNavigationView({
+      renderHeader: this.props.renderHeader,
+      renderDrawerItems: this.renderDrawerItems,
+      items: this.props.items,
+      containerStyle: [styles.navigationViewContainer, this.props.style],
+      scrollableContentContainerStyle: [styles.navigationViewScrollableContentContainer],
+    });
+  }
+
+  renderNavigationView = ({renderHeader, renderDrawerItems, items, containerStyle, scrollableContentContainerStyle}:NavigationViewOptions) => {
     return (
-      <View style={[styles.navigationViewContainer, this.props.style]}>
+      <View style={containerStyle}>
         <View>
-          {this.props.renderHeader()}
+          {renderHeader()}
         </View>
 
-        <ScrollView contentContainerStyle={styles.navigationViewScrollableContentContainer}>
-          {this._renderDrawerItems()}
+        <ScrollView contentContainerStyle={scrollableContentContainerStyle}>
+          {renderDrawerItems(items)}
         </ScrollView>
       </View>
     );
   }
 
-  _renderDrawerItems = () => {
-    if (!this.props.items) {
-      return null;
+  renderDrawerItems = (items: Array<React.Element<any>>) => {
+    if (!items) {
+      return [];
     }
 
-    return this.props.items.map((item, index) => {
+    return items.map((item, index) => {
       let isSelected = this.props.selectedItem === item.props.id;
 
       return React.cloneElement(item, {
