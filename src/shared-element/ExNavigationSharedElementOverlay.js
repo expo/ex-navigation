@@ -3,10 +3,10 @@
  */
 
 import React, { cloneElement } from 'react';
-import findNodeHandle from 'react/lib/findNodeHandle';
 import {
   View,
   StyleSheet,
+  findNodeHandle,
 } from 'react-native';
 
 import { createStore } from 'redux';

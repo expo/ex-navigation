@@ -3,9 +3,9 @@
  */
 
 import React, { Component, PropTypes, cloneElement } from 'react';
-import findNodeHandle from 'react/lib/findNodeHandle';
 import {
   UIManager,
+  findNodeHandle,
 } from 'react-native';
 
 import type { TransitionProps, Metrics } from './ExNavigationSharedElementReducer';
