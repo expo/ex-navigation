@@ -84,7 +84,7 @@ export class ExNavigationRoute {
     let backgroundColor = this.getBarBackgroundColor();
 
     if (backgroundColor) {
-      if (__DEV__ && this.getTranslucent() && !backgroundColor.match(/rgba/)) {
+      if (__DEV__ && this.getTranslucent() && !backgroundColor.match(/rgba|#([0-9a-fA-F]{2}){4}/)) {
         console.warn('Using translucent navigation bar and specifying a solid background color, please use rgba or the bar will not be translucent.');
       }
 
