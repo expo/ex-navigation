@@ -666,4 +666,6 @@ is not a function but a promise that wraps the function you want to be called. E
 ```
 <AndroidBackButtonBehavior isFocused={someboolean}
    onBackButtonPress={()=>Promise.resolve(fireMeWhenSomeBooleanIsTrue)}>
+   ...
+</AndroidBackButtonBehavior>
 ```
