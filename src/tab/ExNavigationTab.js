@@ -56,7 +56,7 @@ export class ExNavigationTabContext extends ExNavigatorContext {
 type TabItem = {
   id: string,
   renderIcon?: Function,
-  renderBadge?: Function,  
+  renderBadge?: Function,
   tabContent?: React.Element<{}>,
 };
 
@@ -72,6 +72,7 @@ type Props = {
   navigation: ExNavigationContext,
   onRegisterNavigatorContext: (navigatorUID: string, navigatorContext: ExNavigationTabContext) => void,
   onUnregisterNavigatorContext: (navigatorUID: string) => void,
+  onWillChangeTab: (id: string) => bool,
   navigationState: Object,
   translucent?: bool,
 };
@@ -312,6 +313,13 @@ class ExNavigationTab extends PureComponent<any, Props, State> {
   }
 
   _setActiveTab(id, index) {
+    if (typeof this.props.onWillChangeTab === 'function') {
+      let changeTab = this.props.onWillChangeTab(id);
+      if (!changeTab) {
+        return;
+      }
+    }
+
     this._getNavigatorContext().jumpToTab(id);
     if (typeof this.props.onTabPress === 'function') {
       this.props.onTabPress(id);
