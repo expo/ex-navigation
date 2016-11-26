@@ -253,16 +253,43 @@ export const SlideHorizontalFixedNav: ExNavigationStyles = {
       };
     },
     /**
-     * Don't animate the nav
+     * Crossfade the left view
      */
     forLeft: (props) => {
-      return {};
+      const {position, scene, scenes} = props;
+      const {index} = scene;
+      return {
+        opacity: position.interpolate({
+          inputRange: [index - 1, index, index + 1],
+          outputRange: [0, barVisibleForSceneIndex(scenes, index) ? 1 : 0, 0],
+        }),
+      };
     },
+    /**
+     * Crossfade the title
+     */
     forCenter: (props) => {
-      return {};
+      const {position, scene, scenes} = props;
+      const {index} = scene;
+      return {
+        opacity: position.interpolate({
+          inputRange: [index - 1, index, index + 1],
+          outputRange: [0, barVisibleForSceneIndex(scenes, index) ? 1 : 0, 0],
+        }),
+      };
     },
+    /**
+     * Crossfade the right view
+     */
     forRight: (props) => {
-      return {};
+      const {position, scene, scenes} = props;
+      const {index} = scene;
+      return {
+        opacity: position.interpolate({
+          inputRange: [index - 1, index, index + 1],
+          outputRange: [0, barVisibleForSceneIndex(scenes, index) ? 1 : 0, 0],
+        }),
+      };
     },
     gestures: CardStackPanResponder.forHorizontal,
   }
