@@ -47,6 +47,7 @@ type Props = {
   pressColor?: string,
   renderBefore: () => ?React.Element<any>,
   renderHeader?: (props: any) => ?React.Element<any>,
+  renderFooter?: (props: any) => ?React.Element<any>,
   renderLabel?: (routeParams: any) => ?React.Element<any>,
   style?: any,
   swipeEnabled?: boolean,
@@ -181,7 +182,8 @@ class ExNavigationSlidingTab extends PureComponent<any, Props, State> {
         navigationState={navigationState}
         renderScene={this._renderScene}
         renderPager={this._renderPager}
-        renderHeader={this.props.renderHeader || this._renderHeader}
+        renderHeader={this.props.renderHeader || (this.props.position !== 'bottom' ? this._renderTabBar : undefined)}
+        renderFooter={this.props.renderFooter || (this.props.position === 'bottom' ? this._renderTabBar : undefined)}
         onRequestChangeTab={this._setActiveTab}
       />
     );
@@ -205,7 +207,7 @@ class ExNavigationSlidingTab extends PureComponent<any, Props, State> {
     }
   };
 
-  _renderHeader = (props) => {
+  _renderTabBar = (props) => {
     const TabBarComponent = this.props.position === 'top' ? TabBarTop : TabBar;
     const tabBarProps = {
       pressColor: this.props.pressColor,

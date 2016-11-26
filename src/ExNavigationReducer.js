@@ -145,6 +145,37 @@ class ExNavigationReducer {
     return _updateNavigator(state, navigatorUID, NavigationStateUtils.pop(navigatorState));
   }
 
+  static [ActionTypes.POP_N](state, { navigatorUID, n }) {
+    invariant(state.navigators[navigatorUID], 'Navigator does not exist.');
+    const navigatorState = state.navigators[navigatorUID];
+
+    if (navigatorState.index === 0) {
+      return state;
+    }
+
+    if (navigatorState.type === 'slidingTab') {
+      return _updateNavigator(
+        state,
+        navigatorUID,
+        {...navigatorState, index: 0 },
+      );
+    }
+
+    let sliceTo;
+    if (n > navigatorState.routes.length) {
+      if (__DEV__) {
+        console.warn('Tried to pop ' + n + ' routes, but only ' + navigatorState.routes.length + ' routes are available on the stack.');
+      }
+      sliceTo = 1;
+    } else {
+      sliceTo = -n;
+    }
+
+    const routes = navigatorState.routes.slice(0, sliceTo);
+    const newNavigatorState = { ...navigatorState, index: routes.length - 1, routes };
+    return _updateNavigator(state, navigatorUID, newNavigatorState);
+  }
+
   static [ActionTypes.POP_TO_TOP](state, { navigatorUID }) {
     invariant(state.navigators[navigatorUID], 'Navigator does not exist.');
     const navigatorState = state.navigators[navigatorUID];

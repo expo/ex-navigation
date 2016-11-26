@@ -3,10 +3,10 @@
  */
 
 import React, { cloneElement } from 'react';
-import findNodeHandle from 'react/lib/findNodeHandle';
 import {
   View,
   StyleSheet,
+  findNodeHandle,
 } from 'react-native';
 
 import { createStore } from 'redux';
@@ -14,7 +14,9 @@ import storeShape from 'react-redux/lib/utils/storeShape';
 
 import SharedElementReducer from './ExNavigationSharedElementReducer';
 
-type Props = {};
+type Props = {
+  children?: ?React.Element<*>,
+};
 
 type State = {
   visible: boolean,
@@ -24,9 +26,18 @@ type State = {
   progress: ?mixed,
 };
 
-const store = createStore(SharedElementReducer);
+const sharedElementStore = createStore(SharedElementReducer);
 
 export default class SharedElementOverlay extends React.Component {
+  static getStore() {
+    return sharedElementStore;
+  }
+
+  static childContextTypes = {
+    sharedElementStore: storeShape,
+  }
+
+  props: Props;
   state: State = {
     visible: false,
     elementGroups: {},
@@ -36,28 +47,13 @@ export default class SharedElementOverlay extends React.Component {
   };
 
   _innerViewRef: React.Element<*>;
-
-  static getStore() {
-    return store;
-  }
-
   _store: Object;
-
-  static childContextTypes = {
-    sharedElementStore: storeShape,
-  }
+  _unsubscribe: ?Function;
 
   constructor(props: Props) {
     super(props);
+
     this._store = SharedElementOverlay.getStore();
-    this._store.subscribe(() => {
-      const state = this._store.getState();
-      this.setState({
-        ...state,
-        visible: state.transitioningElementGroupFromUid &&
-          state.transitioningElementGroupToUid && state.toViewReady,
-      });
-    });
   }
 
   getChildContext() {
@@ -66,15 +62,24 @@ export default class SharedElementOverlay extends React.Component {
     };
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
-    return nextState.visible !== this.state.visible;
-  }
-
   componentDidMount() {
+    this._unsubscribe = this._store.subscribe(() => {
+      const state = this._store.getState();
+      this.setState({
+        ...state,
+        visible: state.transitioningElementGroupFromUid &&
+          state.transitioningElementGroupToUid && state.toViewReady,
+      });
+    });
+
     this._store.dispatch({
       type: 'SET_OVERLAY_HANDLE',
       handle: findNodeHandle(this._innerViewRef),
     });
+  }
+
+  componentWillUnmount() {
+    this._unsubscribe && this._unsubscribe();
   }
 
   render() {

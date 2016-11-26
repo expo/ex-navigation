@@ -3,9 +3,9 @@
  */
 
 import React, { Component, PropTypes, cloneElement } from 'react';
-import findNodeHandle from 'react/lib/findNodeHandle';
 import {
   UIManager,
+  findNodeHandle,
 } from 'react-native';
 
 import type { TransitionProps, Metrics } from './ExNavigationSharedElementReducer';
@@ -16,7 +16,7 @@ type Props = {
 
   // This is not part of the public API and is used by the overlay to pass down
   // transition info used by the animation.
-  transitionProps: ?TransitionProps,
+  transitionProps?: ?TransitionProps,
 };
 
 export default class SharedElement extends Component {

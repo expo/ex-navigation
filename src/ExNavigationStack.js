@@ -45,7 +45,10 @@ const DEFAULT_ROUTE_CONFIG: ExNavigationConfig = {
   styles: Platform.OS === 'ios' ? NavigationStyles.SlideHorizontal : NavigationStyles.Fade,
 };
 
-const STATUSBAR_HEIGHT = Platform.OS === 'ios' ? 20 : (global.__exponent ? 24 : 0);
+const DEFAULT_STATUSBAR_HEIGHT = Platform.OS === 'ios' ? 20 : 25;
+const STATUSBAR_HEIGHT = Platform.OS === 'ios'
+  ? DEFAULT_STATUSBAR_HEIGHT
+  : (global.__exponent ? DEFAULT_STATUSBAR_HEIGHT : 0);
 
 type TransitionFn = (
   transitionProps: NavigationTransitionProps,
@@ -53,6 +56,7 @@ type TransitionFn = (
 ) => void;
 
 type Props = {
+  augmentScene?: (scene: ReactElement<any>, route: Object) => ReactElement<any>,
   defaultRouteConfig?: ExNavigationConfig,
   id: string,
   initialRoute?: ExNavigationRoute,
@@ -146,9 +150,9 @@ export class ExNavigationStackContext extends ExNavigatorContext {
   }
 
   @debounce(500, true)
-  pop() {
+  pop(n: number = 1) {
     this.navigationContext.performAction(({ stacks }) => {
-      stacks(this.navigatorUID).pop();
+      stacks(this.navigatorUID).pop(n);
     });
   }
 
@@ -462,6 +466,16 @@ class ExNavigationStack extends PureComponent<any, Props, State> {
     );
   }
 
+  _getNavigationBarHeight(latestRouteConfig) {
+    let height = NavigationBar.DEFAULT_HEIGHT;
+
+    if (latestRouteConfig.statusBar && latestRouteConfig.statusBar.translucent) {
+      height = NavigationBar.DEFAULT_HEIGHT_WITHOUT_STATUS_BAR + DEFAULT_STATUSBAR_HEIGHT;
+    };
+
+    return height;
+  }
+
   _renderAlertBar = (props: ExNavigationSceneRendererProps) => {
     const latestRoute = this._getRouteAtIndex(props.scenes, props.scenes.length - 1);
     const latestRouteConfig: ExNavigationConfig = latestRoute.config;
@@ -471,8 +485,13 @@ class ExNavigationStack extends PureComponent<any, Props, State> {
 
     const AlertBarComponent = this.props.alertBarComponent || this.context.alertBarComponent || ExNavigationAlertBar;
 
+    const alertBarContainerStyle = [
+      styles.alertBarContainer,
+      { top: navigationBarIsVisible ? this._getNavigationBarHeight(latestRouteConfig): 0 },
+    ];
+
     return (
-      <View style={[styles.alertBarContainer, navigationBarIsVisible ? null : {top: 0}]}>
+      <View style={alertBarContainerStyle}>
         <AlertBarComponent
           style={navigationBarIsVisible ? null : {paddingTop: STATUSBAR_HEIGHT}}
           getNavigatorContext={this._getNavigatorContext}
@@ -507,11 +526,17 @@ class ExNavigationStack extends PureComponent<any, Props, State> {
       latestRouteConfig.navigationBar &&
       latestRouteConfig.navigationBar.visible !== false;
 
-    // TODO: add height and statusBarHeight options here
+    // pass the statusBarHeight to headerComponent if statusBar is translucent
+    let statusBarHeight = STATUSBAR_HEIGHT;
+    if (latestRouteConfig.statusBar && latestRouteConfig.statusBar.translucent) {
+      statusBarHeight = DEFAULT_STATUSBAR_HEIGHT;
+    }
 
+    // TODO: add height here
     return (
       <HeaderComponent
         {...props}
+        statusBarHeight={statusBarHeight}
         getNavigatorContext={this._getNavigatorContext}
         navigatorUID={this.state.navigatorUID}
         visible={navigationBarIsVisible}
@@ -669,7 +694,10 @@ class ExNavigationStack extends PureComponent<any, Props, State> {
 
   _renderRoute = (props: ExNavigationSceneRendererProps) => {
     const route: ExNavigationRoute = props.route;
-    const routeElement = route.render();
+    let routeElement = route.render();
+    if (this.props.augmentScene) {
+      routeElement = this.props.augmentScene(routeElement, route);
+    }
 
     let routeElementProps = {};
 
@@ -696,7 +724,12 @@ class ExNavigationStack extends PureComponent<any, Props, State> {
       if (hasCustomHeight) {
         style = ([...style, {marginTop: customHeight}] : Array<number|Object>);
       } else {
-        style = [...style, isTranslucent ? styles.withNavigationBarTranslucent : styles.withNavigationBarOpaque];
+        style = [
+          ...style,
+          isTranslucent ?
+            styles.withNavigationBarTranslucent
+          : { paddingTop: this._getNavigationBarHeight(routeConfig) },
+        ];
       }
     } else {
       style = [...style, styles.withoutNavigationBar];
@@ -806,13 +839,8 @@ const styles = StyleSheet.create({
   withNavigationBarTranslucent: {
     paddingTop: 0,
   },
-  withNavigationBarOpaque: {
-    // TODO: needs to be dynamic based off of current navbar height
-    paddingTop: NavigationBar.DEFAULT_HEIGHT,
-  },
   alertBarContainer: {
     position: 'absolute',
-    top: NavigationBar.DEFAULT_HEIGHT,
     left: 0,
     right: 0,
   },

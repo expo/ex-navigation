@@ -28,6 +28,7 @@ export default class ExNavigationProvider extends React.Component {
   state: State;
 
   _navigationContext: ExNavigationContext;
+  _backButtonManager: Object;
 
   static childContextTypes = {
     navigationStore: storeShape.isRequired,
@@ -56,11 +57,16 @@ export default class ExNavigationProvider extends React.Component {
       this._navigationContext = props.context;
     }
 
-    createBackButtonManager(this._navigationContext.store);
+    this._backButtonManager = createBackButtonManager();
   }
 
   componentWillMount() {
+    this._backButtonManager.setStore(this._navigationContext.store);
     this._navigationContext.dispatch(Actions.initialize());
+  }
+
+  componentWillUnmount() {
+    this._backButtonManager.unsetStore(this._navigationContext.store);
   }
 
   render(): ReactElement<any> {
