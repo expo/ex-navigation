@@ -223,6 +223,7 @@ export default class ExNavigationBar extends PureComponent {
 
     let styleFromRouteConfig = this.props.latestRoute.getBarStyle();
     let isTranslucent = !!this.props.latestRoute.getTranslucent();
+    let translucentTint = this.props.latestRoute.getTranslucentTint();
     let backgroundStyle = isTranslucent ? styles.appbarTranslucent : styles.appbarSolid;
     let containerStyle = [styles.appbar, backgroundStyle, style, {height}, styleFromRouteConfig];
 
@@ -246,7 +247,12 @@ export default class ExNavigationBar extends PureComponent {
 
     return (
       <View pointerEvents={this.props.visible ? 'auto' : 'none'} style={wrapperStyle}>
-        {isTranslucent && <Components.BlurView style={[styles.translucentUnderlay, {height}]} />}
+        {isTranslucent && (
+          <Components.BlurView
+            tintEffect={translucentTint}
+            style={[styles.translucentUnderlay, {height}]}
+          />
+        )}
 
         <Animated.View style={containerStyle}>
           {backgroundComponents}

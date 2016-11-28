@@ -18,6 +18,7 @@ type Props = {
   renderHeader: () => React.Element<any>,
   width: number,
   children: React.Element<any>,
+  drawerBackgroundColor: string,
   drawerPosition: 'left' | 'right',
   selectedItem: any,
 };
@@ -40,6 +41,7 @@ export default class ExNavigationDrawerLayout extends React.Component {
         ref={component => { this._component = component; }}
         onDrawerClose={() => { this.setState({isOpen: false}) }}
         onDrawerOpen={() => { this.setState({isOpen: true}) }}
+        drawerBackgroundColor={this.props.drawerBackgroundColor}
         drawerWidth={this.props.width}
         drawerPosition={DrawerLayout.positions[position]}
         renderNavigationView={this.props.renderNavigationView || this._renderNavigationView}>

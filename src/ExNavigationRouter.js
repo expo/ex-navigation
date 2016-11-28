@@ -114,6 +114,10 @@ export class ExNavigationRoute {
     return _.get(this.config, 'navigationBar.translucent');
   };
 
+  getTranslucentTint = () => {
+    return _.get(this.config, 'navigationBar.translucentTint');
+  };
+
   getBarElevation = () => {
     return _.get(this.config, 'navigationBar.elevation');
   };
