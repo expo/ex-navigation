@@ -375,6 +375,8 @@ drawer button icons.
 be visible for this route.
 - `translucent` - iOS and Exponent only, use background blur on the
 `navigationBar`, like in the Apple Podcasts app, for example.
+- `borderBottomWidth` - the width of the bottom border
+- `borderBottomColor` - the color of the bottom border
 - `renderLeft` - a function that should return a React component that
 will be rendered in the left position of the `navigationBar`.
 - `renderTitle` - a function that should return a React component that
@@ -604,21 +606,21 @@ export const Router = createRouter(() => ({
 
 ```diff
  /* The top level of your app, often in main.js or index.[ios/android].js */
- 
+
  import {
    NavigationContext,
    NavigationProvider,
    StackNavigation,
  } from '@exponent/ex-navigation';
- 
+
  import Store from './state/Store';
  import Router from './Router';
- 
+
 +const navigationContext = new NavigationContext({
 +  router: Router,
 +  store: Store,
 +})
- 
+
  return (
    <Provider store={Store}>
 +    <NavigationProvider context={navigationContext}>
