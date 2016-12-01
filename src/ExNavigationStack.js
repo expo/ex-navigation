@@ -720,6 +720,11 @@ class ExNavigationStack extends PureComponent<any, Props, State> {
         customHeight += route.getBarHeight();
         hasCustomHeight = true;
       }
+      
+      if (_.isNumber(route.params.hideNavigationBar)) {
+        customHeight = 0;
+        hasCustomHeight = true;
+      }
 
       if (hasCustomHeight) {
         style = ([...style, {marginTop: customHeight}] : Array<number|Object>);
