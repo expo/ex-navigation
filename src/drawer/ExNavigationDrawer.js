@@ -260,6 +260,10 @@ class ExNavigationDrawer extends PureComponent<any, Props, State> {
 
   _parseDrawerItems(props) {
     const drawerItems = Children.map(props.children, (child, index) => {
+      if (!child) {
+        return null;
+      }
+
       invariant(
         child.type === ExNavigationDrawerItem,
         'All children of DrawerNavigation must be DrawerNavigationItems.',
