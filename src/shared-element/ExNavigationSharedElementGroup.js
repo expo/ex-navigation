@@ -200,6 +200,10 @@ export default class SharedElementGroup extends Component {
     prevTransitionProps: NavigationTransitionProps,
     isTransitionTo?: bool = false
   ): void => {
+    if (!this._isMounted) {
+      return;
+    }
+
     const { scene } = transitionProps;
     const { scene: prevScene } = prevTransitionProps;
 
