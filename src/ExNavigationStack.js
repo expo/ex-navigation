@@ -68,6 +68,7 @@ type Props = {
   onUnregisterNavigatorContext: (navigatorUID: string) => void,
   onTransitionStart: ?TransitionFn,
   onTransitionEnd: ?TransitionFn,
+  renderScene?: (props: StackNavigationSceneRendererProps) => ?React.Element<{}>,
 };
 
 type State = {
@@ -87,6 +88,10 @@ type Context = {
 type ExNavigationSceneRendererProps = {
   route: ExNavigationRoute,
 } & NavigationSceneRendererProps;
+
+type StackNavigationSceneRendererProps = ExNavigationSceneRendererProps & {
+  style?: any,
+};
 
 type TransitionOptions = {
   transitionGroup?: string,
@@ -674,21 +679,27 @@ class ExNavigationStack extends PureComponent<any, Props, State> {
     const latestRouteConfig = latestRoute.config;
     const { sceneAnimations, gestures } = latestRouteConfig.styles || {};
 
-    props = { ...props, latestRouteConfig, latestRoute };
-
     const scene: any = props.scene;
     const routeForScene = scene.route;
 
+    props = {
+      ...props,
+      latestRouteConfig,
+      latestRoute,
+      onNavigateBack: this._onNavigateBack,
+      key: props.scene.key,
+      route: routeForScene,
+      sceneAnimations,
+      gestures,
+      renderScene: this._renderRoute,
+    };
+
+    if (typeof this.props.renderScene === 'function') {
+      return this.props.renderScene(props);
+    }
+
     return (
-      <NavigationItem
-        {...props}
-        onNavigateBack={this._onNavigateBack}
-        key={props.scene.key}
-        route={routeForScene}
-        sceneAnimations={sceneAnimations}
-        gestures={gestures}
-        renderScene={this._renderRoute}
-      />
+      <NavigationItem {...props} />
     );
   };
 
