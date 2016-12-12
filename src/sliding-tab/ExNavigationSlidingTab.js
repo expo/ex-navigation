@@ -53,6 +53,7 @@ type Props = {
   swipeEnabled?: boolean,
   tabBarStyle?: any,
   tabStyle?: any,
+  labelStyle?: any,
 };
 
 type State = {
@@ -213,6 +214,7 @@ class ExNavigationSlidingTab extends PureComponent<any, Props, State> {
       pressColor: this.props.pressColor,
       indicatorStyle: this.props.indicatorStyle,
       tabStyle: this.props.tabStyle,
+      labelStyle: this.props.labelStyle,
       renderLabel: this.props.renderLabel,
       style: [{backgroundColor: this.props.barBackgroundColor}, this.props.tabBarStyle],
     };
