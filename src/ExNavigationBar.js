@@ -249,7 +249,8 @@ export default class ExNavigationBar extends PureComponent {
       <View pointerEvents={this.props.visible ? 'auto' : 'none'} style={wrapperStyle}>
         {isTranslucent && (
           <Components.BlurView
-            tintEffect={translucentTint}
+            tint={translucentTint}
+            intensity={100}
             style={[styles.translucentUnderlay, {height}]}
           />
         )}
