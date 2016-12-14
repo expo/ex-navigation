@@ -160,7 +160,7 @@ export default class NavigationContext {
             Actions.push(uid, route)
           );
         },
-        pop: (n) => {
+        pop: (n = 1) => {
           if (n === 1) {
             actions.push(
               Actions.pop(uid)
