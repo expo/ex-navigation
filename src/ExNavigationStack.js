@@ -26,7 +26,6 @@ import { createNavigatorComponent } from './ExNavigationComponents';
 import ExNavigatorContext from './ExNavigatorContext';
 import ExNavigationAlertBar from './ExNavigationAlertBar';
 import * as NavigationStyles from './ExNavigationStyles';
-import * as Utils from './ExNavigationUtils';
 import SharedElementGroup from './shared-element/ExNavigationSharedElementGroup';
 
 const {
@@ -293,8 +292,6 @@ class ExNavigationStack extends PureComponent<any, Props, State> {
 
     this._routeListeners = {};
     this._useAnimation = true;
-
-    this._log = Utils.createLogger('StackNavigation:' + this.state.navigatorUID);
   }
 
   render() {
