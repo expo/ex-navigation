@@ -326,14 +326,9 @@ on the left or right of the title.
 
 ```javascript
 
- @connect()
- class SignOutButton extends React.Component {
-   render() {
-      return (
-        <TouchableOpacity onPress={this.props.dispatch(Actions.signOut())}>
-          <Text>Sign out</Text>
-        </TouchableOpacity>
-      );
+ class HomeScreen extends React.Component {
+   _goToAbout = () => {
+     this.props.navigator.push(Router.getRoute('about', {name: 'Brent'}));
    }
  }
 
@@ -341,11 +336,22 @@ on the left or right of the title.
    static route = {
      navigationBar: {
        title: 'Title goes here',
-       renderRight: (route, props) => <SignOutButton />
+       renderRight: (route, props) => <SignOutButton name={route.params.name} />
      }
    }
 
    // ...
+ }
+ 
+ @connect()
+ class SignOutButton extends React.Component {
+   render() {
+      return (
+        <TouchableOpacity onPress={this.props.dispatch(Actions.signOut())}>
+          <Text>Sign out {this.props.name}</Text>
+        </TouchableOpacity>
+      );
+   }
  }
 ```
 
