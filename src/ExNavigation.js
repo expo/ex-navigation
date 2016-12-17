@@ -27,6 +27,7 @@ export { default as SharedElement } from './shared-element/ExNavigationSharedEle
 export { createNavigationEnabledStore } from './ExNavigationStore';
 
 export { default as NavigationActions } from './ExNavigationActions';
+export { default as ExNavigationActionTypes } from './ExNavigationActionTypes';
 export { default as NavigationReducer } from './ExNavigationReducer';
 
 export * as NavigationStyles from './ExNavigationStyles';
