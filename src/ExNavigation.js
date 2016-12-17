@@ -6,6 +6,7 @@ export { default as NavigationProvider } from './ExNavigationProvider';
 export { default as NavigationContext } from './ExNavigationContext';
 
 export { default as StackNavigation } from './ExNavigationStack';
+export { default as StackNavigationItem } from './ExNavigationStackItem';
 
 export { default as TabNavigation } from './tab/ExNavigationTab';
 export { default as TabNavigationItem } from './tab/ExNavigationTabItem';
