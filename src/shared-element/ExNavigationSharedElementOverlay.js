@@ -101,9 +101,14 @@ export default class SharedElementOverlay extends React.Component {
     const transitioningFromElementGroup = this.state.elementGroups[this.state.transitioningElementGroupFromUid];
     const transitioningToElementGroup = this.state.elementGroups[this.state.transitioningElementGroupToUid];
 
+    // Only transition elements that are present in both transition groups.
+    const commonElements = transitioningToElementGroup.elements.filter(e1 =>
+      transitioningFromElementGroup.elements.some(e2 => e1.props.id === e2.props.id)
+    );
+
     return (
       <View style={styles.overlay}>
-        {transitioningToElementGroup.elements.map((e, i) => {
+        {commonElements.map((e, i) => {
           const fromMetrics = transitioningFromElementGroup.elementMetrics[e.props.id];
           const toMetrics = transitioningToElementGroup.elementMetrics[e.props.id];
           if (!toMetrics) {
