@@ -106,9 +106,9 @@ export default class SharedElement extends Component {
         return;
       }
 
-      UIManager.measureInWindow(
+      UIManager.measure(
         findNodeHandle(this._el),
-        (x, y, width, height) => {
+        (origX, origY, width, height, x, y) => {
           const store = this.context.sharedElementStore;
           store.dispatch({
             type: 'UPDATE_METRICS_FOR_ELEMENT',
