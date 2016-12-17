@@ -212,6 +212,19 @@ class BackButton extends React.Component {
 }
 ```
 
+Alternatively, rather than importing `Router` each time, you may pass the
+route's name directly:
+
+```diff
+_goToAbout = () => {
+-  this.props.navigator.push(Router.getRoute('about'));
++  this.props.navigator.push('about');
+}
+```
+
+… bearing in mind you will loose the ability to type check the route (if using
+Flow).
+
 ## Passing params to a route
 
 ```diff
