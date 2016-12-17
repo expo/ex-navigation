@@ -38,7 +38,7 @@ class ExNavigationBarTitle extends PureComponent {
 
     return (
       <View style={[titleStyles.title, style]}>
-        <Text style={[
+        <Text numberOfLines={1} style={[
           titleStyles.titleText,
           tintColor ? {color: tintColor} : null,
           textStyle,
