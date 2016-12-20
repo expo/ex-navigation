@@ -472,7 +472,7 @@ class TabScreen extends React.Component {
 ```
 
 See an example of TabNavigation in a real app
-[here](https://github.com/exponentjs/rnplay/blob/f4d29c4578fb57347afd0d507a036dd232ec6fdb/navigation/TabNavigationLayout.js).
+[here](https://github.com/exponent/rnplay/blob/f4d29c4578fb57347afd0d507a036dd232ec6fdb/navigation/TabNavigationLayout.js).
 
 If you'd like to switch tabs programmatically (eg: a notification
 arrives and you want to jump to a notifications tab, or you tap on a
@@ -652,7 +652,7 @@ export const Router = createRouter(() => ({
 ### Perform navigation actions from outside of a component
 
 You might be using some Redux middleware like saga, thunk, promise, or
-effex (we recommend [effex](https://github.com/exponentjs/redux-effex)
+effex (we recommend [effex](https://github.com/exponent/redux-effex)
 because we love `async/await`). Whatever you're using, you no longer
 have access to `this.props.navigator` and the like. What to do?
 Well as long as you include your navigation state inside of your Redux

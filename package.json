@@ -11,7 +11,7 @@
     "lint": "eslint ./src ./example",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "repository": "https://github.com/exponentjs/ex-navigation.git",
+  "repository": "https://github.com/exponent/ex-navigation.git",
   "keywords": [
     "react-native",
     "navigation",
@@ -54,6 +54,6 @@
     "eslint-plugin-react": "^5.2.2",
     "flow-bin": "^0.30.0",
     "react": "15.3.2",
-    "react-native": "git+https://github.com/exponentjs/react-native#exp-latest"
+    "react-native": "git+https://github.com/exponent/react-native#exp-latest"
   }
 }
