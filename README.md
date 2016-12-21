@@ -8,7 +8,30 @@ support](https://img.shields.io/badge/exponent-ios%20%7C%20android-blue.svg?styl
 A route-centric, batteries-included navigation library for Exponent and
 React Native that works seamlessly on Android and iOS.
 
-### A few of our favorite features:
+### READ THIS: An important note about the future
+
+"ExNavigation 2" will be called "react-navigation" and it will live on
+the [reactjs](https://github.com/reactjs) organization. It is currently
+being built and scheduled for a beta release in January, 2017. A
+migration path from ExNavigation will be provided.
+
+This means that ExNavigation is currently in maintenance mode -- we
+aren't actively adding new features unless we need them for our own
+projects, because further work is being directed towards
+react-navigation. Pull requests are still welcome.
+
+## Help / Support / Questions
+
+We don't provide any realtime support for ExNavigation questions. If you
+join the Exponent Slack and ask a question there, we will direct you to
+this section of the README. We suggest the following resources:
+
+- Search the README.
+- [Search the issues, then post an issue if nothing matches](https://github.com/exponent/ex-navigation/issues).
+- Search the code if nothing else works.
+- Once you solve your problem, submit a pull request to add the solution to the README.
+
+### A few of our favorite features
 
 - Android back button handling (it just works, no need to do anything)
 - Tab bar navigation
