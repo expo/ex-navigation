@@ -99,11 +99,17 @@ class ExNavigationBarBackButton extends PureComponent {
 }
 
 class ExNavigationBarMenuButton extends PureComponent {
+  onHamburgerPress() {
+    const { onHamburgerPress, navigator } = this.props;
+    onHamburgerPress && onHamburgerPress();
+    navigator.toggleDrawer();
+  }
+  
   render() {
     const { tintColor } = this.props;
 
     return (
-      <TouchableOpacity style={buttonStyles.buttonContainer} onPress={() => this.props.navigator.toggleDrawer()}>
+      <TouchableOpacity style={buttonStyles.buttonContainer} onPress={() => this.onHamburgerPress()}>
         <Image
           style={[buttonStyles.menuButton, tintColor ? {tintColor} : null]}
           source={require('./ExNavigationAssets').menuIcon}

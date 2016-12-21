@@ -576,6 +576,7 @@ class ExNavigationStack extends PureComponent<any, Props, State> {
         <NavigationBar.MenuButton
           navigator={drawerNavigatorParent}
           tintColor={route.getBarTintColor()}
+          onHamburgerPress={this.props.onHamburgerPress || null}
         />
       );
     }
