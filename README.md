@@ -735,3 +735,19 @@ const screenTracking = ({ getState }) => next => action => {
 export default screenTracking;
 
 ```
+
+### Android back button handling
+
+React Native includes a global `BackAndroid` module. Rather than using this module 
+directly, include the `AndroidBackButtonBehavior` component in routes where you'd 
+like to control the back button. `AndroidBackButtonBehavior` accepts
+`isFocused` and `onBackButtonPress`. If `isFocused` is true, the `onBackButtonPress` 
+will fire when the user presses the back button. You need to make sure that `onBackButtonPress` 
+returns a promise that wraps the function you want to be called. Eg. 
+
+```
+<AndroidBackButtonBehavior isFocused={someboolean}
+   onBackButtonPress={()=>Promise.resolve(fireMeWhenSomeBooleanIsTrue)}>
+   ...
+</AndroidBackButtonBehavior>
+```
