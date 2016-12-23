@@ -16,7 +16,11 @@ import { Router } from '../main';
 export default class DrawerNavigationExample extends Component {
 
   _renderHeader = () => {
-    return <Image source={require('../assets/sparkles.jpg')} style={styles.header} />;
+    return (
+      <View style={{height: 180, width: 300}}>
+        <Image source={require('../assets/sparkles.jpg')} style={styles.header} />
+      </View>
+    );
   };
 
   _renderTitle = (text: string, isSelected: bool) => {
