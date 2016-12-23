@@ -130,11 +130,15 @@ export default class ExNavigationAlertBar extends React.Component {
   }
 
   _show = () => {
+    const { currentAlertState } = this.state;
+    const { options } = currentAlertState
+    const duration = options.duration || ALERT_DISPLAY_TIME_MS
+
     this.setState({isVisible: true}, () => {
       this.requestAnimationFrame(() => {
         this._textContainerRef && this._textContainerRef.measure((l, t, w, height) => {
           this._animateIn(height);
-          this._timeout = this.setTimeout(this._dispatchHide, ALERT_DISPLAY_TIME_MS);
+          this._timeout = this.setTimeout(this._dispatchHide, duration);
         });
       });
     });
