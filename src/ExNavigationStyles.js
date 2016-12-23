@@ -205,6 +205,96 @@ export const SlideHorizontalIOS: ExNavigationStyles = {
   gestures: CardStackPanResponder.forHorizontal,
 };
 
+
+export const SlideHorizontalFixedNav: ExNavigationStyles = {
+  configureTransition: configureSpringTransition,
+  sceneAnimations: customForHorizontal,
+  navigationBarAnimations: {
+    forContainer: (props, delta) => {
+      const {
+        layout,
+        position,
+        scene,
+        scenes,
+      } = props;
+
+      const index = scene.index;
+
+      const meVisible = barVisibleForSceneIndex(scenes, index);
+      let offset = layout.initWidth;
+      if (delta === 0) {
+        // default state
+        offset = meVisible ? offset : -offset;
+      } else {
+        // if we're pushing, get the previous scenes' visibility. If we're popping, get the scene ahead
+        const prevVisible = barVisibleForSceneIndex(scenes, index + (delta > 0 ? -1 : 1));
+        if (!prevVisible && meVisible) {
+          // when showing, if a push, move from right to left, otherwise if pop, move from left to right
+          offset = delta > 0 ? offset : -offset;
+        } else {
+          // when hiding, if a push, move from left to right, otherwise if a pop, move from right to left
+          offset = delta > 0 ? -offset : offset;
+        }
+      }
+
+      return {
+        transform: [
+          {
+            translateX: position.interpolate({
+              inputRange: [index - 1, index, index + 1],
+              outputRange: [
+                barVisibleForSceneIndex(scenes, index - 1) ? 0 : offset,
+                barVisibleForSceneIndex(scenes, index) ? 0 : offset,
+                barVisibleForSceneIndex(scenes, index + 1) ? 0 : offset,
+              ],
+            }),
+          },
+        ],
+      };
+    },
+    /**
+     * Crossfade the left view
+     */
+    forLeft: (props) => {
+      const {position, scene, scenes} = props;
+      const {index} = scene;
+      return {
+        opacity: position.interpolate({
+          inputRange: [index - 1, index, index + 1],
+          outputRange: [0, barVisibleForSceneIndex(scenes, index) ? 1 : 0, 0],
+        }),
+      };
+    },
+    /**
+     * Crossfade the title
+     */
+    forCenter: (props) => {
+      const {position, scene, scenes} = props;
+      const {index} = scene;
+      return {
+        opacity: position.interpolate({
+          inputRange: [index - 1, index, index + 1],
+          outputRange: [0, barVisibleForSceneIndex(scenes, index) ? 1 : 0, 0],
+        }),
+      };
+    },
+    /**
+     * Crossfade the right view
+     */
+    forRight: (props) => {
+      const {position, scene, scenes} = props;
+      const {index} = scene;
+      return {
+        opacity: position.interpolate({
+          inputRange: [index - 1, index, index + 1],
+          outputRange: [0, barVisibleForSceneIndex(scenes, index) ? 1 : 0, 0],
+        }),
+      };
+    },
+    gestures: CardStackPanResponder.forHorizontal,
+  }
+};
+
 export const SlideHorizontal: ExNavigationStyles = {
   configureTransition: configureSpringTransition,
   sceneAnimations: customForHorizontal,
