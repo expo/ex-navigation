@@ -365,7 +365,7 @@ on the left or right of the title.
 
    // ...
  }
- 
+
  @connect()
  class SignOutButton extends React.Component {
    render() {
@@ -425,7 +425,7 @@ will be rendered in the left position of the `navigationBar`.
 will be rendered in the title position of the `navigationBar`.
 - `renderRight` - a function that should return a React component that
 will be rendered in the right position of the `navigationBar`.
-- `renderBackground` - a function that should return a React component that 
+- `renderBackground` - a function that should return a React component that
 will be rendered in the background of the `navigationBar`.
 
 ## TabNavigation
@@ -738,16 +738,43 @@ export default screenTracking;
 
 ### Android back button handling
 
-React Native includes a global `BackAndroid` module. Rather than using this module 
-directly, include the `AndroidBackButtonBehavior` component in routes where you'd 
+React Native includes a global `BackAndroid` module. Rather than using this module
+directly, include the `AndroidBackButtonBehavior` component in routes where you'd
 like to control the back button. `AndroidBackButtonBehavior` accepts
-`isFocused` and `onBackButtonPress`. If `isFocused` is true, the `onBackButtonPress` 
-will fire when the user presses the back button. You need to make sure that `onBackButtonPress` 
-returns a promise that wraps the function you want to be called. Eg. 
+`isFocused` and `onBackButtonPress`. If `isFocused` is true, the `onBackButtonPress`
+will fire when the user presses the back button. You need to make sure that `onBackButtonPress`
+returns a promise that wraps the function you want to be called. Eg.
 
 ```
 <AndroidBackButtonBehavior isFocused={someboolean}
    onBackButtonPress={()=>Promise.resolve(fireMeWhenSomeBooleanIsTrue)}>
    ...
 </AndroidBackButtonBehavior>
+```
+
+### Programmatically toggle drawer
+
+You may want to toggle the drawer from a component different than the defaulted
+menu bar icon in the navigation bar.
+
+Credit to @haikyuu, @sibelius
+
+```javascript
+import React, { Component } from 'react';
+import { Navigation } from '@exponent/ex-navigation';
+
+export default class NavigationMenuButton extends Component {
+  render() {
+      const { tintColor, navigation } = this.props;
+      const navigator = navigation.getNavigator('main'); // Pass the ID of your DrawerNavigation
+
+      return (
+        <View>
+          <TouchableOpacity onPress={() => navigator.toggleDrawer()}>
+            <Text>Menu</Text>
+          </TouchableOpacity>
+        </View>
+      );
+  }  
+}
 ```
