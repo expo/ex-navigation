@@ -781,7 +781,8 @@ export default class NavigationMenuButton extends Component {
 ```
 
 Then render your component somewhere in your navigation stack. Be sure to pass
-the navigation object to your component so that you reference the proper.
+the navigation object to your component so that you can select and toggle the
+proper drawer.
 
 ```javascript
 import React, { Component } from 'react';
@@ -794,13 +795,6 @@ export default class Home extends Component {
     navigationBar: {
       visible: false
     },
-  };
-
-  // Navigation
-  _goToHarvest = () => {
-    this.props.navigation.performAction(({ tabs, stacks }) => {
-      tabs('tab-navigation').jumpToTab('tabHarvest');
-    });
   };
 
   render() {
