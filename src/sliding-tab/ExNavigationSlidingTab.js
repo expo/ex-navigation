@@ -55,6 +55,7 @@ type Props = {
   renderFooter?: (props: any) => ?React.Element<any>,
   renderLabel?: (routeParams: any) => ?React.Element<any>,
   getRenderLabel?: (props: any) => (routeParams: any) => ?React.Element<any>,
+  scrollEnabled?: boolean,
   style?: any,
   swipeEnabled?: boolean,
   tabBarStyle?: any,
@@ -87,6 +88,7 @@ class ExNavigationSlidingTab extends PureComponent<any, Props, State> {
     indicatorStyle: {},
     position: 'top',
     pressColor: 'rgba(0,0,0,0.2)',
+    scrollEnabled: false,
     tabStyle: {},
     renderBefore: () => null,
   };
@@ -226,6 +228,7 @@ class ExNavigationSlidingTab extends PureComponent<any, Props, State> {
       tabStyle: this.props.tabStyle,
       labelStyle: this.props.labelStyle,
       renderLabel: renderLabelFn,
+      scrollEnabled: this.props.scrollEnabled,
       style: [{backgroundColor: this.props.barBackgroundColor}, this.props.tabBarStyle],
     };
 
