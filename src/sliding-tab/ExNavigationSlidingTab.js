@@ -228,7 +228,7 @@ class ExNavigationSlidingTab extends PureComponent<any, Props, State> {
       tabStyle: this.props.tabStyle,
       labelStyle: this.props.labelStyle,
       renderLabel: renderLabelFn,
-      tabBarScrollEnabled: this.props.tabBarScrollEnabled,
+      scrollEnabled: this.props.tabBarScrollEnabled,
       style: [{backgroundColor: this.props.barBackgroundColor}, this.props.tabBarStyle],
     };
 
