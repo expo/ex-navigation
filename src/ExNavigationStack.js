@@ -471,9 +471,13 @@ class ExNavigationStack extends PureComponent<any, Props, State> {
   _getNavigationBarHeight(latestRouteConfig) {
     let height = NavigationBar.DEFAULT_HEIGHT;
 
+    if (latestRouteConfig.navigationBar && latestRouteConfig.navigationBar.height) {
+      height = latestRouteConfig.navigationBar.height + DEFAULT_STATUSBAR_HEIGHT;
+    }
+
     if (latestRouteConfig.statusBar && latestRouteConfig.statusBar.translucent) {
       height = NavigationBar.DEFAULT_HEIGHT_WITHOUT_STATUS_BAR + DEFAULT_STATUSBAR_HEIGHT;
-    };
+    }
 
     return height;
   }
