@@ -202,6 +202,7 @@ const WINDOW_WIDTH = Dimensions.get('window').width;
 const styles = StyleSheet.create({
   overflowContainer: {
     overflow: 'hidden',
+    elevation: 0,
   },
   alertBar: {
     backgroundColor: '#000',
