@@ -239,9 +239,13 @@ class ExNavigationReducer {
     const defaultRouteConfig = navigatorState.defaultRouteConfig;
 
     const newChildren = routes.map(child => {
-      const newChild = child.clone();
-      newChild.config = _.merge({}, defaultRouteConfig, child.config);
-      return newChild;
+      if (child.clone) {
+        const newChild = child.clone();
+        newChild.config = _.merge({}, defaultRouteConfig, child.config);
+        return newChild;
+      } else {
+        return child;
+      }
     });
 
     return {
