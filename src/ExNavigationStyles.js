@@ -12,10 +12,17 @@ const {
 
 import type { ExNavigationStyles } from './ExNavigationTypeDefinition';
 
+let useNativeDriver = false;
+
+export function setUseNativeDriverExperimental(use: boolean) {
+  useNativeDriver = use;
+}
+
 const configureTimingTransition = (transitionProps, previousTransitionProps) => ({
   timing: Animated.timing,
   easing: Easing.inOut(Easing.linear),
   duration: 150,
+  useNativeDriver,
 });
 
 const configureSpringTransition = (transitionProps, previousTransitionProps) => {
@@ -36,12 +43,14 @@ const configureSpringTransition = (transitionProps, previousTransitionProps) => 
     speed,
     restSpeedThreshold,
     restDisplacementThreshold,
+    useNativeDriver,
   };
 };
 
 const configureNoopTransition = (transitionProps, previousTransitionProps) => ({
   timing: Animated.timing,
   duration: 1,
+  useNativeDriver,
 });
 
 /**
@@ -292,7 +301,7 @@ export const SlideHorizontalFixedNav: ExNavigationStyles = {
       };
     },
     gestures: CardStackPanResponder.forHorizontal,
-  }
+  },
 };
 
 export const SlideHorizontal: ExNavigationStyles = {
@@ -355,7 +364,7 @@ export const SlideHorizontal: ExNavigationStyles = {
             barVisibleForSceneIndex(scenes, index) ? 0.05 : 0,
             barVisibleForSceneIndex(scenes, index) ? 1 : 0,
             barVisibleForSceneIndex(scenes, index) ? 0.3 : 0,
-            0
+            0,
           ],
         }),
       };
@@ -375,7 +384,7 @@ export const SlideHorizontal: ExNavigationStyles = {
             barVisibleForSceneIndex(scenes, index) ? 0.1 : 0,
             barVisibleForSceneIndex(scenes, index) ? 1 : 0,
             barVisibleForSceneIndex(scenes, index) ? 0.3 : 0,
-            0
+            0,
           ],
         }),
       };
@@ -394,7 +403,7 @@ export const SlideHorizontal: ExNavigationStyles = {
             barVisibleForSceneIndex(scenes, index) ? 0.05 : 0,
             barVisibleForSceneIndex(scenes, index) ? 1 : 0,
             barVisibleForSceneIndex(scenes, index) ? 0.3 : 0,
-            0
+            0,
           ],
         }),
       };
