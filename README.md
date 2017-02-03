@@ -22,7 +22,7 @@ React Native that works seamlessly on Android and iOS.
 ## An important note about the future
 
 "ExNavigation 2" will be called "react-navigation" and it will live on
-the [reactjs](https://github.com/reactjs) organization. It is currently
+the [react-community](https://github.com/react-community) organization. It is currently
 being built and scheduled for a beta release in January, 2017. A
 migration path from ExNavigation will be provided.
 
