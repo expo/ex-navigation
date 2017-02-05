@@ -21,7 +21,7 @@ import ExNavigatorContext from '../ExNavigatorContext';
 import ExNavigationBar from '../ExNavigationBar';
 import ExNavigationSlidingTabItem from './ExNavigationSlidingTabItem';
 import { ExNavigationTabContext } from '../tab/ExNavigationTab';
-import { TabViewAnimated, TabViewPagerAndroid, TabViewPagerScroll, TabBarTop, TabBar } from 'react-native-tab-view';
+import { TabViewAnimated, TabViewPagerAndroid, TabViewPagerScroll, TabBar } from 'react-native-tab-view';
 import { createNavigatorComponent } from '../ExNavigationComponents';
 
 import type ExNavigationContext from '../ExNavigationContext';
@@ -215,7 +215,7 @@ class ExNavigationSlidingTab extends PureComponent<any, Props, State> {
   };
 
   _renderTabBar = (props) => {
-    const TabBarComponent = this.props.position === 'top' ? TabBarTop : TabBar;
+    const TabBarComponent = TabBar;
     const renderLabelFn = this.props.getRenderLabel ?
       this.props.getRenderLabel(props) :
       this.props.renderLabel;
