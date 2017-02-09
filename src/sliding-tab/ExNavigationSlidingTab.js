@@ -50,6 +50,7 @@ type Props = {
   onUnregisterNavigatorContext: (navigatorUID: string) => void,
   position: "top" | "bottom",
   pressColor?: string,
+  renderIndicator: () => ?React.Element<any>,
   renderBefore: () => ?React.Element<any>,
   renderHeader?: (props: any) => ?React.Element<any>,
   renderFooter?: (props: any) => ?React.Element<any>,
@@ -223,6 +224,7 @@ class ExNavigationSlidingTab extends PureComponent<any, Props, State> {
     const tabBarProps = {
       pressColor: this.props.pressColor,
       indicatorStyle: this.props.indicatorStyle,
+      renderIndicator: this.props.renderIndicator,
       tabStyle: this.props.tabStyle,
       labelStyle: this.props.labelStyle,
       renderLabel: renderLabelFn,
