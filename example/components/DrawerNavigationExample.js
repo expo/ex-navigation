@@ -9,6 +9,7 @@ import {
   StackNavigation,
   DrawerNavigation,
   DrawerNavigationItem,
+  DrawerNavigationChild,
 } from '@exponent/ex-navigation';
 import { Ionicons } from '@exponent/vector-icons';
 import { Router } from '../main';
@@ -68,6 +69,9 @@ export default class DrawerNavigationExample extends Component {
             initialRoute={Router.getRoute('home')}
           />
         </DrawerNavigationItem>
+        <DrawerNavigationChild>
+          <Text style={styles.headingText}>Meta</Text>
+        </DrawerNavigationChild>
         <DrawerNavigationItem
           id="another"
           selectedStyle={styles.selectedItemStyle}
@@ -89,6 +93,12 @@ const styles = StyleSheet.create({
     height: 180,
     width: null,
     resizeMode: 'cover',
+  },
+  headingText: {
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+    color: '#777',
+    fontWeight: 'bold',
   },
   buttonTitleText: {
     color: '#222',

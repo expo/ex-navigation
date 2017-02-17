@@ -523,6 +523,7 @@ import {
   StackNavigation,
   DrawerNavigation,
   DrawerNavigationItem,
+  DrawerNavigationChild,
 } from '@exponent/ex-navigation';
 
 // Treat the DrawerNavigationLayout route like any other route -- you may want to set
@@ -553,6 +554,10 @@ class DrawerNavigationLayout extends React.Component {
             initialRoute={Router.getRoute('home')}
           />
         </DrawerNavigationItem>
+
+        <DrawerNavigationChild>
+          <Text style={styles.headingText}>Meta</Text>
+        </DrawerNavigationChild>
 
         <DrawerNavigationItem
           id='about'
@@ -588,6 +593,10 @@ class DrawerNavigationLayout extends React.Component {
 const styles = StyleSheet.create({
   header: {
     height: 20
+  },
+
+  headingText: {
+    fontWeight: 'bold'
   },
 
   selectedItemStyle: {

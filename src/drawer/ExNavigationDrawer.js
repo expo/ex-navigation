@@ -22,6 +22,7 @@ import { createNavigatorComponent } from '../ExNavigationComponents';
 
 import ExNavigationDrawerLayout from './ExNavigationDrawerLayout';
 import ExNavigationDrawerItem from './ExNavigationDrawerItem';
+import ExNavigationDrawerChild from './ExNavigationDrawerChild';
 import type ExNavigationContext from '../ExNavigationContext';
 
 export class ExNavigationDrawerContext extends ExNavigatorContext {
@@ -77,7 +78,7 @@ type Props = {
 type State = {
   id: string,
   navigatorUID: string,
-  drawerItems: Array<ExNavigationDrawerItem>,
+  drawerItems: Array<ExNavigationDrawerItem, ExNavigationDrawerChild>,
   parentNavigatorUID: string,
   renderedItemKeys: Array<string>,
 };
@@ -265,33 +266,43 @@ class ExNavigationDrawer extends PureComponent<any, Props, State> {
       }
 
       invariant(
-        child.type === ExNavigationDrawerItem,
-        'All children of DrawerNavigation must be DrawerNavigationItems.',
+        child.type === ExNavigationDrawerItem || child.type === ExNavigationDrawerChild,
+        'All children of DrawerNavigation must be DrawerNavigationItems or DrawerNavigationChilds.',
       );
 
-      const drawerItemProps = child.props;
+      if (child.type === ExNavigationDrawerChild) {
+        const drawerChildProps = child.props;
 
-      let drawerItem = {
-        ..._.omit(drawerItemProps, ['children']),
-      };
+        let drawerItem = {
+          drawerChildren: drawerChildProps.children,
+        };
 
-      if (Children.count(drawerItemProps.children) > 0) {
-        drawerItem.element = Children.only(drawerItemProps.children);
-      }
-
-      const drawerItemOnPress = () => {
-        this._setActiveItem(drawerItemProps.id, index);
-      };
-
-      if (typeof drawerItemProps.onPress === 'function') {
-        drawerItem.onPress = drawerItem.onPress.bind(this, drawerItemOnPress);
+        return drawerItem;
       } else {
-        drawerItem.onPress = drawerItemOnPress;
+        const drawerItemProps = child.props;
+
+        let drawerItem = {
+          ..._.omit(drawerItemProps, ['children']),
+        };
+
+        if (Children.count(drawerItemProps.children) > 0) {
+          drawerItem.element = Children.only(drawerItemProps.children);
+        }
+
+        const drawerItemOnPress = () => {
+          this._setActiveItem(drawerItemProps.id, index);
+        };
+
+        if (typeof drawerItemProps.onPress === 'function') {
+          drawerItem.onPress = drawerItem.onPress.bind(this, drawerItemOnPress);
+        } else {
+          drawerItem.onPress = drawerItemOnPress;
+        }
+
+        drawerItem.onLongPress = drawerItemProps.onLongPress;
+
+        return drawerItem;
       }
-
-      drawerItem.onLongPress = drawerItemProps.onLongPress;
-
-      return drawerItem;
     });
 
     this.setState({
