@@ -37,15 +37,39 @@ class ExNavigationBarTitle extends PureComponent {
     const { children, style, textStyle, tintColor } = this.props;
 
     return (
-      <View style={[titleStyles.title, style]}>
-        <Text numberOfLines={1} style={[
-          titleStyles.titleText,
-          tintColor ? {color: tintColor} : null,
-          textStyle,
-        ]}>
+      <ExNavigationBarTitleContainer style={style}>
+        <ExNavigationBarTitleText style={textStyle} tintColor={tintColor}>
           {children}
-        </Text>
+        </ExNavigationBarTitleText>
+      </ExNavigationBarTitleContainer>
+    );
+  }
+}
+
+class ExNavigationBarTitleContainer extends PureComponent {
+  render() {
+    const { children, style, ...props } = this.props;
+
+    return (
+      <View {...props} style={[titleStyles.title, style]}>
+        {children}
       </View>
+    );
+  }
+}
+
+class ExNavigationBarTitleText extends PureComponent {
+  render() {
+    const { children, style, tintColor } = this.props;
+
+    return (
+      <Text numberOfLines={1} style={[
+        titleStyles.titleText,
+        tintColor ? {color: tintColor} : null,
+        style,
+      ]}>
+        {children}
+      </Text>
     );
   }
 }
@@ -56,21 +80,26 @@ const titleStyles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginHorizontal: 16,
+    ...Platform.select({
+      ios: {
+        justifyContent: 'center',
+      },
+      android: {
+        justifyContent: 'flex-start',
+      },
+    }),
   },
 
   titleText: {
-    flex: 1,
     color: 'rgba(0, 0, 0, .9)',
     ...Platform.select({
       ios: {
         fontSize: 17,
         fontWeight: '500',
-        textAlign: 'center',
       },
       android: {
         fontSize: 20,
         // fontFamily: 'sans-serif-medium',
-        textAlign: 'left',
       },
     }),
   },
@@ -384,6 +413,8 @@ ExNavigationBar.DEFAULT_BACKGROUND_COLOR = BACKGROUND_COLOR;
 ExNavigationBar.DEFAULT_BORDER_BOTTOM_COLOR = BORDER_BOTTOM_COLOR;
 ExNavigationBar.DEFAULT_BORDER_BOTTOM_WIDTH = BORDER_BOTTOM_WIDTH;
 ExNavigationBar.Title = ExNavigationBarTitle;
+ExNavigationBar.TitleContainer = ExNavigationBarTitleContainer;
+ExNavigationBar.TitleText = ExNavigationBarTitleText;
 ExNavigationBar.BackButton = ExNavigationBarBackButton;
 ExNavigationBar.MenuButton = ExNavigationBarMenuButton;
 
