@@ -4,23 +4,30 @@
 
 import React from 'react';
 import {
-  NativeModules,
   ScrollView,
   StyleSheet,
-  Text,
-  TouchableWithoutFeedback,
   View,
 } from 'react-native';
 import DrawerLayout from 'react-native-drawer-layout';
-import TouchableNativeFeedbackSafe from '@exponent/react-native-touchable-native-feedback-safe';
+
+type NavigationViewOptions = {
+  renderHeader: () => React.Element<any>,
+  renderDrawerItems: (items: Array<React.Element<any>>) => Array<React.Element<any>>,
+  items: Array<React.Element<any>>,
+  containerStyle: Array<any>,
+  scrollableContentContainerStyle: Array<any>,
+};
 
 type Props = {
   renderHeader: () => React.Element<any>,
+  renderNavigationView: (options:NavigationViewOptions) => React.Element<any>,
   width: number,
+  items: Array<React.Element<any>>,
   children: React.Element<any>,
   drawerBackgroundColor: string,
   drawerPosition: 'left' | 'right',
   selectedItem: any,
+  setActiveItem: (id: string) => void,
 };
 
 type State = {
@@ -44,7 +51,7 @@ export default class ExNavigationDrawerLayout extends React.Component {
         drawerBackgroundColor={this.props.drawerBackgroundColor}
         drawerWidth={this.props.width}
         drawerPosition={DrawerLayout.positions[position]}
-        renderNavigationView={this.props.renderNavigationView || this._renderNavigationView}>
+        renderNavigationView={this._renderNavigationView}>
         {this.props.children}
       </DrawerLayout>
     );
@@ -59,73 +66,45 @@ export default class ExNavigationDrawerLayout extends React.Component {
   }
 
   _renderNavigationView = () => {
+    const renderNavigationView = this.props.renderNavigationView || this.renderNavigationView;
+    return renderNavigationView({
+      renderHeader: this.props.renderHeader,
+      renderDrawerItems: this.renderDrawerItems,
+      items: this.props.items,
+      containerStyle: [styles.navigationViewContainer, this.props.style],
+      scrollableContentContainerStyle: [styles.navigationViewScrollableContentContainer],
+    });
+  }
+
+  renderNavigationView = ({renderHeader, renderDrawerItems, items, containerStyle, scrollableContentContainerStyle}:NavigationViewOptions) => {
     return (
-      <View style={[styles.navigationViewContainer, this.props.style]}>
+      <View style={containerStyle}>
         <View>
-          {this.props.renderHeader()}
+          {renderHeader()}
         </View>
 
-        <ScrollView contentContainerStyle={styles.navigationViewScrollableContentContainer}>
-          {this._renderDrawerItems()}
+        <ScrollView contentContainerStyle={scrollableContentContainerStyle}>
+          {renderDrawerItems(items)}
         </ScrollView>
       </View>
     );
   }
 
-  _renderDrawerItems = () => {
-    if (!this.props.items) {
-      return null;
+  renderDrawerItems = (items: Array<React.Element<any>>) => {
+    if (!items) {
+      return [];
     }
 
-    return this.props.items.map((item, index) => {
-      let { renderIcon, renderTitle, renderRight } = item;
-      let isSelected = this.props.selectedItem === item.id;
-      const icon = renderIcon && renderIcon(isSelected);
-      const title = renderTitle && renderTitle(isSelected);
-      const rightElement = renderRight && renderRight(isSelected);
+    return items.map((item, index) => {
+      let isSelected = this.props.selectedItem === item.props.id;
 
-      if (item.showsTouches !== false) {
-        return (
-          <TouchableNativeFeedbackSafe
-            key={index}
-            onPress={() => { this._handlePress(item); }}
-            onLongPress={() => { this._handleLongPress(item); }}
-            delayPressIn={0}
-            style={[isSelected ? item.selectedStyle : item.style]}
-            background={item.nativeFeedbackBackground}>
-            <View style={styles.buttonContainer}>
-              {
-                icon && <View style={[styles.elementContainer]}>{icon}</View>
-              }
-              {
-                title && <View style={[styles.elementContainer]}>{title}</View>
-              }
-              {
-                rightElement && <View style={[styles.elementContainer, styles.rightElementContainer]}>{rightElement}</View>
-              }
-            </View>
-          </TouchableNativeFeedbackSafe>
-        );
-      } else {
-        return (
-          <TouchableWithoutFeedback
-            key={index}
-            onPress={() => { this._handlePress(item); }}
-            onLongPress={() => { this._handleLongPress(item); }}>
-            <View style={[styles.buttonContainer, isSelected ? item.selectedStyle : item.style]}>
-              {
-                icon && <View style={[styles.elementContainer]}>{icon}</View>
-              }
-              {
-                title && <View style={[styles.elementContainer]}>{title}</View>
-              }
-              {
-                rightElement && <View style={[styles.elementContainer, styles.rightElementContainer]}>{rightElement}</View>
-              }
-            </View>
-          </TouchableWithoutFeedback>
-        );
-      }
+      return React.cloneElement(item, {
+        key: index,
+        isSelected,
+        onPress: () => { this._handlePress(item.props); },
+        onLongPress: () => { this._handleLongPress(item.props); },
+        renderTo: 'drawer',
+      });
     });
   }
 
@@ -133,7 +112,11 @@ export default class ExNavigationDrawerLayout extends React.Component {
   // onPress and onLongPress should fire after close drawer!
   //
   _handlePress = (item: any) => {
-    item.onPress();
+    if (item.onPress) {
+      item.onPress();
+    } else {
+      this.props.setActiveItem(item.id);
+    }
     this._component.closeDrawer();
   }
 
@@ -155,21 +138,4 @@ const styles = StyleSheet.create({
   navigationViewScrollableContentContainer: {
     paddingTop: 8,
   },
-  buttonContainer: {
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'flex-start',
-    alignItems: 'center',
-    paddingVertical: 10,
-    paddingHorizontal: 15,
-  },
-  elementContainer: {
-    flexDirection: 'row',
-    justifyContent: 'flex-start',
-    alignItems: 'center',
-  },
-  rightElementContainer: {
-    flex: 1,
-    justifyContent: 'flex-end'
-  }
 });
