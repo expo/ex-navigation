@@ -34,10 +34,11 @@ const BACK_BUTTON_HIT_SLOP = { top: 0, bottom: 0, left: 0, right: 30 };
 
 class ExNavigationBarTitle extends PureComponent {
   render() {
-    const { children, style, textStyle, tintColor } = this.props;
+    const { children, before, after, style, textStyle, tintColor } = this.props;
 
     return (
       <View style={[titleStyles.title, style]}>
+        {before}
         <Text numberOfLines={1} style={[
           titleStyles.titleText,
           tintColor ? {color: tintColor} : null,
@@ -45,6 +46,7 @@ class ExNavigationBarTitle extends PureComponent {
         ]}>
           {children}
         </Text>
+        {after}
       </View>
     );
   }
