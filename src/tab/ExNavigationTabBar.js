@@ -86,9 +86,9 @@ export default class ExNavigationTabBar extends React.Component {
             delayPressIn={0}
             style={[styles.tabItem, isSelected ? item.selectedStyle : item.style]}
             background={item.nativeFeedbackBackground}>
-            {title}
             {icon}
             {badge}
+            {title}
           </TouchableNativeFeedback>
         );
       } else {
