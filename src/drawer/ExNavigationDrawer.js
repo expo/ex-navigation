@@ -9,7 +9,7 @@ import {
   StyleSheet,
   View,
 } from 'react-native';
-import DrawerLayout from 'react-native-drawer-layout';
+import DrawerLayout from 'react-native-drawer-layout-polyfill';
 import PureComponent from '../utils/PureComponent';
 import StaticContainer from 'react-static-container';
 
