@@ -138,11 +138,16 @@ class ExNavigationDrawer extends PureComponent<any, Props, State> {
       return null;
     }
 
+
+    // LD - 3/22/17. I've added the drawerLockMode passthrough.
+
+
     const drawerLayoutProps = {
       children: this.renderContent(),
       renderHeader: this.props.renderHeader,
       selectedItem: navigationState.routes[navigationState.index].key,
       items: this.state.drawerItems,
+      drawerLockMode: this.props.drawerLockMode,
       drawerBackgroundColor: this.props.drawerBackgroundColor,
       drawerPosition: this.props.drawerPosition,
       width: this.props.drawerWidth,

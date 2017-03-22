@@ -37,6 +37,8 @@ export default class ExNavigationDrawerLayout extends React.Component {
     let { drawerPosition } = this.props;
     let position = drawerPosition[0].toUpperCase() + drawerPosition.substr(1);
 
+    // LD - 3/22/17. I've added the drawerLockMode passthrough.
+
     return (
       <DrawerLayout
         ref={component => {
@@ -49,6 +51,7 @@ export default class ExNavigationDrawerLayout extends React.Component {
           this.setState({ isOpen: true });
         }}
         drawerBackgroundColor={this.props.drawerBackgroundColor}
+        drawerLockMode={this.props.drawerLockMode}
         drawerWidth={this.props.width}
         drawerPosition={DrawerLayout.positions[position]}
         renderNavigationView={
