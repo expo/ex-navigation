@@ -14,7 +14,7 @@ import type {
   NavigationSceneRendererProps,
   NavigationTransitionProps,
   NavigationTransitionSpec,
-} from 'NavigationTypeDefinition';
+} from './navigation-experimental/NavigationTypeDefinition';
 
 export type ExNavigationStyles = {
   applyAnimation: ?((position: Animated.Value, navigationState: Object) => void),

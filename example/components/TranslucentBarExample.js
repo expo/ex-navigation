@@ -9,8 +9,8 @@ import {
 import {
   TabNavigation,
   TabNavigationItem,
-} from '@exponent/ex-navigation';
-import { Ionicons } from '@exponent/vector-icons';
+} from '@expo/ex-navigation';
+import { Ionicons } from '@expo/vector-icons';
 
 function getColor(isSelected) {
   return isSelected ? '#fff' : '#000';

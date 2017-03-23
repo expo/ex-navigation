@@ -2,8 +2,8 @@ import {
   Animated,
   Easing,
   I18nManager,
-  NavigationExperimental,
 } from 'react-native';
+import NavigationExperimental from './navigation-experimental';
 
 const {
   CardStackStyleInterpolator,

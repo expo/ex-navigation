@@ -8,8 +8,8 @@ import {
 import {
   SlidingTabNavigation,
   SlidingTabNavigationItem,
-} from '@exponent/ex-navigation';
-import { Ionicons } from '@exponent/vector-icons';
+} from '@expo/ex-navigation';
+import { Ionicons } from '@expo/vector-icons';
 
 export default class SlidingTabNavigationExample extends Component {
   static route = {

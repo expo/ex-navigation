@@ -5,7 +5,7 @@ import {
   StyleSheet,
   StatusBar,
 } from 'react-native';
-import pak from '@exponent/ex-navigation/package.json';
+import pak from '@expo/ex-navigation/package.json';
 
 export default class HomeScreen extends Component {
   /**
