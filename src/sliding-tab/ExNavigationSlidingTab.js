@@ -38,6 +38,8 @@ type SlidingTabItem = {
 };
 
 type Props = {
+  tabBarScrollEnabled?: boolean,
+  tabWidth?: number,
   barBackgroundColor?: string,
   children: Array<React.Element<any>>,
   indicatorStyle?: any,
@@ -222,6 +224,9 @@ class ExNavigationSlidingTab extends PureComponent<any, Props, State> {
       this.props.renderLabel;
 
     const tabBarProps = {
+      tabBarScrollEnabled: this.props.tabBarScrollEnabled,
+      scrollEnabled: this.props.scrollEnabled,
+      tabWidth: this.props.tabWidth,
       pressColor: this.props.pressColor,
       indicatorStyle: this.props.indicatorStyle,
       renderIndicator: this.props.renderIndicator,
