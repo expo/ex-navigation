@@ -8,7 +8,6 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import PureComponent from './utils/PureComponent';
 import { unsupportedNativeView } from './ExUnsupportedNativeView';
 import { withNavigation } from './ExNavigationComponents';
 
@@ -37,7 +36,7 @@ const BORDER_BOTTOM_WIDTH = Platform.OS === 'ios'
   : 0;
 const BACK_BUTTON_HIT_SLOP = { top: 0, bottom: 0, left: 0, right: 30 };
 
-class ExNavigationBarTitle extends PureComponent {
+class ExNavigationBarTitle extends React.PureComponent {
   render() {
     const { children, style, textStyle, tintColor } = this.props;
 
@@ -83,7 +82,7 @@ const titleStyles = StyleSheet.create({
   },
 });
 
-@withNavigation class ExNavigationBarBackButton extends PureComponent {
+@withNavigation class ExNavigationBarBackButton extends React.PureComponent {
   render() {
     const { tintColor } = this.props;
 
@@ -103,7 +102,7 @@ const titleStyles = StyleSheet.create({
   _onPress = () => this.props.navigator.pop();
 }
 
-class ExNavigationBarMenuButton extends PureComponent {
+class ExNavigationBarMenuButton extends React.PureComponent {
   render() {
     const { tintColor } = this.props;
 
@@ -161,7 +160,7 @@ const buttonStyles = StyleSheet.create({
   },
 });
 
-export default class ExNavigationBar extends PureComponent {
+export default class ExNavigationBar extends React.PureComponent {
   static defaultProps = {
     renderTitleComponent(props) {
       const { navigationState } = props;

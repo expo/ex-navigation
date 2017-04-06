@@ -9,7 +9,6 @@ import NavigationExperimental from './navigation-experimental';
 import _ from 'lodash';
 import invariant from 'invariant';
 import cloneReferencedElement from 'react-clone-referenced-element';
-import PureComponent from './utils/PureComponent';
 import { debounce } from 'core-decorators';
 
 import Actions from './ExNavigationActions';
@@ -252,7 +251,7 @@ export class ExNavigationStackContext extends ExNavigatorContext {
   }
 }
 
-class ExNavigationStack extends PureComponent<any, Props, State> {
+class ExNavigationStack extends React.PureComponent<any, Props, State> {
   props: Props;
   state: State;
   context: Context;

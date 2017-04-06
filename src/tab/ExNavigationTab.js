@@ -4,7 +4,6 @@
 
 import React, { Children } from 'react';
 import { StyleSheet, View } from 'react-native';
-import PureComponent from '../utils/PureComponent';
 import StaticContainer from 'react-static-container';
 
 import _ from 'lodash';
@@ -83,7 +82,7 @@ type State = {
   renderedTabKeys: Array<string>,
 };
 
-class ExNavigationTab extends PureComponent<any, Props, State> {
+class ExNavigationTab extends React.PureComponent<any, Props, State> {
   props: Props;
   state: State;
 
