@@ -6,6 +6,7 @@ import React, { PropTypes } from 'react';
 
 import UUID from 'uuid-js';
 
+import invariant from 'invariant';
 import { createSelector } from 'reselect';
 import hoistStatics from 'hoist-non-react-statics';
 import PureComponent from './utils/PureComponent';
@@ -149,7 +150,7 @@ import { NavigationPropType, StackNavigatorContextType } from './ExNavigationPro
 
 const NavigatorPropType = PropTypes.object;
 
-export function withNavigation<T>(WrappedComponent: ReactClass<T>) {
+export function withNavigation<T>(WrappedComponent: ReactClass<T>, { withRef }) {
   class WithNavigation extends PureComponent {
     _wrappedInstance: ReactElement<T>;
 
@@ -166,7 +167,7 @@ export function withNavigation<T>(WrappedComponent: ReactClass<T>) {
     render() {
       return (
         <WrappedComponent
-          ref={(c) => { this._wrappedInstance = c; }}
+          ref={withRef ? this.setWrappedInstance : undefined}
           navigation={this.getNavigationContext()}
           navigator={this.getCurrentNavigator()}
           {...this.props}
@@ -182,7 +183,17 @@ export function withNavigation<T>(WrappedComponent: ReactClass<T>) {
     }
 
     getWrappedInstance() {
+      if (__DEV__) {
+        invariant(withRef,
+          'To access the wrapped instance, you need to specify ' +
+          '{ withRef: true } in the options argument of withNavigation call.'
+        );
+      }
       return this._wrappedInstance;
+    }
+
+    setWrappedInstance(ref) {
+      this._wrappedInstance = ref;
     }
 
     getNavigationContext() {
