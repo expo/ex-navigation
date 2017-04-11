@@ -278,7 +278,7 @@ Flow).
 ## Updating route params
 
 Sometimes you don't have all of the data that you need to set the
-navigation bar title when you mount the route - for example, if you
+navigation bar title or height when you mount the route - for example, if you
 navigate to a user profile screen by user id and need to fetch the
 profile data before you know what the name is. In this case,
 one solution is to use the `updateCurrentRouteParams` function available
@@ -296,13 +296,17 @@ on `StackNavigation` navigators.
 +
 +        return params.isCool ? `Hey cool person!` : `zzz`;
        },
++      height(params) {
++        return params.height;
++      }
      }
    }
 
 +  componentDidMount() {
 +    setTimeout(() => {
 +      this.props.navigator.updateCurrentRouteParams({
-+        isCool: this.props.route.params.name === 'Brent'
++        isCool: this.props.route.params.name === 'Brent',
++        height: 115
 +      })
 +    }, 1000);
 +  }
@@ -423,6 +427,8 @@ will be rendered in the title position of the `navigationBar`.
 will be rendered in the right position of the `navigationBar`.
 - `renderBackground` - a function that should return a React component that
 will be rendered in the background of the `navigationBar`.
+- `height` - Either a number or a function that returns a number, 
+representing the height of the navigation bar. The function is provided with the route params as the first argument.
 
 ## TabNavigation
 

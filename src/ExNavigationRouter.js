@@ -134,7 +134,11 @@ export class ExNavigationRoute {
   };
 
   getBarHeight = () => {
-    return _.get(this.config, 'navigationBar.height');
+    const height = _.get(this.config, 'navigationBar.height');
+    if (typeof height === 'function') {
+      return height(this.params, this.config);
+    }
+    return height;
   };
 
   getBarBorderBottomWidth = () => {
