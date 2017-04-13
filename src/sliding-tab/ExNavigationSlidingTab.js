@@ -56,6 +56,7 @@ type Props = {
   renderFooter?: (props: any) => ?React.Element<any>,
   renderLabel?: (routeParams: any) => ?React.Element<any>,
   getRenderLabel?: (props: any) => (routeParams: any) => ?React.Element<any>,
+  tabBarScrollEnabled?: boolean,
   style?: any,
   swipeEnabled?: boolean,
   tabBarStyle?: any,
@@ -88,6 +89,7 @@ class ExNavigationSlidingTab extends PureComponent<any, Props, State> {
     indicatorStyle: {},
     position: 'top',
     pressColor: 'rgba(0,0,0,0.2)',
+    tabBarScrollEnabled: false,
     tabStyle: {},
     renderBefore: () => null,
   };
@@ -120,12 +122,9 @@ class ExNavigationSlidingTab extends PureComponent<any, Props, State> {
   }
 
   componentWillMount() {
-    let tabItems = this._parseTabItems(this.props);
-
     this._registerNavigatorContext();
 
-    let routes = tabItems.map(({ id, title }) => ({ title, key: id }));
-    let routeKeys = routes.map(r => r.key);
+    const { routes, routeKeys } = this._parseRoutes(this._parseTabItems(this.props));
 
     this.props.navigation.dispatch(Actions.setCurrentNavigator(
       this.state.navigatorUID,
@@ -143,10 +142,16 @@ class ExNavigationSlidingTab extends PureComponent<any, Props, State> {
   }
 
   componentWillReceiveProps(nextProps) {
-    // TODO: Should make it possible to dynamically add children after initial render?
-    // if (nextProps.children && nextProps.children !== this.props.children) {
-    //   this._parseTabItems(nextProps);
-    // }
+    if (nextProps.children && nextProps.children !== this.props.children) {
+      const { routes, routeKeys } = this._parseRoutes(this._parseTabItems(nextProps));
+      const navigationState = nextProps.navigationState;
+      const currentTabKey = (navigationState && navigationState.routes[navigationState.index].key) || nextProps.initialTab;
+      nextProps.navigation.dispatch(Actions.immediatelyResetStack(
+        this.state.navigatorUID,
+        routes,
+        routeKeys.indexOf(currentTabKey),
+      ));
+    }
   }
 
   componentDidUpdate(prevProps) {
@@ -167,7 +172,6 @@ class ExNavigationSlidingTab extends PureComponent<any, Props, State> {
       }
     }
   }
-
 
   render() {
     if (!this.props.children || !this.state.tabItems) {
@@ -228,6 +232,7 @@ class ExNavigationSlidingTab extends PureComponent<any, Props, State> {
       tabStyle: this.props.tabStyle,
       labelStyle: this.props.labelStyle,
       renderLabel: renderLabelFn,
+      scrollEnabled: this.props.tabBarScrollEnabled,
       style: [{backgroundColor: this.props.barBackgroundColor}, this.props.tabBarStyle],
     };
 
@@ -283,6 +288,16 @@ class ExNavigationSlidingTab extends PureComponent<any, Props, State> {
     });
 
     return tabItems;
+  }
+
+  _parseRoutes(tabItems) {
+    const routeKeys = [];
+    const routes = tabItems.map(({ id, title }) => {
+      routeKeys.push(id);
+      return { title, key: id };
+    });
+
+    return { routes, routeKeys };
   }
 
   _setActiveTab = (i) => {
