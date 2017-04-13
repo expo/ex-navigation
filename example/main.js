@@ -1,4 +1,4 @@
-import Exponent, { Asset, Components } from 'exponent';
+import Exponent, { Asset, AppLoading } from 'expo';
 import React, { Component } from 'react';
 import { StatusBar } from 'react-native';
 import DrawerNavigationExample from './components/DrawerNavigationExample';
@@ -14,7 +14,7 @@ import CustomNavigationBarExample from './components/CustomNavigationBarExample'
 import {
   createRouter,
   NavigationProvider,
-} from '@exponent/ex-navigation';
+} from '@expo/ex-navigation';
 
 const assets = [
   require('./assets/beetle.jpg'),
@@ -61,7 +61,7 @@ class App extends Component {
 
   render() {
     if (!this.state.bootstrapped) {
-      return <Components.AppLoading />;
+      return <AppLoading />;
     }
 
     /**

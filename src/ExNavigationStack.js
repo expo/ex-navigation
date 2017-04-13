@@ -8,8 +8,8 @@ import {
   Platform,
   StyleSheet,
   View,
-  NavigationExperimental,
 } from 'react-native';
+import NavigationExperimental from './navigation-experimental';
 
 import _ from 'lodash';
 import invariant from 'invariant';
@@ -34,7 +34,7 @@ const {
 
 import type {
   NavigationSceneRendererProps, NavigationScene, NavigationTransitionProps,
-} from 'NavigationTypeDefinition';
+} from './navigation-experimental/NavigationTypeDefinition';
 import type { ExNavigationRoute, ExNavigationRouter } from './ExNavigationRouter';
 import type ExNavigationContext from './ExNavigationContext';
 import type { ExNavigationConfig } from './ExNavigationTypeDefinition';

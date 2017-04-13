@@ -19,7 +19,7 @@ import type {
   NavigationTransitionProps,
   NavigationTransitionSpec,
   NavigationSceneRendererProps,
-} from 'NavigationTypeDefinition';
+} from '../navigation-experimental/NavigationTypeDefinition';
 
 const DEFAULT_TRANSITION = {
   timing: Animated.timing,
