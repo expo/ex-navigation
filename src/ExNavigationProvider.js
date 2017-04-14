@@ -3,10 +3,7 @@
  */
 
 import React, { PropTypes } from 'react';
-import {
-  View,
-  StyleSheet,
-} from 'react-native';
+import { View, StyleSheet } from 'react-native';
 
 import storeShape from 'react-redux/lib/utils/storeShape';
 
@@ -46,7 +43,9 @@ export default class ExNavigationProvider extends React.Component {
     super(props);
 
     if (!props.context && !props.router) {
-      throw new Error('If no custom NavigationContext is passed into NavigationProvider, you must provide a router.');
+      throw new Error(
+        'If no custom NavigationContext is passed into NavigationProvider, you must provide a router.'
+      );
     }
 
     if (!props.context) {

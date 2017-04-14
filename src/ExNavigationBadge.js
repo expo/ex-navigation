@@ -3,11 +3,7 @@
  */
 
 import React from 'react';
-import {
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 
 type Props = {
   textStyle: Object,
@@ -62,14 +58,18 @@ export default class Badge extends React.Component {
   _handleLayout(event: Object) {
     let { width, height } = event.nativeEvent.layout;
     let { computedSize } = this.state;
-    if (computedSize && computedSize.height === height &&
-      computedSize.width === width) {
+    if (
+      computedSize &&
+      computedSize.height === height &&
+      computedSize.width === width
+    ) {
       return;
     }
 
     this.setState({
       computedSize: {
-        width, height,
+        width,
+        height,
       },
     });
 

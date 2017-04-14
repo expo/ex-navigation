@@ -4,7 +4,10 @@
 
 import React from 'react';
 
-import { withNavigation, createFocusAwareComponent } from './ExNavigationComponents';
+import {
+  withNavigation,
+  createFocusAwareComponent,
+} from './ExNavigationComponents';
 import { getBackButtonManager } from './ExNavigationBackButtonManager';
 
 type Props = {
@@ -19,7 +22,8 @@ type State = {
 
 @createFocusAwareComponent
 @withNavigation
-export default class ExNavigationAndroidBackButtonBehavior extends React.Component {
+export default class ExNavigationAndroidBackButtonBehavior
+  extends React.Component {
   state: State = {
     enabled: false,
   };
@@ -31,9 +35,11 @@ export default class ExNavigationAndroidBackButtonBehavior extends React.Compone
   }
 
   componentWillReceiveProps(nextProps: Props) {
-    if (nextProps.isFocused && !this.props.isFocused) { //becomes focused
+    if (nextProps.isFocused && !this.props.isFocused) {
+      //becomes focused
       this.enable();
-    } else if (!nextProps.isFocused && this.props.isFocused) { //becomes unfocused
+    } else if (!nextProps.isFocused && this.props.isFocused) {
+      //becomes unfocused
       this.disable();
     }
   }

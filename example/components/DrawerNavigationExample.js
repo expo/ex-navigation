@@ -1,10 +1,5 @@
 import React, { Component } from 'react';
-import {
-  StyleSheet,
-  View,
-  Text,
-  Image,
-} from 'react-native';
+import { StyleSheet, View, Text, Image } from 'react-native';
 import {
   StackNavigation,
   DrawerNavigation,
@@ -14,31 +9,41 @@ import { Ionicons } from '@expo/vector-icons';
 import { Router } from '../main';
 
 export default class DrawerNavigationExample extends Component {
-
   _renderHeader = () => {
     return (
-      <View style={{height: 180, width: 300}}>
-        <Image source={require('../assets/sparkles.jpg')} style={styles.header} />
+      <View style={{ height: 180, width: 300 }}>
+        <Image
+          source={require('../assets/sparkles.jpg')}
+          style={styles.header}
+        />
       </View>
     );
   };
 
-  _renderTitle = (text: string, isSelected: bool) => {
+  _renderTitle = (text: string, isSelected: boolean) => {
     return (
-      <Text style={[styles.buttonTitleText, isSelected ? styles.selectedText : null]}>
+      <Text
+        style={[
+          styles.buttonTitleText,
+          isSelected ? styles.selectedText : null,
+        ]}>
         {text}
       </Text>
     );
   };
 
-  _renderIcon = (name: string, isSelected: bool) => {
-    let extraStyle = {marginTop: 2};
+  _renderIcon = (name: string, isSelected: boolean) => {
+    let extraStyle = { marginTop: 2 };
     if (name === 'md-alert') {
-      extraStyle = {...extraStyle, marginLeft: -3};
+      extraStyle = { ...extraStyle, marginLeft: -3 };
     }
     return (
       <Ionicons
-        style={[styles.icon, isSelected ? styles.selectedText : null, extraStyle]}
+        style={[
+          styles.icon,
+          isSelected ? styles.selectedText : null,
+          extraStyle,
+        ]}
         name={name}
         size={24}
       />
@@ -73,10 +78,7 @@ export default class DrawerNavigationExample extends Component {
           selectedStyle={styles.selectedItemStyle}
           renderTitle={isSelected => this._renderTitle('About', isSelected)}
           renderIcon={isSelected => this._renderIcon('md-alert', isSelected)}>
-          <StackNavigation
-            id="about"
-            initialRoute={Router.getRoute('about')}
-          />
+          <StackNavigation id="about" initialRoute={Router.getRoute('about')} />
         </DrawerNavigationItem>
       </DrawerNavigation>
     );
@@ -102,6 +104,6 @@ const styles = StyleSheet.create({
     color: '#0084FF',
   },
   selectedItemStyle: {
-    backgroundColor: "#E8E8E8",
+    backgroundColor: '#E8E8E8',
   },
 });

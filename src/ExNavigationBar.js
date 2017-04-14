@@ -331,16 +331,9 @@ export default class ExNavigationBar extends PureComponent {
   }
 
   _renderSubView(props, name, renderer, styleInterpolator, options = {}) {
-    const {
-      scene,
-      navigationState,
-    } = props;
+    const { scene, navigationState } = props;
 
-    const {
-      index,
-      isStale,
-      key,
-    } = scene;
+    const { index, isStale, key } = scene;
 
     const offset = navigationState.index - index;
 

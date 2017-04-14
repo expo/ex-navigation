@@ -48,14 +48,17 @@ class ExNavigationBackButtonManager {
   }
 
   ensureGlobalListener() {
-    this._setListeners([
-      this._onHardwareBackPress,
-    ]);
+    this._setListeners([this._onHardwareBackPress]);
   }
 
   disable() {
-    this._listeners.forEach(listener => BackAndroid.removeEventListener('hardwareBackPress', listener));
-    BackAndroid.addEventListener('hardwareBackPress', this._disabledBackButtonPress); // Don't let app be exited.
+    this._listeners.forEach(listener =>
+      BackAndroid.removeEventListener('hardwareBackPress', listener)
+    );
+    BackAndroid.addEventListener(
+      'hardwareBackPress',
+      this._disabledBackButtonPress
+    ); // Don't let app be exited.
   }
 
   enable() {
@@ -65,8 +68,14 @@ class ExNavigationBackButtonManager {
   _setListeners(newListeners: Array<() => Promise<void>>) {
     this.disable();
     this._listeners = newListeners;
-    BackAndroid.removeEventListener('hardwareBackPress', this._disabledBackButtonPress);
-    BackAndroid.addEventListener('hardwareBackPress', this._listeners[this._listeners.length - 1]);
+    BackAndroid.removeEventListener(
+      'hardwareBackPress',
+      this._disabledBackButtonPress
+    );
+    BackAndroid.addEventListener(
+      'hardwareBackPress',
+      this._listeners[this._listeners.length - 1]
+    );
   }
 
   _onHardwareBackPress = async () => {
@@ -81,7 +90,7 @@ class ExNavigationBackButtonManager {
 
   _disabledBackButtonPress = () => {
     return true;
-  }
+  };
 }
 
 let manager;

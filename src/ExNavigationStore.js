@@ -2,12 +2,7 @@
  * @flow
  */
 
-import {
-  applyMiddleware,
-  createStore,
-  compose,
-  combineReducers,
-} from 'redux';
+import { applyMiddleware, createStore, compose, combineReducers } from 'redux';
 
 import ExNavigationReducer from './ExNavigationReducer';
 import createExNavigationMiddleware from './ExNavigationMiddleware';
@@ -23,7 +18,7 @@ export type ExNavigationState = {
   currentNavigatorUID: string,
   navigators: {
     [navigatorUID: string]: ExNavigatorState,
-  }
+  },
 };
 
 export type ExNavigationStore = {
@@ -34,12 +29,16 @@ export type ExNavigationStore = {
 };
 
 type Reducer = (state: mixed, action: mixed) => Object;
-type StoreCreator = (reducer: Reducer, initialState: ?Object, enhancer?: Function) => ExNavigationStore;
+type StoreCreator = (
+  reducer: Reducer,
+  initialState: ?Object,
+  enhancer?: Function
+) => ExNavigationStore;
 
 const BATCH_ACTION = 'EX_NAVIGATION.BATCH';
 
 export function batchNavigationActions(actions: Array<mixed>): mixed {
-	return {type: BATCH_ACTION, payload: actions};
+  return { type: BATCH_ACTION, payload: actions };
 }
 
 export function enableActionBatching(reduce: Reducer) {
@@ -53,24 +52,37 @@ export function enableActionBatching(reduce: Reducer) {
   };
 }
 
-export function createNavigationEnabledStore({
-  createStore: createStoreFn = createStore,
-  navigationStateKey = 'navigation',
-}: { createStore?: StoreCreator, navigationStateKey?: string } = {}): StoreCreator {
-  return (reducer: Reducer, initialState: ?Object = {}, enhancer: ?Function = null) => { // eslint-disable-line space-infix-ops
+export function createNavigationEnabledStore(
+  {
+    createStore: createStoreFn = createStore,
+    navigationStateKey = 'navigation',
+  }: { createStore?: StoreCreator, navigationStateKey?: string } = {}
+): StoreCreator {
+  return (
+    reducer: Reducer,
+    initialState: ?Object = {},
+    enhancer: ?Function = null
+  ) => {
+    // eslint-disable-line space-infix-ops
     const reducerWithNav = enableActionBatching(reducer);
 
     let enhancerWithNav;
     if (typeof enhancer === 'function') {
       enhancerWithNav = compose(
         applyMiddleware(...createExNavigationMiddleware(navigationStateKey)),
-        enhancer,
+        enhancer
       );
     } else {
-      enhancerWithNav = applyMiddleware(...createExNavigationMiddleware(navigationStateKey));
+      enhancerWithNav = applyMiddleware(
+        ...createExNavigationMiddleware(navigationStateKey)
+      );
     }
 
-    const store: ExNavigationStore = createStoreFn(reducerWithNav, initialState, enhancerWithNav);
+    const store: ExNavigationStore = createStoreFn(
+      reducerWithNav,
+      initialState,
+      enhancerWithNav
+    );
     store.__exNavigationStateKey = navigationStateKey;
     return store;
   };
