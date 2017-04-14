@@ -6,9 +6,7 @@ import invariant from 'invariant';
 
 import ActionTypes from './ExNavigationActionTypes';
 
-const {
-  StateUtils: NavigationStateUtils,
-} = NavigationExperimental;
+const { StateUtils: NavigationStateUtils } = NavigationExperimental;
 
 const INITIAL_STATE = {
   navigators: {},
@@ -31,7 +29,17 @@ class ExNavigationReducer {
     return INITIAL_STATE;
   }
 
-  static [ActionTypes.SET_CURRENT_NAVIGATOR](state, { navigatorUID, parentNavigatorUID, navigatorType, defaultRouteConfig, routes, index }) {
+  static [ActionTypes.SET_CURRENT_NAVIGATOR](
+    state,
+    {
+      navigatorUID,
+      parentNavigatorUID,
+      navigatorType,
+      defaultRouteConfig,
+      routes,
+      index,
+    }
+  ) {
     if (!state.navigators[navigatorUID] && !routes) {
       return state;
     }
@@ -73,7 +81,9 @@ class ExNavigationReducer {
   }
 
   static [ActionTypes.REMOVE_NAVIGATOR](state, { navigatorUID }) {
-    const currentNavigatorUID = (navigatorsToRestore.length && navigatorsToRestore[navigatorsToRestore.length - 1]) ||
+    const currentNavigatorUID =
+      (navigatorsToRestore.length &&
+        navigatorsToRestore[navigatorsToRestore.length - 1]) ||
       state.navigators[navigatorUID].parentNavigatorUID;
     navigatorsToRestore.pop();
     return {
@@ -102,7 +112,11 @@ class ExNavigationReducer {
     newChild.config = _.merge({}, defaultRouteConfig, child.config);
 
     return {
-      ..._updateNavigator(state, navigatorUID, NavigationStateUtils.push(navigatorState, newChild)),
+      ..._updateNavigator(
+        state,
+        navigatorUID,
+        NavigationStateUtils.push(navigatorState, newChild)
+      ),
       currentNavigatorUID: navigatorUID,
     };
   }
@@ -133,14 +147,17 @@ class ExNavigationReducer {
     }
 
     if (navigatorState.type === 'slidingTab') {
-      return _updateNavigator(
-        state,
-        navigatorUID,
-        {...navigatorState, index: 0 },
-      );
+      return _updateNavigator(state, navigatorUID, {
+        ...navigatorState,
+        index: 0,
+      });
     }
 
-    return _updateNavigator(state, navigatorUID, NavigationStateUtils.pop(navigatorState));
+    return _updateNavigator(
+      state,
+      navigatorUID,
+      NavigationStateUtils.pop(navigatorState)
+    );
   }
 
   static [ActionTypes.POP_N](state, { navigatorUID, n }) {
@@ -152,17 +169,22 @@ class ExNavigationReducer {
     }
 
     if (navigatorState.type === 'slidingTab') {
-      return _updateNavigator(
-        state,
-        navigatorUID,
-        {...navigatorState, index: 0 },
-      );
+      return _updateNavigator(state, navigatorUID, {
+        ...navigatorState,
+        index: 0,
+      });
     }
 
     let sliceTo;
     if (n > navigatorState.routes.length) {
       if (__DEV__) {
-        console.warn('Tried to pop ' + n + ' routes, but only ' + navigatorState.routes.length + ' routes are available on the stack.');
+        console.warn(
+          'Tried to pop ' +
+            n +
+            ' routes, but only ' +
+            navigatorState.routes.length +
+            ' routes are available on the stack.'
+        );
       }
       sliceTo = 1;
     } else {
@@ -170,7 +192,11 @@ class ExNavigationReducer {
     }
 
     const routes = navigatorState.routes.slice(0, sliceTo);
-    const newNavigatorState = { ...navigatorState, index: routes.length - 1, routes };
+    const newNavigatorState = {
+      ...navigatorState,
+      index: routes.length - 1,
+      routes,
+    };
     return _updateNavigator(state, navigatorUID, newNavigatorState);
   }
 
@@ -183,11 +209,10 @@ class ExNavigationReducer {
     }
 
     if (navigatorState.type === 'slidingTab') {
-      return _updateNavigator(
-        state,
-        navigatorUID,
-        {...navigatorState, index: 0 },
-      );
+      return _updateNavigator(state, navigatorUID, {
+        ...navigatorState,
+        index: 0,
+      });
     }
 
     const routes = navigatorState.routes.slice(0, 1);
@@ -195,7 +220,10 @@ class ExNavigationReducer {
     return _updateNavigator(state, navigatorUID, newNavigatorState);
   }
 
-  static [ActionTypes.SHOW_LOCAL_ALERT_BAR](state, { navigatorUID, message, options }) {
+  static [ActionTypes.SHOW_LOCAL_ALERT_BAR](
+    state,
+    { navigatorUID, message, options }
+  ) {
     let alertState = {
       message,
       options,
@@ -222,10 +250,17 @@ class ExNavigationReducer {
       return state;
     }
 
-    return _updateNavigator(state, navigatorUID, NavigationStateUtils.pop(navigatorState));
+    return _updateNavigator(
+      state,
+      navigatorUID,
+      NavigationStateUtils.pop(navigatorState)
+    );
   }
 
-  static [ActionTypes.IMMEDIATELY_RESET_STACK](state, { navigatorUID, routes, index }) {
+  static [ActionTypes.IMMEDIATELY_RESET_STACK](
+    state,
+    { navigatorUID, routes, index }
+  ) {
     const navigatorState = state.navigators[navigatorUID] || {
       routes: [],
       index: 0,
@@ -243,20 +278,34 @@ class ExNavigationReducer {
     });
 
     return {
-      ..._updateNavigator(state, navigatorUID, NavigationStateUtils.reset(navigatorState, newChildren, index)),
+      ..._updateNavigator(
+        state,
+        navigatorUID,
+        NavigationStateUtils.reset(navigatorState, newChildren, index)
+      ),
       currentNavigatorUID: navigatorUID,
     };
   }
 
-  static [ActionTypes.UPDATE_ROUTE_AT_INDEX](state, { navigatorUID, index, newRoute }) {
+  static [ActionTypes.UPDATE_ROUTE_AT_INDEX](
+    state,
+    { navigatorUID, index, newRoute }
+  ) {
     invariant(state.navigators[navigatorUID], 'Navigator does not exist.');
     const navigatorState = state.navigators[navigatorUID];
-    return _updateNavigator(state, navigatorUID, NavigationStateUtils.replaceAtIndex(navigatorState, index, newRoute));
+    return _updateNavigator(
+      state,
+      navigatorUID,
+      NavigationStateUtils.replaceAtIndex(navigatorState, index, newRoute)
+    );
   }
 
   static [ActionTypes.JUMP_TO_ITEM](state, { navigatorUID, item }) {
     invariant(state.navigators[navigatorUID], 'Navigator does not exist.');
-    invariant(state.navigators[navigatorUID].type === 'drawer', 'Navigator is not drawer navigator.');
+    invariant(
+      state.navigators[navigatorUID].type === 'drawer',
+      'Navigator is not drawer navigator.'
+    );
     return _updateSelectedKey(item, state, navigatorUID);
   }
 
@@ -265,7 +314,10 @@ class ExNavigationReducer {
     invariant(navigator, 'Navigator does not exist.');
 
     let { type } = navigator;
-    invariant(['slidingTab', 'tab'].indexOf(type) !== -1, 'Navigator is not tab navigator.');
+    invariant(
+      ['slidingTab', 'tab'].indexOf(type) !== -1,
+      'Navigator is not tab navigator.'
+    );
 
     if (type === 'tab') {
       return _updateSelectedKey(tab, state, navigatorUID);
@@ -274,11 +326,7 @@ class ExNavigationReducer {
       let index = navigator.routes.indexOf(route);
 
       // With slidingTab we only need to change the index
-      return _updateNavigator(
-        state,
-        navigatorUID,
-        {...navigator, index },
-      );
+      return _updateNavigator(state, navigatorUID, { ...navigator, index });
     }
   }
 }
@@ -289,7 +337,8 @@ function _updateSelectedKey(target, state, navigatorUID) {
   const newNavigatorState = { ...state.navigators[navigatorUID] };
   const selected = newNavigatorState.routes[newNavigatorState.index];
 
-  if (target.key === selected.key) { // haven't changed sections
+  if (target.key === selected.key) {
+    // haven't changed sections
     return state;
   }
 

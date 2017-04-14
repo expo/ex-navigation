@@ -8,10 +8,7 @@ import {
   ScrollView,
   TouchableHighlight,
 } from 'react-native';
-import {
-  TabNavigation,
-  TabNavigationItem,
-} from '@expo/ex-navigation';
+import { TabNavigation, TabNavigationItem } from '@expo/ex-navigation';
 import { Ionicons } from '@expo/vector-icons';
 
 function getColor(isSelected) {
@@ -49,12 +46,30 @@ export default class TabNavigationExample extends Component {
             title="First"
             selectedStyle={styles.selectedTab}
             renderTitle={this._renderTitle}
-            renderIcon={(isSelected) => <Ionicons name="ios-boat-outline" size={24} color={getColor(isSelected)} />}>
+            renderIcon={isSelected => (
+              <Ionicons
+                name="ios-boat-outline"
+                size={24}
+                color={getColor(isSelected)}
+              />
+            )}>
             <View style={styles.row}>
-              <Image style={styles.image} source={require('../assets/beetle.jpg')} />
-              <Image style={styles.image} source={require('../assets/colorful-windows.jpg')} />
-              <Image style={styles.image} source={require('../assets/paintbrush.jpg')} />
-              <Image style={styles.image} source={require('../assets/sparkles.jpg')} />
+              <Image
+                style={styles.image}
+                source={require('../assets/beetle.jpg')}
+              />
+              <Image
+                style={styles.image}
+                source={require('../assets/colorful-windows.jpg')}
+              />
+              <Image
+                style={styles.image}
+                source={require('../assets/paintbrush.jpg')}
+              />
+              <Image
+                style={styles.image}
+                source={require('../assets/sparkles.jpg')}
+              />
             </View>
           </TabNavigationItem>
           <TabNavigationItem
@@ -62,7 +77,13 @@ export default class TabNavigationExample extends Component {
             title="Second"
             selectedStyle={styles.selectedTab}
             renderTitle={this._renderTitle}
-            renderIcon={(isSelected) => <Ionicons name="ios-bulb-outline" size={24} color={getColor(isSelected)} />}>
+            renderIcon={isSelected => (
+              <Ionicons
+                name="ios-bulb-outline"
+                size={24}
+                color={getColor(isSelected)}
+              />
+            )}>
             <Image style={styles.gif} source={require('../assets/cat.gif')} />
           </TabNavigationItem>
           <TabNavigationItem
@@ -70,20 +91,37 @@ export default class TabNavigationExample extends Component {
             title="Third"
             selectedStyle={styles.selectedTab}
             renderTitle={this._renderTitle}
-            renderIcon={(isSelected) => <Ionicons name="ios-bowtie-outline" size={24} color={getColor(isSelected)} />}>
+            renderIcon={isSelected => (
+              <Ionicons
+                name="ios-bowtie-outline"
+                size={24}
+                color={getColor(isSelected)}
+              />
+            )}>
             <ScrollView>
-              <Image style={styles.cover} source={require('../assets/space.jpg')} />
+              <Image
+                style={styles.cover}
+                source={require('../assets/space.jpg')}
+              />
               <View style={styles.article}>
                 <View style={styles.row}>
-                  <TouchableHighlight style={styles.button} onPress={this._goToFirstTab}>
+                  <TouchableHighlight
+                    style={styles.button}
+                    onPress={this._goToFirstTab}>
                     <Text style={styles.buttonText}>FIRST TAB</Text>
                   </TouchableHighlight>
-                  <TouchableHighlight style={styles.button} onPress={this._goToSecondTab}>
+                  <TouchableHighlight
+                    style={styles.button}
+                    onPress={this._goToSecondTab}>
                     <Text style={styles.buttonText}>SECOND TAB</Text>
                   </TouchableHighlight>
                 </View>
-                <Text style={styles.heading}>The Hitchhiker's Guide to the Galaxy</Text>
-                <Text style={styles.body}>For instance, on the planet Earth, man had always assumed that he was more intelligent than dolphins because he had achieved so much—the wheel, New York, wars and so on—whilst all the dolphins had ever done was muck about in the water having a good time. But conversely, the dolphins had always believed that they were far more intelligent than man—for precisely the same reasons.</Text>
+                <Text style={styles.heading}>
+                  The Hitchhiker's Guide to the Galaxy
+                </Text>
+                <Text style={styles.body}>
+                  For instance, on the planet Earth, man had always assumed that he was more intelligent than dolphins because he had achieved so much—the wheel, New York, wars and so on—whilst all the dolphins had ever done was muck about in the water having a good time. But conversely, the dolphins had always believed that they were far more intelligent than man—for precisely the same reasons.
+                </Text>
               </View>
             </ScrollView>
           </TabNavigationItem>
@@ -94,11 +132,11 @@ export default class TabNavigationExample extends Component {
 
   _renderTitle = (isSelected, title) => {
     return (
-      <Text style={{color: getColor(isSelected)}}>
+      <Text style={{ color: getColor(isSelected) }}>
         {title}
       </Text>
     );
-  }
+  };
 }
 
 const IMAGE_SIZE = Dimensions.get('window').width / 2 - 16;

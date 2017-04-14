@@ -14,9 +14,7 @@ import shallowEqual from 'fbjs/lib/shallowEqual';
 import ExNavigationContext from './ExNavigationContext';
 import connect from './ExNavigationConnect';
 
-import type {
-  ExNavigatorState,
-} from './ExNavigationStore';
+import type { ExNavigatorState } from './ExNavigationStore';
 
 function getDisplayName(WrappedComponent: ReactClass<any>): string {
   return WrappedComponent.displayName || WrappedComponent.name || 'Component';
@@ -29,13 +27,17 @@ type WrappedComponentProps = {
 
 const getStateForNavigatorId = (state, props: WrappedComponentProps) => {
   const navigationState = state[props.navigation.navigationStateKey];
-  return navigationState.navigators && props.navigatorUID && navigationState.navigators[props.navigatorUID];
+  return (
+    navigationState.navigators &&
+    props.navigatorUID &&
+    navigationState.navigators[props.navigatorUID]
+  );
 };
 
 const makeNavigatorStateSelector = () => {
   return createSelector(
     [getStateForNavigatorId],
-    (navigationState) => navigationState,
+    navigationState => navigationState
   );
 };
 
@@ -62,12 +64,9 @@ export function createNavigatorComponent(WrappedComponent: ReactClass<any>) {
   };
 
   // Connect the wrapped component to the correct navigation state
-  const ConnectedWrappedComponent = connect(
-    makeMapStateToProps,
-    null,
-    null,
-    { withRef: true },
-  )(WrappedComponent);
+  const ConnectedWrappedComponent = connect(makeMapStateToProps, null, null, {
+    withRef: true,
+  })(WrappedComponent);
 
   class ExNavigatorComponent extends React.Component {
     props: Props;
@@ -94,10 +93,16 @@ export function createNavigatorComponent(WrappedComponent: ReactClass<any>) {
       };
     }
 
-    shouldComponentUpdate(nextProps: Props, nextState: State, nextContext: Context) {
-      return !shallowEqual(this.props, nextProps) ||
-         !shallowEqual(this.state, nextState) ||
-         !shallowEqual(this.context, nextContext);
+    shouldComponentUpdate(
+      nextProps: Props,
+      nextState: State,
+      nextContext: Context
+    ) {
+      return (
+        !shallowEqual(this.props, nextProps) ||
+        !shallowEqual(this.state, nextState) ||
+        !shallowEqual(this.context, nextContext)
+      );
     }
 
     render(): ?ReactElement<any> {
@@ -126,8 +131,7 @@ export function createNavigatorComponent(WrappedComponent: ReactClass<any>) {
     }
 
     getNavigationContext(): ExNavigationContext {
-      return this.props.navigation ||
-        this.context.navigation;
+      return this.props.navigation || this.context.navigation;
     }
 
     _wrappedInstanceRef = (c: ReactElement<{}>) => {
@@ -137,15 +141,21 @@ export function createNavigatorComponent(WrappedComponent: ReactClass<any>) {
         /* $FlowFixMe */
         this._wrappedInstance = c.refs.wrappedInstance;
       }
-    }
+    };
   }
 
   ExNavigatorComponent.displayName = `ExNavigatorComponent(${getDisplayName(WrappedComponent)})`;
 
-  return hoistStatics(ExNavigatorComponent, createFocusableComponent(WrappedComponent));
+  return hoistStatics(
+    ExNavigatorComponent,
+    createFocusableComponent(WrappedComponent)
+  );
 }
 
-import { NavigationPropType, StackNavigatorContextType } from './ExNavigationPropTypes';
+import {
+  NavigationPropType,
+  StackNavigatorContextType,
+} from './ExNavigationPropTypes';
 
 const NavigatorPropType = PropTypes.object;
 
@@ -166,7 +176,9 @@ export function withNavigation<T>(WrappedComponent: ReactClass<T>) {
     render() {
       return (
         <WrappedComponent
-          ref={(c) => { this._wrappedInstance = c; }}
+          ref={c => {
+            this._wrappedInstance = c;
+          }}
           navigation={this.getNavigationContext()}
           navigator={this.getCurrentNavigator()}
           {...this.props}
@@ -220,7 +232,11 @@ export const createFocusableComponent = (WrappedComponent: ReactClass<any>) => {
       this._unsubcribeFromStore = this.props.navigation.store.subscribe(() => {
         try {
           const navState = this.props.navigation.navigationState;
-          if (navState === _prevNavState || !navState || !navState.currentNavigatorUID) {
+          if (
+            navState === _prevNavState ||
+            !navState ||
+            !navState.currentNavigatorUID
+          ) {
             return;
           }
 
@@ -229,7 +245,9 @@ export const createFocusableComponent = (WrappedComponent: ReactClass<any>) => {
 
           let isFocused = false;
 
-          const componentIsNavigator = WrappedComponent.navigation && WrappedComponent.navigation.__isNavigator;
+          const componentIsNavigator =
+            WrappedComponent.navigation &&
+            WrappedComponent.navigation.__isNavigator;
           if (componentIsNavigator) {
             isFocused = focusedNavigatorUID === this.props.navigatorUID;
             if (isFocused && isFocused !== this.state.isFocused) {
@@ -277,7 +295,9 @@ export const createFocusableComponent = (WrappedComponent: ReactClass<any>) => {
   return hoistStatics(withNavigation(FocusableComponent), WrappedComponent);
 };
 
-export const createFocusAwareComponent = (WrappedComponent: ReactClass<any>) => {
+export const createFocusAwareComponent = (
+  WrappedComponent: ReactClass<any>
+) => {
   class FocusAwareComponent extends React.Component {
     static contextTypes = {
       isFocused: React.PropTypes.bool,
