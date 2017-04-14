@@ -1,8 +1,10 @@
 import { Animated, Easing, I18nManager } from 'react-native';
 import NavigationExperimental from './navigation-experimental';
 
-const { CardStackStyleInterpolator, CardStackPanResponder } =
-  NavigationExperimental.Card;
+const {
+  CardStackStyleInterpolator,
+  CardStackPanResponder,
+} = NavigationExperimental.Card;
 
 import type { ExNavigationStyles } from './ExNavigationTypeDefinition';
 
