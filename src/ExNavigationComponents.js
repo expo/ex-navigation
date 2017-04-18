@@ -159,7 +159,7 @@ const NavigatorPropType = PropTypes.object;
 
 export function withNavigation<T>(
   WrappedComponent: ReactClass<T>,
-  { withRef }
+  { withRef } = {}
 ) {
   class WithNavigation extends PureComponent {
     _wrappedInstance: ReactElement<T>;
