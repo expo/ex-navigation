@@ -1,6 +1,6 @@
 {
   "name": "@expo/ex-navigation",
-  "version": "2.10.0",
+  "version": "2.11.0",
   "description": "Route-centric navigation library for React Native.",
   "main": "./src/ExNavigation.js",
   "files": [
