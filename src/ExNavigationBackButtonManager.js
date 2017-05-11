@@ -2,11 +2,13 @@
  * @flow
  */
 
-import { BackAndroid } from 'react-native';
+import { BackAndroid, BackHandler } from 'react-native';
 
 import ExNavigationActions from './ExNavigationActions';
 
 import type { ExNavigationStore } from './ExNavigationStore';
+
+const Handler = BackHandler ? BackHandler : BackAndroid;
 
 /**
  * Manages a global listener, as well as any custom listeners, on the
@@ -53,9 +55,9 @@ class ExNavigationBackButtonManager {
 
   disable() {
     this._listeners.forEach(listener =>
-      BackAndroid.removeEventListener('hardwareBackPress', listener)
+      Handler.removeEventListener('hardwareBackPress', listener)
     );
-    BackAndroid.addEventListener(
+    Handler.addEventListener(
       'hardwareBackPress',
       this._disabledBackButtonPress
     ); // Don't let app be exited.
@@ -68,11 +70,11 @@ class ExNavigationBackButtonManager {
   _setListeners(newListeners: Array<() => Promise<void>>) {
     this.disable();
     this._listeners = newListeners;
-    BackAndroid.removeEventListener(
+    Handler.removeEventListener(
       'hardwareBackPress',
       this._disabledBackButtonPress
     );
-    BackAndroid.addEventListener(
+    Handler.addEventListener(
       'hardwareBackPress',
       this._listeners[this._listeners.length - 1]
     );
@@ -84,7 +86,7 @@ class ExNavigationBackButtonManager {
     }
     const moreRoutes = await this._store.dispatch(ExNavigationActions.goBack());
     if (moreRoutes === false) {
-      BackAndroid.exitApp();
+      Handler.exitApp();
     }
   };
 
