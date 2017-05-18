@@ -34,23 +34,23 @@
 const React = require('react');
 const ReactNative = require('react-native');
 
-const {
-  Platform,
-  StyleSheet,
-  View,
-  Text,
-} = ReactNative;
+const { Platform, StyleSheet, View, Text, ViewPropTypes } = ReactNative;
 
 type Props = {
   children?: React.Element<any>,
   style?: any,
   textStyle?: any,
   viewProps?: any,
-}
+};
 
-const NavigationHeaderTitle = ({ children, style, textStyle, viewProps }: Props) => (
-  <View style={[ styles.title, style ]} {...viewProps}>
-    <Text style={[ styles.titleText, textStyle ]}>{children}</Text>
+const NavigationHeaderTitle = ({
+  children,
+  style,
+  textStyle,
+  viewProps,
+}: Props) => (
+  <View style={[styles.title, style]} {...viewProps}>
+    <Text style={[styles.titleText, textStyle]}>{children}</Text>
   </View>
 );
 
@@ -59,7 +59,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    marginHorizontal: 16
+    marginHorizontal: 16,
   },
 
   titleText: {
@@ -67,14 +67,14 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: '500',
     color: 'rgba(0, 0, 0, .9)',
-    textAlign: Platform.OS === 'ios' ? 'center' : 'left'
-  }
+    textAlign: Platform.OS === 'ios' ? 'center' : 'left',
+  },
 });
 
 NavigationHeaderTitle.propTypes = {
   children: React.PropTypes.node.isRequired,
-  style: View.propTypes.style,
-  textStyle: Text.propTypes.style
+  style: ViewPropTypes.style,
+  textStyle: Text.propTypes.style,
 };
 
 module.exports = NavigationHeaderTitle;

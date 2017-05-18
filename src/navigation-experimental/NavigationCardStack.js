@@ -37,11 +37,16 @@ const NavigationCardStackStyleInterpolator = require('./NavigationCardStackStyle
 const NavigationPropTypes = require('./NavigationPropTypes');
 const NavigationTransitioner = require('./NavigationTransitioner');
 const React = require('react');
-const {NativeModules, StyleSheet, View} = require('react-native');
+const {
+  NativeModules,
+  StyleSheet,
+  View,
+  ViewPropTypes,
+} = require('react-native');
 
-const {NativeAnimatedModule} = NativeModules;
-const {PropTypes} = React;
-const {Directions} = NavigationCardStackPanResponder;
+const { NativeAnimatedModule } = NativeModules;
+const { PropTypes } = React;
+const { Directions } = NavigationCardStackPanResponder;
 
 import type {
   NavigationState,
@@ -125,8 +130,8 @@ type DefaultProps = {
  * ```
  */
 class NavigationCardStack extends React.Component<DefaultProps, Props, void> {
-  _render : NavigationSceneRenderer;
-  _renderScene : NavigationSceneRenderer;
+  _render: NavigationSceneRenderer;
+  _renderScene: NavigationSceneRenderer;
 
   static propTypes = {
     /**
@@ -200,12 +205,12 @@ class NavigationCardStack extends React.Component<DefaultProps, Props, void> {
     /**
      * Custom style applied to the cards stack.
      */
-    style: View.propTypes.style,
+    style: ViewPropTypes.style,
 
     /**
      * Custom style applied to the scenes stack.
      */
-    scenesStyle: View.propTypes.style,
+    scenesStyle: ViewPropTypes.style,
   };
 
   static defaultProps: DefaultProps = {
@@ -237,38 +242,33 @@ class NavigationCardStack extends React.Component<DefaultProps, Props, void> {
     const isVertical = this.props.direction === 'vertical';
     const animationConfig = {};
     if (
-      !!NativeAnimatedModule
-
+      !!NativeAnimatedModule &&
       // Gestures do not work with the current iteration of native animation
       // driving. When gestures are disabled, we can drive natively.
-      && !this.props.enableGestures
-
+      !this.props.enableGestures &&
       // Native animation support also depends on the transforms used:
-      && NavigationCardStackStyleInterpolator.canUseNativeDriver(isVertical)
+      NavigationCardStackStyleInterpolator.canUseNativeDriver(isVertical)
     ) {
       animationConfig.useNativeDriver = true;
     }
     return animationConfig;
-  }
+  };
 
   _render(props: NavigationTransitionProps): React.Element<any> {
-    const {
-      renderHeader,
-    } = this.props;
+    const { renderHeader } = this.props;
 
     const header = renderHeader ? <View>{renderHeader(props)}</View> : null;
 
-    const scenes = props.scenes.map(
-     scene => this._renderScene({
-       ...props,
-       scene,
-     })
+    const scenes = props.scenes.map(scene =>
+      this._renderScene({
+        ...props,
+        scene,
+      })
     );
 
     return (
       <View style={styles.container}>
-        <View
-          style={[styles.scenes, this.props.scenesStyle]}>
+        <View style={[styles.scenes, this.props.scenesStyle]}>
           {scenes}
         </View>
         {header}
@@ -279,9 +279,11 @@ class NavigationCardStack extends React.Component<DefaultProps, Props, void> {
   _renderScene(props: NavigationSceneRendererProps): React.Element<any> {
     const isVertical = this.props.direction === 'vertical';
 
-    const interpolator = this.props.cardStyleInterpolator || (isVertical ?
-      NavigationCardStackStyleInterpolator.forVertical :
-      NavigationCardStackStyleInterpolator.forHorizontal);
+    const interpolator =
+      this.props.cardStyleInterpolator ||
+      (isVertical
+        ? NavigationCardStackStyleInterpolator.forVertical
+        : NavigationCardStackStyleInterpolator.forHorizontal);
 
     const style = interpolator(props);
 
@@ -293,9 +295,9 @@ class NavigationCardStack extends React.Component<DefaultProps, Props, void> {
         onNavigateBack: this.props.onNavigateBack,
         gestureResponseDistance: this.props.gestureResponseDistance,
       };
-      panHandlers = isVertical ?
-        NavigationCardStackPanResponder.forVertical(panHandlersProps) :
-        NavigationCardStackPanResponder.forHorizontal(panHandlersProps);
+      panHandlers = isVertical
+        ? NavigationCardStackPanResponder.forVertical(panHandlersProps)
+        : NavigationCardStackPanResponder.forHorizontal(panHandlersProps);
     }
 
     return (
