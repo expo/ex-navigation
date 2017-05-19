@@ -391,6 +391,9 @@ class ExNavigationStack extends PureComponent<any, Props, State> {
           this.state.navigatorUID
         );
       }
+      else if(parentNavigator.type === 'drawer') {
+        ((parentNavigator: any): ExNavigationDrawerContext).setNavigatorUIDForCurrentItem(this.state.navigatorUID);
+      }
     }
 
     getBackButtonManager().ensureGlobalListener();
