@@ -4,13 +4,13 @@ import invariant from 'invariant';
 import ExNavigationActionTypes from './ExNavigationActionTypes';
 import ExNavigationActions from './ExNavigationActions';
 
-export default (navigationStateKey) => ([
-  ({ getState, dispatch }) => check(
-    ExNavigationActionTypes.GO_BACK,
-    (next, action) => {
+export default navigationStateKey => [
+  ({ getState, dispatch }) =>
+    check(ExNavigationActionTypes.GO_BACK, (next, action) => {
       const navState = getState()[navigationStateKey];
 
-      const currentNavigatorState = navState.navigators[navState.currentNavigatorUID];
+      const currentNavigatorState =
+        navState.navigators[navState.currentNavigatorUID];
       if (currentNavigatorState.index === 0) {
         const { parentNavigatorUID } = currentNavigatorState;
         if (parentNavigatorUID) {
@@ -22,11 +22,12 @@ export default (navigationStateKey) => ([
 
       const { navigation: newNavState } = getState();
       return navState !== newNavState;
-    }
-  ),
-  ({ getState, dispatch }) => check(
-    ExNavigationActionTypes.UPDATE_CURRENT_ROUTE_PARAMS,
-    (next, { navigatorUID, newParams }) => {
+    }),
+  ({ getState, dispatch }) =>
+    check(ExNavigationActionTypes.UPDATE_CURRENT_ROUTE_PARAMS, (next, {
+      navigatorUID,
+      newParams,
+    }) => {
       const navState = getState()[navigationStateKey];
 
       invariant(navState.navigators[navigatorUID], 'Navigator does not exist.');
@@ -54,9 +55,8 @@ export default (navigationStateKey) => ([
       });
 
       return;
-    }
-  ),
-]);
+    }),
+];
 
 // Check whether a specific middleware is of a certain type.
 const check = (actionType, nextFn) => next => action => {

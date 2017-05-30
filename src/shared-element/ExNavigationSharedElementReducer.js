@@ -25,12 +25,12 @@ type State = {
 };
 
 type ActionType =
-  'REGISTER_GROUP' |
-  'UNREGISTER_GROUP' |
-  'UPDATE_METRICS_FOR_ELEMENT' |
-  'START_TRANSITION_FOR_ELEMENT_GROUPS' |
-  'END_TRANSITION_FOR_ELEMENT_GROUPS' |
-  'SET_OVERLAY_HANDLE';
+  | 'REGISTER_GROUP'
+  | 'UNREGISTER_GROUP'
+  | 'UPDATE_METRICS_FOR_ELEMENT'
+  | 'START_TRANSITION_FOR_ELEMENT_GROUPS'
+  | 'END_TRANSITION_FOR_ELEMENT_GROUPS'
+  | 'SET_OVERLAY_HANDLE';
 
 type Action = {
   type: ActionType,
@@ -45,7 +45,9 @@ const INITIAL_STATE: State = {
 
 class SharedElementReducer {
   static reduce(state: State = INITIAL_STATE, action: Action): State {
-    const reducer: { [key: string]: (state: State, action: Action) => State } = SharedElementReducer;
+    const reducer: {
+      [key: string]: (state: State, action: Action) => State,
+    } = SharedElementReducer;
     if (!reducer[action.type]) {
       return state;
     }
@@ -81,7 +83,7 @@ class SharedElementReducer {
         [groupUid]: {
           ...state.elementGroups[groupUid],
           elementMetrics: {
-            ...((state.elementGroups[groupUid] || {}).elementMetrics),
+            ...(state.elementGroups[groupUid] || {}).elementMetrics,
             [id]: metrics,
           },
         },
@@ -89,7 +91,10 @@ class SharedElementReducer {
     };
   }
 
-  static START_TRANSITION_FOR_ELEMENT_GROUPS(state, { fromUid, toUid, progress }) {
+  static START_TRANSITION_FOR_ELEMENT_GROUPS(
+    state,
+    { fromUid, toUid, progress }
+  ) {
     return {
       ...state,
       transitioningElementGroupFromUid: fromUid,

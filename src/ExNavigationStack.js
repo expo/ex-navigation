@@ -3,13 +3,8 @@
  */
 
 import React from 'react';
-import {
-  Animated,
-  Platform,
-  StyleSheet,
-  View,
-  NavigationExperimental,
-} from 'react-native';
+import { Animated, Platform, StyleSheet, View } from 'react-native';
+import NavigationExperimental from './navigation-experimental';
 
 import _ from 'lodash';
 import invariant from 'invariant';
@@ -26,29 +21,34 @@ import { createNavigatorComponent } from './ExNavigationComponents';
 import ExNavigatorContext from './ExNavigatorContext';
 import ExNavigationAlertBar from './ExNavigationAlertBar';
 import * as NavigationStyles from './ExNavigationStyles';
-import * as Utils from './ExNavigationUtils';
-import SharedElementGroup from './shared-element/ExNavigationSharedElementGroup';
+import SharedElementGroup
+  from './shared-element/ExNavigationSharedElementGroup';
 
-const {
-  Transitioner: NavigationTransitioner,
-} = NavigationExperimental;
+const { Transitioner: NavigationTransitioner } = NavigationExperimental;
 
 import type {
-  NavigationSceneRendererProps, NavigationScene, NavigationTransitionProps,
-} from 'NavigationTypeDefinition';
-import type { ExNavigationRoute, ExNavigationRouter } from './ExNavigationRouter';
+  NavigationSceneRendererProps,
+  NavigationScene,
+  NavigationTransitionProps,
+} from './navigation-experimental/NavigationTypeDefinition';
+import type {
+  ExNavigationRoute,
+  ExNavigationRouter,
+} from './ExNavigationRouter';
 import type ExNavigationContext from './ExNavigationContext';
 import type { ExNavigationConfig } from './ExNavigationTypeDefinition';
 import type { ExNavigationTabContext } from './tab/ExNavigationTab';
 
 const DEFAULT_ROUTE_CONFIG: ExNavigationConfig = {
-  styles: Platform.OS === 'ios' ? NavigationStyles.SlideHorizontal : NavigationStyles.Fade,
+  styles: Platform.OS === 'ios'
+    ? NavigationStyles.SlideHorizontal
+    : NavigationStyles.Fade,
 };
 
 const DEFAULT_STATUSBAR_HEIGHT = Platform.OS === 'ios' ? 20 : 25;
 const STATUSBAR_HEIGHT = Platform.OS === 'ios'
   ? DEFAULT_STATUSBAR_HEIGHT
-  : (global.__exponent ? DEFAULT_STATUSBAR_HEIGHT : 0);
+  : global.__exponent ? DEFAULT_STATUSBAR_HEIGHT : 0;
 
 type TransitionFn = (
   transitionProps: NavigationTransitionProps,
@@ -64,10 +64,16 @@ type Props = {
   navigation: ExNavigationContext,
   navigationState?: Object,
   navigatorUID: string,
-  onRegisterNavigatorContext: (navigatorUID: string, navigatorContext: ExNavigationStackContext) => void,
+  onRegisterNavigatorContext: (
+    navigatorUID: string,
+    navigatorContext: ExNavigationStackContext
+  ) => void,
   onUnregisterNavigatorContext: (navigatorUID: string) => void,
   onTransitionStart: ?TransitionFn,
   onTransitionEnd: ?TransitionFn,
+  renderScene?: (
+    props: StackNavigationSceneRendererProps
+  ) => ?React.Element<{}>,
 };
 
 type State = {
@@ -88,13 +94,20 @@ type ExNavigationSceneRendererProps = {
   route: ExNavigationRoute,
 } & NavigationSceneRendererProps;
 
+type StackNavigationSceneRendererProps = ExNavigationSceneRendererProps & {
+  style?: any,
+};
+
 type TransitionOptions = {
   transitionGroup?: string,
 };
 
 let ROUTE_LISTENER_INDEX = 0;
 
-type ExNavigationStackInstance = React.Component<*, *, *> & { _useAnimation: boolean, _routeListeners: { [listenerId: string]: Function } };
+type ExNavigationStackInstance = React.Component<*, *, *> & {
+  _useAnimation: boolean,
+  _routeListeners: { [listenerId: string]: Function },
+};
 
 declare var requestAnimationFrame: () => void;
 
@@ -111,7 +124,7 @@ export class ExNavigationStackContext extends ExNavigatorContext {
     parentNavigatorUID: string,
     navigatorId: string,
     navigationContext: ExNavigationContext,
-    componentInstance: ExNavigationStackInstance,
+    componentInstance: ExNavigationStackInstance
   ) {
     super(navigatorUID, parentNavigatorUID, navigatorId, navigationContext);
     this.navigatorUID = navigatorUID;
@@ -121,14 +134,14 @@ export class ExNavigationStackContext extends ExNavigatorContext {
     this.componentInstance = componentInstance;
   }
 
-  get router():ExNavigationRouter<*> {
+  get router(): ExNavigationRouter<*> {
     return this.navigationContext.router;
   }
 
   @debounce(500, true)
   push(
-    route: (ExNavigationRoute | string),
-    paramsOrOptions?: (Object | TransitionOptions),
+    route: ExNavigationRoute | string,
+    paramsOrOptions?: Object | TransitionOptions,
     options?: TransitionOptions
   ) {
     if (typeof route == 'string') {
@@ -141,7 +154,9 @@ export class ExNavigationStackContext extends ExNavigatorContext {
     invariant(route !== null && route.key, 'Route is null or malformed.');
 
     if (options.transitionGroup) {
-      route.config.styles = SharedElementGroup.getRouteStyle(options.transitionGroup);
+      route.config.styles = SharedElementGroup.getRouteStyle(
+        options.transitionGroup
+      );
     }
 
     this.navigationContext.performAction(({ stacks }) => {
@@ -164,7 +179,7 @@ export class ExNavigationStackContext extends ExNavigatorContext {
   }
 
   @debounce(500, true)
-  replace(route: (ExNavigationRoute | string), params?: Object) {
+  replace(route: ExNavigationRoute | string, params?: Object) {
     if (typeof route == 'string') {
       route = this.router.getRoute(route, params);
     }
@@ -228,7 +243,7 @@ export class ExNavigationStackContext extends ExNavigatorContext {
     this.navigationContext.performAction(({ stacks }) => {
       stacks(this.navigatorUID).hideLocalAlert();
     });
-  }
+  };
 
   updateCurrentRouteParams(newParams: Object) {
     this.navigationContext.performAction(({ stacks }) => {
@@ -243,7 +258,7 @@ class ExNavigationStack extends PureComponent<any, Props, State> {
   context: Context;
   _log: Function;
   _routeListeners: {
-    [key: string]: Function
+    [key: string]: Function,
   };
   _useAnimation: boolean;
 
@@ -275,8 +290,10 @@ class ExNavigationStack extends PureComponent<any, Props, State> {
       // Get the navigator actions instance for this navigator
       navigator: this._getNavigatorContext(),
       parentNavigatorUID: this.state.navigatorUID,
-      headerComponent: this.props.headerComponent || this.context.headerComponent,
-      alertBarComponent: this.props.alertBarComponent || this.context.alertBarComponent,
+      headerComponent: this.props.headerComponent ||
+        this.context.headerComponent,
+      alertBarComponent: this.props.alertBarComponent ||
+        this.context.alertBarComponent,
     };
   }
 
@@ -293,8 +310,6 @@ class ExNavigationStack extends PureComponent<any, Props, State> {
 
     this._routeListeners = {};
     this._useAnimation = true;
-
-    this._log = Utils.createLogger('StackNavigation:' + this.state.navigatorUID);
   }
 
   render() {
@@ -338,55 +353,65 @@ class ExNavigationStack extends PureComponent<any, Props, State> {
     } else if (initialRoute) {
       // initialRoute can be passed in as strings
       if (typeof initialRoute === 'string') {
-        initialRoute = this._getNavigatorContext().router.getRoute(initialRoute, {});
+        initialRoute = this._getNavigatorContext().router.getRoute(
+          initialRoute,
+          {}
+        );
       }
-      routes = [
-        initialRoute,
-      ];
+      routes = [initialRoute];
     }
 
     let stack = routes;
 
     if (this.props.navigationState) {
-      stack = [
-        ...routes,
-        ...this.props.navigationState.routes,
-      ];
+      stack = [...routes, ...this.props.navigationState.routes];
     }
 
-    this.props.navigation.dispatch(Actions.setCurrentNavigator(
-      this.state.navigatorUID,
-      this.state.parentNavigatorUID,
-      'stack',
-      this._getDefaultRouteConfig(),
-      stack,
-      stack.length - 1,
-    ));
+    this.props.navigation.dispatch(
+      Actions.setCurrentNavigator(
+        this.state.navigatorUID,
+        this.state.parentNavigatorUID,
+        'stack',
+        this._getDefaultRouteConfig(),
+        stack,
+        stack.length - 1
+      )
+    );
 
     if (this.state.parentNavigatorUID) {
-      const parentNavigator = this.props.navigation.getNavigatorByUID(this.state.parentNavigatorUID);
+      const parentNavigator = this.props.navigation.getNavigatorByUID(
+        this.state.parentNavigatorUID
+      );
       if (parentNavigator.type === 'tab') {
-        ((parentNavigator: any): ExNavigationTabContext).setNavigatorUIDForCurrentTab(this.state.navigatorUID);
-      }
-      else if(parentNavigator.type === 'drawer') {
-        ((parentNavigator: any): ExNavigationDrawerContext).setNavigatorUIDForCurrentItem(this.state.navigatorUID);
+        ((parentNavigator: any): ExNavigationTabContext).setNavigatorUIDForCurrentTab(
+          this.state.navigatorUID
+        );
+      } else if (parentNavigator.type === 'drawer') {
+        ((parentNavigator: any): ExNavigationDrawerContext).setNavigatorUIDForCurrentItem(
+          this.state.navigatorUID
+        );
       }
     }
-
 
     getBackButtonManager().ensureGlobalListener();
   }
 
   componentWillUnmount() {
-    this.props.navigation.dispatch(Actions.removeNavigator(this.state.navigatorUID));
+    this.props.navigation.dispatch(
+      Actions.removeNavigator(this.state.navigatorUID)
+    );
     this.props.onUnregisterNavigatorContext(this.state.navigatorUID);
   }
 
   componentWillReceiveProps(nextProps: Props) {
     const prevNavigationState: ?Object = this.props.navigationState;
     const nextNavigationState: ?Object = nextProps.navigationState;
-    if (prevNavigationState && nextNavigationState && prevNavigationState.index !== nextNavigationState.index) {
-      _.forEach(this._routeListeners, (listener) => {
+    if (
+      prevNavigationState &&
+      nextNavigationState &&
+      prevNavigationState.index !== nextNavigationState.index
+    ) {
+      _.forEach(this._routeListeners, listener => {
         listener(prevNavigationState, nextNavigationState);
       });
 
@@ -412,7 +437,8 @@ class ExNavigationStack extends PureComponent<any, Props, State> {
       return null;
     }
 
-    const latestRoute = transitionProps.scenes[transitionProps.scenes.length - 1].route;
+    const latestRoute =
+      transitionProps.scenes[transitionProps.scenes.length - 1].route;
     const latestRouteConfig = latestRoute.config;
     const { configureTransition } = latestRouteConfig.styles || {};
 
@@ -422,13 +448,14 @@ class ExNavigationStack extends PureComponent<any, Props, State> {
   };
 
   _registerNavigatorContext() {
-    this.props.onRegisterNavigatorContext(this.state.navigatorUID,
+    this.props.onRegisterNavigatorContext(
+      this.state.navigatorUID,
       new ExNavigationStackContext(
         this.state.navigatorUID,
         this.state.parentNavigatorUID,
         this.state.id,
         this.props.navigation,
-        this,
+        this
       )
     );
   }
@@ -437,7 +464,7 @@ class ExNavigationStack extends PureComponent<any, Props, State> {
     this._getNavigatorContext().pop();
   };
 
-  _renderTransitioner = (props) => {
+  _renderTransitioner = props => {
     const header = this._renderHeader({
       ...props,
       scene: props.scene,
@@ -448,8 +475,8 @@ class ExNavigationStack extends PureComponent<any, Props, State> {
       scene: props.scene,
     });
 
-    const scenes = props.scenes.map(
-      scene => this._renderScene({
+    const scenes = props.scenes.map(scene =>
+      this._renderScene({
         ...props,
         scene,
       })
@@ -464,46 +491,72 @@ class ExNavigationStack extends PureComponent<any, Props, State> {
         {alertBar}
       </View>
     );
-  }
+  };
 
   _getNavigationBarHeight(latestRouteConfig) {
     let height = NavigationBar.DEFAULT_HEIGHT;
 
-    if (latestRouteConfig.statusBar && latestRouteConfig.statusBar.translucent) {
-      height = NavigationBar.DEFAULT_HEIGHT_WITHOUT_STATUS_BAR + DEFAULT_STATUSBAR_HEIGHT;
-    };
+    if (
+      latestRouteConfig.navigationBar && latestRouteConfig.navigationBar.height
+    ) {
+      height =
+        latestRouteConfig.navigationBar.height + DEFAULT_STATUSBAR_HEIGHT;
+    }
+
+    if (
+      latestRouteConfig.statusBar && latestRouteConfig.statusBar.translucent
+    ) {
+      height =
+        NavigationBar.DEFAULT_HEIGHT_WITHOUT_STATUS_BAR +
+        DEFAULT_STATUSBAR_HEIGHT;
+    }
 
     return height;
   }
 
   _renderAlertBar = (props: ExNavigationSceneRendererProps) => {
-    const latestRoute = this._getRouteAtIndex(props.scenes, props.scenes.length - 1);
+    const latestRoute = this._getRouteAtIndex(
+      props.scenes,
+      props.scenes.length - 1
+    );
     const latestRouteConfig: ExNavigationConfig = latestRoute.config;
     const navigationBarIsVisible =
       latestRouteConfig.navigationBar &&
       latestRouteConfig.navigationBar.visible !== false;
 
-    const AlertBarComponent = this.props.alertBarComponent || this.context.alertBarComponent || ExNavigationAlertBar;
+    const AlertBarComponent =
+      this.props.alertBarComponent ||
+      this.context.alertBarComponent ||
+      ExNavigationAlertBar;
 
     const alertBarContainerStyle = [
       styles.alertBarContainer,
-      { top: navigationBarIsVisible ? this._getNavigationBarHeight(latestRouteConfig): 0 },
+      {
+        top: navigationBarIsVisible
+          ? this._getNavigationBarHeight(latestRouteConfig)
+          : 0,
+      },
     ];
 
     return (
       <View style={alertBarContainerStyle}>
         <AlertBarComponent
-          style={navigationBarIsVisible ? null : {paddingTop: STATUSBAR_HEIGHT}}
+          style={
+            navigationBarIsVisible ? null : { paddingTop: STATUSBAR_HEIGHT }
+          }
           getNavigatorContext={this._getNavigatorContext}
           navigatorUID={this.state.navigatorUID}
         />
       </View>
     );
-  }
+  };
 
   _renderHeader = (props: ExNavigationSceneRendererProps) => {
     // Determine animation styles based on the most recent scene in the stack.
-    const latestRoute = this._getRouteAtIndex(props.scenes, props.scenes.length - 1);
+    const latestRoute = this._getRouteAtIndex(
+      props.scenes,
+      props.scenes.length - 1
+    );
     const latestRouteConfig: ExNavigationConfig = latestRoute.config;
 
     props = { ...props, latestRouteConfig, latestRoute };
@@ -515,20 +568,28 @@ class ExNavigationStack extends PureComponent<any, Props, State> {
     let interpolator = null;
     if (latestRouteConfig.styles) {
       interpolator = latestRouteConfig.styles.navigationBarAnimations;
-      if (latestRouteConfig.navigationBar && latestRouteConfig.navigationBar.styles) {
+      if (
+        latestRouteConfig.navigationBar &&
+        latestRouteConfig.navigationBar.styles
+      ) {
         interpolator = latestRouteConfig.navigationBar.styles;
       }
     }
 
     // Get HeaderComponent from props/context
-    const HeaderComponent = this.props.headerComponent || this.context.headerComponent || NavigationBar;
+    const HeaderComponent =
+      this.props.headerComponent ||
+      this.context.headerComponent ||
+      NavigationBar;
     const navigationBarIsVisible =
       latestRouteConfig.navigationBar &&
       latestRouteConfig.navigationBar.visible !== false;
 
     // pass the statusBarHeight to headerComponent if statusBar is translucent
     let statusBarHeight = STATUSBAR_HEIGHT;
-    if (latestRouteConfig.statusBar && latestRouteConfig.statusBar.translucent) {
+    if (
+      latestRouteConfig.statusBar && latestRouteConfig.statusBar.translucent
+    ) {
       statusBarHeight = DEFAULT_STATUSBAR_HEIGHT;
     }
 
@@ -567,14 +628,21 @@ class ExNavigationStack extends PureComponent<any, Props, State> {
     }
 
     return result;
-  }
+  };
 
-  _renderBackgroundComponentForHeader = (props) => { //eslint-disable-line react/display-name
+  _renderBackgroundComponentForHeader = props => {
+    //eslint-disable-line react/display-name
     const { scene: { route } } = props;
     const routeConfig = route.config;
 
-     if (routeConfig.navigationBar && typeof routeConfig.navigationBar.renderBackground === 'function') {
-      let maybeBackgroundComponent = routeConfig.navigationBar.renderBackground(route, props);
+    if (
+      routeConfig.navigationBar &&
+      typeof routeConfig.navigationBar.renderBackground === 'function'
+    ) {
+      let maybeBackgroundComponent = routeConfig.navigationBar.renderBackground(
+        route,
+        props
+      );
 
       if (maybeBackgroundComponent) {
         return maybeBackgroundComponent;
@@ -584,12 +652,19 @@ class ExNavigationStack extends PureComponent<any, Props, State> {
     }
   };
 
-  _renderLeftComponentForHeader = (props) => { //eslint-disable-line react/display-name
+  _renderLeftComponentForHeader = props => {
+    //eslint-disable-line react/display-name
     const { scene: { route } } = props;
     const routeConfig = route.config;
 
-    if (routeConfig.navigationBar && typeof routeConfig.navigationBar.renderLeft === 'function') {
-      let maybeLeftComponent = routeConfig.navigationBar.renderLeft(route, props);
+    if (
+      routeConfig.navigationBar &&
+      typeof routeConfig.navigationBar.renderLeft === 'function'
+    ) {
+      let maybeLeftComponent = routeConfig.navigationBar.renderLeft(
+        route,
+        props
+      );
 
       if (maybeLeftComponent) {
         return maybeLeftComponent;
@@ -604,9 +679,7 @@ class ExNavigationStack extends PureComponent<any, Props, State> {
     }
 
     if (props.scene.index > 0) {
-      return (
-        <NavigationBar.BackButton tintColor={route.getBarTintColor()} />
-      );
+      return <NavigationBar.BackButton tintColor={route.getBarTintColor()} />;
     }
 
     return null;
@@ -629,27 +702,39 @@ class ExNavigationStack extends PureComponent<any, Props, State> {
         />
       );
     }
-  }
+  };
 
-  _renderTitleComponentForHeader = (props) => { //eslint-disable-line react/display-name
+  _renderTitleComponentForHeader = props => {
+    //eslint-disable-line react/display-name
     const { scene: { route } } = props;
     const routeConfig = route.config;
-    if (routeConfig.navigationBar && typeof routeConfig.navigationBar.renderTitle === 'function') {
+    if (
+      routeConfig.navigationBar &&
+      typeof routeConfig.navigationBar.renderTitle === 'function'
+    ) {
       return routeConfig.navigationBar.renderTitle(route, props);
     }
     return (
-      <NavigationBar.Title textStyle={route.getTitleStyle()} tintColor={route.getBarTintColor()}>
+      <NavigationBar.Title
+        textStyle={route.getTitleStyle()}
+        tintColor={route.getBarTintColor()}>
         {route.getTitle()}
       </NavigationBar.Title>
     );
   };
 
-  _renderRightComponentForHeader = (props) => {
+  _renderRightComponentForHeader = props => {
     const { scene: { route } } = props;
     const routeConfig = route.config;
 
-    if (routeConfig.navigationBar && typeof routeConfig.navigationBar.renderRight === 'function') {
-      let maybeRightComponent = routeConfig.navigationBar.renderRight(route, props);
+    if (
+      routeConfig.navigationBar &&
+      typeof routeConfig.navigationBar.renderRight === 'function'
+    ) {
+      let maybeRightComponent = routeConfig.navigationBar.renderRight(
+        route,
+        props
+      );
 
       if (maybeRightComponent) {
         return maybeRightComponent;
@@ -669,27 +754,34 @@ class ExNavigationStack extends PureComponent<any, Props, State> {
   _renderScene = (props: ExNavigationSceneRendererProps) => {
     // Determine gesture and animation styles based on the most recent scene in the stack,
     // not based on the scene we're rendering in this method.
-    const latestRoute = this._getRouteAtIndex(props.scenes, props.scenes.length - 1);
+    const latestRoute = this._getRouteAtIndex(
+      props.scenes,
+      props.scenes.length - 1
+    );
 
     const latestRouteConfig = latestRoute.config;
     const { sceneAnimations, gestures } = latestRouteConfig.styles || {};
 
-    props = { ...props, latestRouteConfig, latestRoute };
-
     const scene: any = props.scene;
     const routeForScene = scene.route;
 
-    return (
-      <NavigationItem
-        {...props}
-        onNavigateBack={this._onNavigateBack}
-        key={props.scene.key}
-        route={routeForScene}
-        sceneAnimations={sceneAnimations}
-        gestures={gestures}
-        renderScene={this._renderRoute}
-      />
-    );
+    props = {
+      ...props,
+      latestRouteConfig,
+      latestRoute,
+      onNavigateBack: this._onNavigateBack,
+      key: props.scene.key,
+      route: routeForScene,
+      sceneAnimations,
+      gestures,
+      renderScene: this._renderRoute,
+    };
+
+    if (typeof this.props.renderScene === 'function') {
+      return this.props.renderScene(props);
+    }
+
+    return <NavigationItem {...props} />;
   };
 
   _renderRoute = (props: ExNavigationSceneRendererProps) => {
@@ -707,11 +799,11 @@ class ExNavigationStack extends PureComponent<any, Props, State> {
       route,
     };
 
-    let style = [
-      styles.routeInnerContainer,
-    ];
+    let style = [styles.routeInnerContainer];
 
-    if (routeConfig.navigationBar && routeConfig.navigationBar.visible !== false) {
+    if (
+      routeConfig.navigationBar && routeConfig.navigationBar.visible !== false
+    ) {
       let customHeight = 0;
       let hasCustomHeight = false;
       let isTranslucent = !!routeConfig.navigationBar.translucent;
@@ -727,13 +819,15 @@ class ExNavigationStack extends PureComponent<any, Props, State> {
       }
 
       if (hasCustomHeight) {
-        style = ([...style, {marginTop: customHeight}] : Array<number|Object>);
+        style = ([...style, { marginTop: customHeight }]: Array<
+          number | Object
+        >);
       } else {
         style = [
           ...style,
-          isTranslucent ?
-            styles.withNavigationBarTranslucent
-          : { paddingTop: this._getNavigationBarHeight(routeConfig) },
+          isTranslucent
+            ? styles.withNavigationBarTranslucent
+            : { paddingTop: this._getNavigationBarHeight(routeConfig) },
         ];
       }
     } else {
@@ -759,17 +853,21 @@ class ExNavigationStack extends PureComponent<any, Props, State> {
     const { route: nextRoute } = transitionProps.scene;
 
     const nextRouteConfig = nextRoute.config;
-    if (nextRouteConfig.styles &&
-      nextRouteConfig.styles.onTransitionStart) {
-      nextRouteConfig.styles.onTransitionStart(transitionProps, prevTransitionProps);
+    if (nextRouteConfig.styles && nextRouteConfig.styles.onTransitionStart) {
+      nextRouteConfig.styles.onTransitionStart(
+        transitionProps,
+        prevTransitionProps
+      );
     }
 
     if (prevTransitionProps) {
       const { route: prevRoute } = prevTransitionProps.scene;
       const prevRouteConfg = prevRoute.config;
-      if (prevRouteConfg.styles &&
-        prevRouteConfg.styles.onTransitionStart) {
-        prevRouteConfg.styles.onTransitionStart(transitionProps, prevTransitionProps);
+      if (prevRouteConfg.styles && prevRouteConfg.styles.onTransitionStart) {
+        prevRouteConfg.styles.onTransitionStart(
+          transitionProps,
+          prevTransitionProps
+        );
       }
     }
 
@@ -782,17 +880,21 @@ class ExNavigationStack extends PureComponent<any, Props, State> {
     const { route: nextRoute } = transitionProps.scene;
 
     const nextRouteConfig = nextRoute.config;
-    if (nextRouteConfig.styles &&
-      nextRouteConfig.styles.onTransitionEnd) {
-      nextRouteConfig.styles.onTransitionEnd(transitionProps, prevTransitionProps);
+    if (nextRouteConfig.styles && nextRouteConfig.styles.onTransitionEnd) {
+      nextRouteConfig.styles.onTransitionEnd(
+        transitionProps,
+        prevTransitionProps
+      );
     }
 
     if (prevTransitionProps) {
       const { route: prevRoute } = prevTransitionProps.scene;
       const prevRouteConfg = prevRoute.config;
-      if (prevRouteConfg.styles &&
-        prevRouteConfg.styles.onTransitionEnd) {
-        prevRouteConfg.styles.onTransitionEnd(transitionProps, prevTransitionProps);
+      if (prevRouteConfg.styles && prevRouteConfg.styles.onTransitionEnd) {
+        prevRouteConfg.styles.onTransitionEnd(
+          transitionProps,
+          prevTransitionProps
+        );
       }
     }
 
@@ -801,7 +903,10 @@ class ExNavigationStack extends PureComponent<any, Props, State> {
     }
   };
 
-  _getRouteAtIndex(scenes: Array<NavigationScene>, index: number): ExNavigationRoute {
+  _getRouteAtIndex(
+    scenes: Array<NavigationScene>,
+    index: number
+  ): ExNavigationRoute {
     const scene: any = scenes[index];
     const latestRoute: ExNavigationRoute = scene.route;
     return latestRoute;
@@ -817,7 +922,7 @@ class ExNavigationStack extends PureComponent<any, Props, State> {
   // TODO: fix this type annotation to return the actual type
   _getNavigatorContext = (): any => {
     return this.props.navigation.getNavigatorByUID(this.state.navigatorUID);
-  }
+  };
 }
 
 export default createNavigatorComponent(ExNavigationStack);

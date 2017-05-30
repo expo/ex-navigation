@@ -1,15 +1,11 @@
 import React, { PropTypes } from 'react';
-import {
-  Animated,
-  StyleSheet,
-} from 'react-native';
+import { Animated, StyleSheet } from 'react-native';
 
 import PureComponent from './utils/PureComponent';
 
 import * as NavigationStyles from './ExNavigationStyles';
 
 class SceneView extends React.Component<any, SceneViewProps, any> {
-
   static propTypes = {
     sceneRenderer: PropTypes.func.isRequired,
     // sceneRendererProps: NavigationPropTypes.SceneRenderer,
@@ -28,7 +24,7 @@ class SceneView extends React.Component<any, SceneViewProps, any> {
   shouldComponentUpdate(nextProps: SceneViewProps, nextState: any): boolean {
     return (
       nextProps.sceneRendererProps.scene.route !==
-        this.props.sceneRendererProps.scene.route
+      this.props.sceneRendererProps.scene.route
     );
   }
 
@@ -46,18 +42,22 @@ export default class ExNavigationStackItem extends PureComponent {
       style,
       navigationState,
       scene,
-      ...props,
+      ...props
     } = this.props;
 
     if (sceneAnimations === undefined) {
       // fall back to default style.
-      sceneAnimations = NavigationStyles.SlideHorizontal.sceneAnimations(this.props);
+      sceneAnimations = NavigationStyles.SlideHorizontal.sceneAnimations(
+        this.props
+      );
     } else {
       sceneAnimations = sceneAnimations(this.props);
     }
     if (gestures === undefined) {
       // fall back to default pan handlers.
-      gestures = NavigationStyles.SlideHorizontal.gestures && NavigationStyles.SlideHorizontal.gestures(this.props);
+      gestures =
+        NavigationStyles.SlideHorizontal.gestures &&
+        NavigationStyles.SlideHorizontal.gestures(this.props);
     } else if (typeof gestures === 'function') {
       gestures = gestures(this.props);
     }
@@ -88,7 +88,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     right: 0,
     shadowColor: 'black',
-    shadowOffset: {width: 0, height: 0},
+    shadowOffset: { width: 0, height: 0 },
     shadowOpacity: 0.4,
     shadowRadius: 10,
     top: 0,

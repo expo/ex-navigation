@@ -2,13 +2,8 @@
  * @flow
  */
 
-import React, {
-  Children,
-} from 'react';
-import {
-  StyleSheet,
-  View,
-} from 'react-native';
+import React, { Children } from 'react';
+import { StyleSheet, View } from 'react-native';
 import PureComponent from '../utils/PureComponent';
 import StaticContainer from 'react-static-container';
 
@@ -56,7 +51,7 @@ export class ExNavigationTabContext extends ExNavigatorContext {
 type TabItem = {
   id: string,
   renderIcon?: Function,
-  renderBadge?: Function,  
+  renderBadge?: Function,
   tabContent?: React.Element<{}>,
 };
 
@@ -70,10 +65,14 @@ type Props = {
   tabBarStyle?: any,
   children: Array<React.Element<{}>>,
   navigation: ExNavigationContext,
-  onRegisterNavigatorContext: (navigatorUID: string, navigatorContext: ExNavigationTabContext) => void,
+  onRegisterNavigatorContext: (
+    navigatorUID: string,
+    navigatorContext: ExNavigationTabContext
+  ) => void,
   onUnregisterNavigatorContext: (navigatorUID: string) => void,
+  onWillChangeTab: (id: string) => boolean,
   navigationState: Object,
-  translucent?: bool,
+  translucent?: boolean,
 };
 
 type State = {
@@ -144,19 +143,23 @@ class ExNavigationTab extends PureComponent<any, Props, State> {
       translucent: this.props.translucent,
       style: [
         this.props.tabBarStyle,
-        this.props.tabBarColor ? {backgroundColor: this.props.tabBarColor} : {},
+        this.props.tabBarColor
+          ? { backgroundColor: this.props.tabBarColor }
+          : {},
       ],
     };
 
     const tabBar = this.props.renderTabBar(tabBarProps);
     const TabBarComponent = tabBar.type;
     // Get the tab bar's height from a static property on the class
-    const tabBarHeight =  this.props.tabBarHeight || TabBarComponent.defaultHeight || 0;
+    const tabBarHeight =
+      this.props.tabBarHeight || TabBarComponent.defaultHeight || 0;
     const isTranslucent = this.props.translucent;
 
     return (
       <View style={styles.container}>
-        <View style={{flex: 1, marginBottom: isTranslucent ? 0 : tabBarHeight}}>
+        <View
+          style={{ flex: 1, marginBottom: isTranslucent ? 0 : tabBarHeight }}>
           {this.renderTabs()}
         </View>
         {tabBar}
@@ -188,7 +191,7 @@ class ExNavigationTab extends PureComponent<any, Props, State> {
       <View
         key={tabItem.id}
         removeClippedSubviews={!isSelected}
-        style={[styles.tabContentInner, {opacity: isSelected ? 1 : 0}]}
+        style={[styles.tabContentInner, { opacity: isSelected ? 1 : 0 }]}
         pointerEvents={isSelected ? 'auto' : 'none'}>
         <StaticContainer shouldUpdate={isSelected}>
           {tabItem.element}
@@ -202,19 +205,25 @@ class ExNavigationTab extends PureComponent<any, Props, State> {
 
     this._registerNavigatorContext();
 
-    this.props.navigation.dispatch(Actions.setCurrentNavigator(
-      this.state.navigatorUID,
-      this.state.parentNavigatorUID,
-      'tab',
-      {},
-      [{
-        key: this.props.initialTab,
-      }],
-    ));
+    this.props.navigation.dispatch(
+      Actions.setCurrentNavigator(
+        this.state.navigatorUID,
+        this.state.parentNavigatorUID,
+        'tab',
+        {},
+        [
+          {
+            key: this.props.initialTab,
+          },
+        ]
+      )
+    );
   }
 
   componentWillUnmount() {
-    this.props.navigation.dispatch(Actions.removeNavigator(this.state.navigatorUID));
+    this.props.navigation.dispatch(
+      Actions.removeNavigator(this.state.navigatorUID)
+    );
     this.props.onUnregisterNavigatorContext(this.state.navigatorUID);
   }
 
@@ -225,7 +234,10 @@ class ExNavigationTab extends PureComponent<any, Props, State> {
 
     if (nextProps.navigationState !== this.props.navigationState) {
       this.setState({
-        renderedTabKeys: this._updateRenderedTabKeys(nextProps, this.state.renderedTabKeys),
+        renderedTabKeys: this._updateRenderedTabKeys(
+          nextProps,
+          this.state.renderedTabKeys
+        ),
       });
     }
   }
@@ -240,7 +252,9 @@ class ExNavigationTab extends PureComponent<any, Props, State> {
     if (prevProps.navigationState !== this.props.navigationState) {
       const navigationState = this.props.navigationState;
       const currentTabKey = navigationState.routes[navigationState.index].key;
-      const navigatorUIDForTabKey = this._getNavigatorContext().getNavigatorUIDForTabKey(currentTabKey);
+      const navigatorUIDForTabKey = this._getNavigatorContext().getNavigatorUIDForTabKey(
+        currentTabKey
+      );
       if (navigatorUIDForTabKey) {
         this.props.navigation.dispatch(
           Actions.setCurrentNavigator(navigatorUIDForTabKey)
@@ -255,7 +269,12 @@ class ExNavigationTab extends PureComponent<any, Props, State> {
     const selectedChild = navState.routes[navState.index];
 
     return [
-      ..._.uniq(_.without([...currentRenderedTabKeys, ...currentTabItems], selectedChild.key)),
+      ..._.uniq(
+        _.without(
+          [...currentRenderedTabKeys, ...currentTabItems],
+          selectedChild.key
+        )
+      ),
       selectedChild.key,
     ];
   }
@@ -264,7 +283,7 @@ class ExNavigationTab extends PureComponent<any, Props, State> {
     const tabItems = Children.map(props.children, (child, index) => {
       invariant(
         child.type === ExNavigationTabItem,
-        'All children of TabNavigation must be TabNavigationItems.',
+        'All children of TabNavigation must be TabNavigationItems.'
       );
 
       const tabItemProps = child.props;
@@ -280,8 +299,14 @@ class ExNavigationTab extends PureComponent<any, Props, State> {
         // via initialRoute
         if (child.props.initialRoute && this.props.translucent) {
           let defaultRouteConfig = child.props.defaultRouteConfig || {};
-          defaultRouteConfig = {...defaultRouteConfig, __tabBarInset: this.props.tabBarHeight};
-          tabItem.element = cloneReferencedElement(child, {...child.props, defaultRouteConfig});
+          defaultRouteConfig = {
+            ...defaultRouteConfig,
+            __tabBarInset: this.props.tabBarHeight,
+          };
+          tabItem.element = cloneReferencedElement(child, {
+            ...child.props,
+            defaultRouteConfig,
+          });
         } else {
           tabItem.element = child;
         }
@@ -312,6 +337,13 @@ class ExNavigationTab extends PureComponent<any, Props, State> {
   }
 
   _setActiveTab(id, index) {
+    if (typeof this.props.onWillChangeTab === 'function') {
+      let changeTab = this.props.onWillChangeTab(id);
+      if (!changeTab) {
+        return;
+      }
+    }
+
     this._getNavigatorContext().jumpToTab(id);
     if (typeof this.props.onTabPress === 'function') {
       this.props.onTabPress(id);
@@ -333,13 +365,15 @@ class ExNavigationTab extends PureComponent<any, Props, State> {
         this.state.navigatorUID,
         this.state.parentNavigatorUID,
         this.state.id,
-        this.props.navigation,
+        this.props.navigation
       )
     );
   }
 
   _getNavigatorContext(): ExNavigationTabContext {
-    const navigatorContext: any = this.props.navigation.getNavigatorByUID(this.state.navigatorUID);
+    const navigatorContext: any = this.props.navigation.getNavigatorByUID(
+      this.state.navigatorUID
+    );
     return (navigatorContext: ExNavigationTabContext);
   }
 }

@@ -1,14 +1,22 @@
 # ExNavigation
 
-[![exponent
-support](https://img.shields.io/badge/exponent-ios%20%7C%20android-blue.svg?style=flat-square&logo=data%3Aimage%2Fpng%3Bbase64%2CiVBORw0KGgoAAAANSUhEUgAAAC4AAAAoCAYAAACB4MgqAAAAAXNSR0IArs4c6QAAA2VJREFUWAnFmTtoVEEYhbOJL0hIRDBqZYQEEUQsRBHxAYr4wM5CBKuAsRJUFAQjaKN2WpginaIi2GgjaBQtLKKFBh%2BFKIaIjwgi8a3xsX7%2FurvuvTs788%2FMXRw4ZGf%2B859zdrl7d%2BamoSGjkc%2Fnp4KT4Bn4Bn6BcfAanAddGVllJ0OoZnAf2MZbip3ZuWagRKB%2BW%2BKK2m1eT8jAMl6CIKsqgmle7ol3jVQgZRNwXSLpN%2FOehRmR1nHtBOhJp1LO%2B%2BOcI7oJ2AreKIOmaXLHWRBhH96K8ZF0Gs%2F51XD3wE4CzgZfPYOa6OsDI4S1keCMKUXA2kN6msJSeHZhtAj8DghZq2W7Z4QwOu43ayUIXJctQbNvmkafBgw2wV%2Fp06PgzoSzV8FLUHKJmWVCaLkWH4B5Flpo6TONnblcblQr4POJdyOqDX0WruwGDyiDyKVySMnV0%2BQaBK%2BAZgxBmlxS57X2DvQTrvaDKcnb%2FyLYCzRD9uHzK9WYt4HnmmY4lyp7o14j1g4%2BKo33mczoXa3sF9pyk4b3GkJyqtGMO5Bq%2FphQ0%2B7ZB71Dphsw6wI%2FgGt8h5C4RAxasil74RIq1jen%2B73miFxQGh3UCKO1Uan3GF7YSYnGxUoT2W9M1AQXDtxzSt0dWs0ED%2FEbCgPZsyxNNDom8OXL%2Fk6h7b8VQHSDQlgofY6cxjJ93Ur9XqOAaRHBRqA5R76E12rScK3RlwOazdoHeNNdeoU6xG1AM6K%2B%2BRjMBXI3co3jzuAoTALDLiXql51iCgI6hxVe8uY6rHIQdiqEvsCZYxVSFtGZAp4qPE%2FXlKS5BWhO7ftrigQU8FyrCC5PBcw%2FcBQ0G6lH8NT3bO37QFMeirrGxSo9OqaBMVcn9axPP4Us6M4C8oTLNZYkwsM%2B6uqgfirRlPEEfc33a6BsS4P8kn0CtiG%2FdO3lpjq8QF%2BeQ961hSjWVhTsmRxTkHvqkLVKkhyyP5Ivom1cKwV%2FYmNRGwTqQ3VVGs8FvPoceaTcJru16xainAMXenpH0fGTf8mMWjKNiYGc8v9%2B9Ga7EzwyGDKX6rOKnwTbbVEvXypymJUtZHqMsNBiEahrCe8r6UDM5TT27%2FE0kzUgveFZV9dkDnHydID0IX1XVRukZWAA3ANbqwj%2FYaGY6RZ%2F5QaxpTLCH1MMfbtE9CyFAAAAAElFTkSuQmCC&link=https%3A%2F%2Fgetexponent.com)](https://getexponent.com)
-[![npm version](https://img.shields.io/npm/v/@exponent/ex-navigation.svg?style=flat-square)](https://www.npmjs.com/package/@exponent/ex-navigation)
-
-
-A route-centric, batteries-included navigation library for Exponent and
+A route-centric, batteries-included navigation library for Expo and
 React Native that works seamlessly on Android and iOS.
 
-### A few of our favorite features:
+## An important note about the future
+
+The successor to ExNavigation,
+["react-navigation"](https://github.com/react-community/react-navigation),
+is now in public beta. Before the 1.0 release of react-navigation, a migration path from
+ExNavigation will be provided, but feel free to migrate before then if
+you prefer.
+
+This means that ExNavigation is currently in maintenance mode -- we
+aren't actively adding new features unless we need them for our own
+projects, because further work is being directed towards
+react-navigation. Pull requests are still welcome.
+
+### A few of our favorite features
 
 - Android back button handling (it just works, no need to do anything)
 - Tab bar navigation
@@ -19,13 +27,24 @@ React Native that works seamlessly on Android and iOS.
 - Declarative configuration co-located with your routes
 - Typed with Flow
 
+## Help / Support / Questions
+
+We don't provide any realtime support for ExNavigation questions. If you
+join the Expo Slack and ask a question there, we will direct you to
+this section of the README. We suggest the following resources:
+
+- Search the README.
+- [Search the issues, then post an issue if nothing matches](https://github.com/expo/ex-navigation/issues).
+- Search the code if nothing else works.
+- Once you solve your problem, submit a pull request to add the solution to the README.
+
 ## Installation
 
 As of version 1.9.0, ExNavigation only supports React Native versions >=
 0.36.0 due to changes to the css-layout algorithm in React Native core.
 
 
-- `npm i @exponent/ex-navigation babel-preset-react-native-stage-0 --save`
+- `npm i @expo/ex-navigation babel-preset-react-native-stage-0 --save`
 - Change your `.babelrc` (if you have one, if not, then create one):
 
 ```
@@ -42,10 +61,10 @@ As of version 1.9.0, ExNavigation only supports React Native versions >=
 ## How to run the example project
 
 - `cd example && npm install`
-- [Install the Exponent client and XDE](https://docs.getexponent.com/versions/v10.0.0/introduction/installation.html)
+- [Install the Expo client and XDE](https://docs.expo.io/versions/latest/introduction/installation.html)
 - Open the project in XDE and open it in the Exponent client
 
-or use this link in your mobile phone: https://getexponent.com/@community/ex-navigation-example
+or use this link in your mobile phone: https://expo.io/@community/ex-navigation-example
 
 ## How is this different from what is built into React Native?
 
@@ -68,17 +87,17 @@ import {
 } from 'react-native';
 
 /**
- * If you're using Exponent, uncomment the line below to import Exponent
- * BEFORE importing `@exponent/ex-navigation`. This sets the status bar
+ * If you're using Expo, uncomment the line below to import Exponent
+ * BEFORE importing `@expo/ex-navigation`. This sets the status bar
  * offsets properly.
  */
-// import Exponent from 'exponent';
+// import Expo from 'expo';
 
 import {
   createRouter,
   NavigationProvider,
   StackNavigation,
-} from '@exponent/ex-navigation';
+} from '@expo/ex-navigation';
 
 /**
   * This is where we map route names to route components. Any React
@@ -191,12 +210,12 @@ from the stack by calling those functions on the `navigator` prop. This
 is a prop that is passed into all components that you registered with
 the router. If you need to access the `navigator` on a component that
 is not a route, you can either pass it in manually from your route
-component use `withNavigation` as a decorator on the component:
+component or use `withNavigation` as a decorator on the component:
 
 ```javascript
 import React from 'react';
 import { Text } from 'react-native';
-import { withNavigation } from '@exponent/ex-navigation';
+import { withNavigation } from '@expo/ex-navigation';
 
 @withNavigation
 class BackButton extends React.Component {
@@ -211,6 +230,19 @@ class BackButton extends React.Component {
   }
 }
 ```
+
+Alternatively, rather than importing `Router` each time, you may pass the
+route's name directly:
+
+```diff
+_goToAbout = () => {
+-  this.props.navigator.push(Router.getRoute('about'));
++  this.props.navigator.push('about');
+}
+```
+
+… bearing in mind you will loose the ability to type check the route (if using
+Flow).
 
 ## Passing params to a route
 
@@ -313,14 +345,9 @@ on the left or right of the title.
 
 ```javascript
 
- @connect()
- class SignOutButton extends React.Component {
-   render() {
-      return (
-        <TouchableOpacity onPress={this.props.dispatch(Actions.signOut())}>
-          <Text>Sign out</Text>
-        </TouchableOpacity>
-      );
+ class HomeScreen extends React.Component {
+   _goToAbout = () => {
+     this.props.navigator.push(Router.getRoute('about', {name: 'Brent'}));
    }
  }
 
@@ -328,11 +355,22 @@ on the left or right of the title.
    static route = {
      navigationBar: {
        title: 'Title goes here',
-       renderRight: (route, props) => <SignOutButton />
+       renderRight: (route, props) => <SignOutButton name={route.params.name} />
      }
    }
 
    // ...
+ }
+
+ @connect()
+ class SignOutButton extends React.Component {
+   render() {
+      return (
+        <TouchableOpacity onPress={this.props.dispatch(Actions.signOut())}>
+          <Text>Sign out {this.props.name}</Text>
+        </TouchableOpacity>
+      );
+   }
  }
 ```
 
@@ -373,7 +411,7 @@ class App extends React.Component {
 drawer button icons.
 - `visible` - boolean that indicates whether the `navigationBar` should
 be visible for this route.
-- `translucent` - iOS and Exponent only, use background blur on the
+- `translucent` - iOS and Expo only, use background blur on the
 `navigationBar`, like in the Apple Podcasts app, for example.
 - `borderBottomWidth` - the width of the bottom border
 - `borderBottomColor` - the color of the bottom border
@@ -383,7 +421,7 @@ will be rendered in the left position of the `navigationBar`.
 will be rendered in the title position of the `navigationBar`.
 - `renderRight` - a function that should return a React component that
 will be rendered in the right position of the `navigationBar`.
-- `renderBackground` - a function that should return a React component that 
+- `renderBackground` - a function that should return a React component that
 will be rendered in the background of the `navigationBar`.
 
 ## TabNavigation
@@ -395,11 +433,11 @@ import {
   StackNavigation,
   TabNavigation,
   TabNavigationItem as TabItem,
-} from '@exponent/ex-navigation';
+} from '@expo/ex-navigation';
 
 
 // Treat the TabScreen route like any other route -- you may want to set
-// it as the intiial route for a top-level StackNavigation
+// it as the initial route for a top-level StackNavigation
 class TabScreen extends React.Component {
   static route = {
     navigationBar: {
@@ -453,7 +491,7 @@ class TabScreen extends React.Component {
 ```
 
 See an example of TabNavigation in a real app
-[here](https://github.com/exponentjs/rnplay/blob/f4d29c4578fb57347afd0d507a036dd232ec6fdb/navigation/TabNavigationLayout.js).
+[here](https://github.com/expo/rnplay/blob/f4d29c4578fb57347afd0d507a036dd232ec6fdb/navigation/TabNavigationLayout.js).
 
 If you'd like to switch tabs programmatically (eg: a notification
 arrives and you want to jump to a notifications tab, or you tap on a
@@ -481,7 +519,7 @@ import {
   StackNavigation,
   DrawerNavigation,
   DrawerNavigationItem,
-} from '@exponent/ex-navigation';
+} from '@expo/ex-navigation';
 
 // Treat the DrawerNavigationLayout route like any other route -- you may want to set
 // it as the intiial route for a top-level StackNavigation
@@ -574,7 +612,7 @@ function when creating the store and then manually provide the
 ```javascript
 /* Your store definition, let's say state/Store.js */
 
-import { createNavigationEnabledStore, NavigationReducer } from '@exponent/ex-navigation';
+import { createNavigationEnabledStore, NavigationReducer } from '@expo/ex-navigation';
 import { combineReducers, createStore } from 'redux';
 
 const createStoreWithNavigation = createNavigationEnabledStore({
@@ -596,7 +634,7 @@ export default store;
 ```javascript
 /* Your routes, Router.js */
 
-import { createRouter } from '@exponent/ex-navigation';
+import { createRouter } from '@expo/ex-navigation';
 import HomeScreen from './HomeScreen';
 
 export const Router = createRouter(() => ({
@@ -611,7 +649,7 @@ export const Router = createRouter(() => ({
    NavigationContext,
    NavigationProvider,
    StackNavigation,
- } from '@exponent/ex-navigation';
+ } from '@expo/ex-navigation';
 
  import Store from './state/Store';
  import Router from './Router';
@@ -633,7 +671,7 @@ export const Router = createRouter(() => ({
 ### Perform navigation actions from outside of a component
 
 You might be using some Redux middleware like saga, thunk, promise, or
-effex (we recommend [effex](https://github.com/exponentjs/redux-effex)
+effex (we recommend [effex](https://github.com/expo/redux-effex)
 because we love `async/await`). Whatever you're using, you no longer
 have access to `this.props.navigator` and the like. What to do?
 Well as long as you include your navigation state inside of your Redux
@@ -646,7 +684,7 @@ for your context (eg: if this was effex, `dispatch` and `getState` would
 be passed in to the `goHome` function).
 
 ```javascript
-import { NavigationActions } from '@exponent/ex-navigation'
+import { NavigationActions } from '@expo/ex-navigation'
 import Store from '../state/Store';
 import Router from './Router'
 
@@ -654,4 +692,58 @@ export default function goHome() {
   let navigatorUID = Store.getState().navigation.currentNavigatorUID;
   Store.dispatch(NavigationActions.push(navigatorUID, Router.getRoute('home')))
 }
+```
+
+### Screen Tracking / Analytics
+
+You might want to do some screen tracking in your apps. Since the entire navigation state is in redux, screen tracking is as simple as writing a redux middleware. Below is a simple middleware that uses `routeName` as the screen name for tracking screens.
+
+```javascript
+import SegmentIO from 'react-native-segment-io-analytics';
+
+const navigationStateKey = 'navigation';
+
+// gets the current screen from navigation state
+function getCurrentScreen(getStateFn) {
+  const navigationState = getStateFn()[navigationStateKey];
+  // navigationState can be null when exnav is initializing
+  if (!navigationState) return null;
+
+  const { currentNavigatorUID, navigators } = navigationState;
+  if (!currentNavigatorUID) return null;
+
+  const { index, routes } = navigators[currentNavigatorUID];
+  const { routeName } = routes[index];
+  return routeName;
+}
+
+const screenTracking = ({ getState }) => next => action => {
+  if (!action.type.startsWith('EX_NAVIGATION')) return next(action);
+  const currentScreen = getCurrentScreen(getState);
+  const result = next(action);
+  const nextScreen = getCurrentScreen(getState);
+  if (nextScreen !== currentScreen) {
+    SegmentIO.screen(nextScreen);
+  }
+  return result;
+}
+
+export default screenTracking;
+
+```
+
+### Android back button handling
+
+React Native includes a global `BackHandler` module. Rather than using this module
+directly, include the `AndroidBackButtonBehavior` component in routes where you'd
+like to control the back button. `AndroidBackButtonBehavior` accepts
+`isFocused` and `onBackButtonPress`. If `isFocused` is true, the `onBackButtonPress`
+will fire when the user presses the back button. You need to make sure that `onBackButtonPress`
+returns a promise that wraps the function you want to be called. Eg.
+
+```
+<AndroidBackButtonBehavior isFocused={someboolean}
+   onBackButtonPress={()=>Promise.resolve(fireMeWhenSomeBooleanIsTrue)}>
+   ...
+</AndroidBackButtonBehavior>
 ```

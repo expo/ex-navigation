@@ -2,9 +2,7 @@
  * @providesModule AppRouter
  */
 
-import {
-  createRouter,
-} from '@exponent/ex-navigation';
+import { createRouter } from '@exponent/ex-navigation';
 
 import PlacesList from 'PlacesList';
 import PlaceDetail from 'PlaceDetail';

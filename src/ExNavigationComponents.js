@@ -6,6 +6,7 @@ import React, { PropTypes } from 'react';
 
 import UUID from 'uuid-js';
 
+import invariant from 'invariant';
 import { createSelector } from 'reselect';
 import hoistStatics from 'hoist-non-react-statics';
 import PureComponent from './utils/PureComponent';
@@ -14,9 +15,7 @@ import shallowEqual from 'fbjs/lib/shallowEqual';
 import ExNavigationContext from './ExNavigationContext';
 import connect from './ExNavigationConnect';
 
-import type {
-  ExNavigatorState,
-} from './ExNavigationStore';
+import type { ExNavigatorState } from './ExNavigationStore';
 
 function getDisplayName(WrappedComponent: ReactClass<any>): string {
   return WrappedComponent.displayName || WrappedComponent.name || 'Component';
@@ -29,13 +28,17 @@ type WrappedComponentProps = {
 
 const getStateForNavigatorId = (state, props: WrappedComponentProps) => {
   const navigationState = state[props.navigation.navigationStateKey];
-  return navigationState.navigators && props.navigatorUID && navigationState.navigators[props.navigatorUID];
+  return (
+    navigationState.navigators &&
+    props.navigatorUID &&
+    navigationState.navigators[props.navigatorUID]
+  );
 };
 
 const makeNavigatorStateSelector = () => {
   return createSelector(
     [getStateForNavigatorId],
-    (navigationState) => navigationState,
+    navigationState => navigationState
   );
 };
 
@@ -62,12 +65,9 @@ export function createNavigatorComponent(WrappedComponent: ReactClass<any>) {
   };
 
   // Connect the wrapped component to the correct navigation state
-  const ConnectedWrappedComponent = connect(
-    makeMapStateToProps,
-    null,
-    null,
-    { withRef: true },
-  )(WrappedComponent);
+  const ConnectedWrappedComponent = connect(makeMapStateToProps, null, null, {
+    withRef: true,
+  })(createFocusableComponent(WrappedComponent));
 
   class ExNavigatorComponent extends React.Component {
     props: Props;
@@ -94,10 +94,16 @@ export function createNavigatorComponent(WrappedComponent: ReactClass<any>) {
       };
     }
 
-    shouldComponentUpdate(nextProps: Props, nextState: State, nextContext: Context) {
-      return !shallowEqual(this.props, nextProps) ||
-         !shallowEqual(this.state, nextState) ||
-         !shallowEqual(this.context, nextContext);
+    shouldComponentUpdate(
+      nextProps: Props,
+      nextState: State,
+      nextContext: Context
+    ) {
+      return (
+        !shallowEqual(this.props, nextProps) ||
+        !shallowEqual(this.state, nextState) ||
+        !shallowEqual(this.context, nextContext)
+      );
     }
 
     render(): ?ReactElement<any> {
@@ -126,8 +132,7 @@ export function createNavigatorComponent(WrappedComponent: ReactClass<any>) {
     }
 
     getNavigationContext(): ExNavigationContext {
-      return this.props.navigation ||
-        this.context.navigation;
+      return this.props.navigation || this.context.navigation;
     }
 
     _wrappedInstanceRef = (c: ReactElement<{}>) => {
@@ -137,19 +142,25 @@ export function createNavigatorComponent(WrappedComponent: ReactClass<any>) {
         /* $FlowFixMe */
         this._wrappedInstance = c.refs.wrappedInstance;
       }
-    }
+    };
   }
 
-  ExNavigatorComponent.displayName = `ExNavigatorComponent(${getDisplayName(WrappedComponent)})`;
-
-  return hoistStatics(ExNavigatorComponent, createFocusableComponent(WrappedComponent));
+  const C = hoistStatics(ExNavigatorComponent, ConnectedWrappedComponent);
+  C.displayName = `ExNavigatorComponent(${getDisplayName(C)})`;
+  return C;
 }
 
-import { NavigationPropType, StackNavigatorContextType } from './ExNavigationPropTypes';
+import {
+  NavigationPropType,
+  StackNavigatorContextType,
+} from './ExNavigationPropTypes';
 
 const NavigatorPropType = PropTypes.object;
 
-export function withNavigation<T>(WrappedComponent: ReactClass<T>) {
+export function withNavigation<T>(
+  WrappedComponent: ReactClass<T>,
+  { withRef } = {}
+) {
   class WithNavigation extends PureComponent {
     _wrappedInstance: ReactElement<T>;
 
@@ -166,7 +177,7 @@ export function withNavigation<T>(WrappedComponent: ReactClass<T>) {
     render() {
       return (
         <WrappedComponent
-          ref={(c) => { this._wrappedInstance = c; }}
+          ref={withRef ? this.setWrappedInstance : undefined}
           navigation={this.getNavigationContext()}
           navigator={this.getCurrentNavigator()}
           {...this.props}
@@ -182,7 +193,18 @@ export function withNavigation<T>(WrappedComponent: ReactClass<T>) {
     }
 
     getWrappedInstance() {
+      if (__DEV__) {
+        invariant(
+          withRef,
+          'To access the wrapped instance, you need to specify ' +
+            '{ withRef: true } in the options argument of withNavigation call.'
+        );
+      }
       return this._wrappedInstance;
+    }
+
+    setWrappedInstance(ref) {
+      this._wrappedInstance = ref;
     }
 
     getNavigationContext() {
@@ -194,14 +216,19 @@ export function withNavigation<T>(WrappedComponent: ReactClass<T>) {
     }
   }
 
-  WithNavigation.displayName = `WithNavigation(${getDisplayName(WrappedComponent)})`;
-
-  return hoistStatics(WithNavigation, WrappedComponent);
+  const C = hoistStatics(WithNavigation, WrappedComponent);
+  C.displayName = `WithNavigation(${getDisplayName(WrappedComponent)})`;
+  return C;
 }
 
 export const createFocusableComponent = (WrappedComponent: ReactClass<any>) => {
+  const _componentIsNavigator =
+    WrappedComponent.route && WrappedComponent.route.__isNavigator;
+
   class FocusableComponent extends PureComponent {
     _unsubcribeFromStore: ?Function;
+    _prevNavState: ?Object;
+    _wrappedInstance: ReactElement<T>;
 
     static childContextTypes = {
       isFocused: React.PropTypes.bool,
@@ -216,68 +243,90 @@ export const createFocusableComponent = (WrappedComponent: ReactClass<any>) => {
     constructor(props, context) {
       super(props, context);
 
-      let _prevNavState = null;
-      this._unsubcribeFromStore = this.props.navigation.store.subscribe(() => {
-        try {
-          const navState = this.props.navigation.navigationState;
-          if (navState === _prevNavState || !navState || !navState.currentNavigatorUID) {
-            return;
-          }
-
-          const focusedRoute = this.props.navigation.getFocusedRoute();
-          const focusedNavigatorUID = this.props.navigation.getCurrentNavigatorUID();
-
-          let isFocused = false;
-
-          const componentIsNavigator = WrappedComponent.navigation && WrappedComponent.navigation.__isNavigator;
-          if (componentIsNavigator) {
-            isFocused = focusedNavigatorUID === this.props.navigatorUID;
-            if (isFocused && isFocused !== this.state.isFocused) {
-              // console.log('focused navigator: ', this.props.id, this.props.navigatorUID);
-            } else if (!isFocused && isFocused !== this.state.isFocused) {
-              // console.log('unfocused navigator: ', this.props.id, this.props.navigatorUID);
-            }
-          } else if (this.props.route) {
-            isFocused = this.props.route === focusedRoute;
-            if (isFocused && isFocused !== this.state.isFocused) {
-              // console.log('focused screen: ', this.props.route);
-            } else if (!isFocused && isFocused !== this.state.isFocused) {
-              // console.log('unfocused screen: ', this.props.route);
-            }
-          }
-
-          if (isFocused !== this.state.isFocused) {
-            this.setState({
-              isFocused,
-            });
-          }
-
-          _prevNavState = navState;
-        } catch (e) {
-          throw e;
-        }
-      });
-
+      this._prevNavState = null;
       this.state = {
         isFocused: false,
       };
+    }
+
+    componentWillMount() {
+      this._handleStateUpdate();
+    }
+
+    componentDidMount() {
+      this.subscribeToStore();
     }
 
     componentWillUnmount() {
       this._unsubcribeFromStore && this._unsubcribeFromStore();
     }
 
+    subscribeToStore() {
+      this._unsubcribeFromStore = this.props.navigation.store.subscribe(() => {
+        this._handleStateUpdate();
+      });
+    }
+
     render() {
       return (
-        <WrappedComponent {...this.props} isFocused={this.state.isFocused} />
+        <WrappedComponent
+          ref={c => {
+            this._wrappedInstance = c;
+          }}
+          {...this.props}
+          isFocused={this.state.isFocused}
+        />
       );
     }
+
+    getWrappedInstance() {
+      return this._wrappedInstance;
+    }
+
+    _handleStateUpdate = () => {
+      try {
+        const state = this.props.navigation.store.getState();
+        const navState = { ...state.navigation };
+        if (
+          navState === this._prevNavState ||
+          !navState ||
+          !navState.currentNavigatorUID
+        ) {
+          return;
+        }
+
+        const focusedRoute = this.props.navigation.getFocusedRoute();
+        const focusedNavigatorUID = this.props.navigation.getCurrentNavigatorUID();
+
+        let isFocused = false;
+
+        if (_componentIsNavigator) {
+          isFocused = focusedNavigatorUID === this.props.navigatorUID;
+        } else if (this.props.route) {
+          isFocused = this.props.route === focusedRoute;
+        }
+
+        if (isFocused !== this.state.isFocused) {
+          this.setState({
+            isFocused,
+          });
+        }
+
+        this._prevNavState = navState;
+      } catch (e) {
+        throw e;
+      }
+    };
   }
 
-  return hoistStatics(withNavigation(FocusableComponent), WrappedComponent);
+  const C = hoistStatics(withNavigation(FocusableComponent), WrappedComponent);
+  C.displayName = `FocusableComponent(${getDisplayName(WrappedComponent)})`;
+  return C;
 };
 
-export const createFocusAwareComponent = (WrappedComponent: ReactClass<any>) => {
+export const createFocusAwareComponent = <T>(
+  WrappedComponent: ReactClass<T>
+) => {
   class FocusAwareComponent extends React.Component {
     static contextTypes = {
       isFocused: React.PropTypes.bool,
@@ -287,6 +336,8 @@ export const createFocusAwareComponent = (WrappedComponent: ReactClass<any>) => 
       isFocused: React.PropTypes.bool,
     };
 
+    _wrappedInstance: ReactElement<T>;
+
     getChildContext() {
       return {
         isFocused: this._getIsFocused(),
@@ -295,14 +346,26 @@ export const createFocusAwareComponent = (WrappedComponent: ReactClass<any>) => 
 
     render() {
       return (
-        <WrappedComponent {...this.props} isFocused={this._getIsFocused()} />
+        <WrappedComponent
+          ref={c => {
+            this._wrappedInstance = c;
+          }}
+          {...this.props}
+          isFocused={this._getIsFocused()}
+        />
       );
     }
 
     _getIsFocused = () => {
       return this.props.isFocused || this.context.isFocused;
     };
+
+    getWrappedInstance() {
+      return this._wrappedInstance;
+    }
   }
 
-  return hoistStatics(FocusAwareComponent, WrappedComponent);
+  const C = hoistStatics(FocusAwareComponent, WrappedComponent);
+  C.displayName = `FocusAwareComponent(${getDisplayName(C)})`;
+  return C;
 };

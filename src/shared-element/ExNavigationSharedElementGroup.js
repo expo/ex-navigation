@@ -4,11 +4,7 @@
 
 import _ from 'lodash';
 import React, { cloneElement, Children, Component, PropTypes } from 'react';
-import {
-  Animated,
-  Easing,
-  View,
-} from 'react-native';
+import { Animated, Easing, View } from 'react-native';
 
 import UUID from 'uuid-js';
 
@@ -19,7 +15,7 @@ import type {
   NavigationTransitionProps,
   NavigationTransitionSpec,
   NavigationSceneRendererProps,
-} from 'NavigationTypeDefinition';
+} from '../navigation-experimental/NavigationTypeDefinition';
 
 const DEFAULT_TRANSITION = {
   timing: Animated.timing,
@@ -42,12 +38,12 @@ type State = {
 type Props = {
   id: string,
   children?: React.Element<*>,
-  configureTransition?: ?((
+  configureTransition?: ?(
     a: NavigationTransitionProps,
-    b: ?NavigationTransitionProps,
-  ) => NavigationTransitionSpec),
-  sceneAnimations?: ?((props: NavigationSceneRendererProps) => Object),
-  navigationBarAnimations?: ?((props: NavigationSceneRendererProps) => Object),
+    b: ?NavigationTransitionProps
+  ) => NavigationTransitionSpec,
+  sceneAnimations?: ?(props: NavigationSceneRendererProps) => Object,
+  navigationBarAnimations?: ?(props: NavigationSceneRendererProps) => Object,
   onTransitionStart?: ?TransitionFn,
   onTransitionEnd?: ?TransitionFn,
 };
@@ -77,8 +73,8 @@ export default class SharedElementGroup extends Component {
     transitioningElementGroupFromUid: null,
   };
 
-  _elements: {[key: string]: React.Element<*>} = {};
-  _isMounted: bool = true;
+  _elements: { [key: string]: React.Element<*> } = {};
+  _isMounted: boolean = true;
   _store = this.context.sharedElementStore;
   _uid = UUID.create(1).toString();
   _unsubscribe: any;
@@ -93,8 +89,12 @@ export default class SharedElementGroup extends Component {
   componentWillMount() {
     this._unsubscribe = this._store.subscribe(() => {
       const storeState = this._store.getState();
-      if (storeState.transitioningElementGroupFromUid === this.state.transitioningElementGroupFromUid &&
-          storeState.transitioningElementGroupToUid === this.state.transitioningElementGroupToUid) {
+      if (
+        storeState.transitioningElementGroupFromUid ===
+          this.state.transitioningElementGroupFromUid &&
+        storeState.transitioningElementGroupToUid ===
+          this.state.transitioningElementGroupToUid
+      ) {
         return;
       }
       if (!this._isMounted) {
@@ -124,15 +124,19 @@ export default class SharedElementGroup extends Component {
       sceneIndex: scene.index,
       style: {
         configureTransition: this._configureTransition,
-        sceneAnimations: this.props.sceneAnimations || ExNavigationStyles.Fade.sceneAnimations,
+        sceneAnimations: this.props.sceneAnimations ||
+          ExNavigationStyles.Fade.sceneAnimations,
         gestures: null,
-        navigationBarAnimations: this.props.navigationBarAnimations || ExNavigationStyles.Fade.navigationBarAnimations,
+        navigationBarAnimations: this.props.navigationBarAnimations ||
+          ExNavigationStyles.Fade.navigationBarAnimations,
         onTransitionStart: this._onTransitionStart,
         onTransitionEnd: this._onTransitionEnd,
       },
-      elements: Children.map(this.props.children, (child) => {
+      elements: Children.map(this.props.children, child => {
         if (__DEV__ && child.type.name !== 'SharedElement') {
-          throw new Error('All children of a SharedElementGroup must be SharedElements.');
+          throw new Error(
+            'All children of a SharedElementGroup must be SharedElements.'
+          );
         }
         return child;
       }),
@@ -140,10 +144,16 @@ export default class SharedElementGroup extends Component {
   }
 
   componentWillUpdate(nextProps: Props, nextState: State) {
-    if (this.state.transitioningElementGroupToUid !== nextState.transitioningElementGroupToUid ||
-        this.state.transitioningElementGroupFromUid !== nextState.transitioningElementGroupFromUid) {
-      if (this._uid === nextState.transitioningElementGroupToUid ||
-          this._uid === nextState.transitioningElementGroupFromUid) {
+    if (
+      this.state.transitioningElementGroupToUid !==
+        nextState.transitioningElementGroupToUid ||
+      this.state.transitioningElementGroupFromUid !==
+        nextState.transitioningElementGroupFromUid
+    ) {
+      if (
+        this._uid === nextState.transitioningElementGroupToUid ||
+        this._uid === nextState.transitioningElementGroupFromUid
+      ) {
         // TODO: Ugh, need to add enough delay to prevent image flicker on iOS.
         // Might want to try to fix image loading to it is sync if the image is
         // cached.
@@ -188,7 +198,9 @@ export default class SharedElementGroup extends Component {
       <View style={style}>
         {Children.map(this.props.children, child =>
           cloneElement(child, {
-            ref: c => { this._elements[child.props.id] = c; },
+            ref: c => {
+              this._elements[child.props.id] = c;
+            },
           })
         )}
       </View>
@@ -198,12 +210,18 @@ export default class SharedElementGroup extends Component {
   _onTransitionStart = (
     transitionProps: NavigationTransitionProps,
     prevTransitionProps: NavigationTransitionProps,
-    isTransitionTo?: bool = false
+    isTransitionTo?: boolean = false
   ): void => {
+    if (!this._isMounted) {
+      return;
+    }
+
     const { scene } = transitionProps;
     const { scene: prevScene } = prevTransitionProps;
 
-    if (scene.index !== this._sceneIndex && prevScene.index !== this._sceneIndex) {
+    if (
+      scene.index !== this._sceneIndex && prevScene.index !== this._sceneIndex
+    ) {
       return;
     }
 
@@ -217,7 +235,9 @@ export default class SharedElementGroup extends Component {
       // something to know if the view is being transitioned to or from.
       if (isTransitionTo) {
         // $FlowFixMe
-        Promise.all(Object.values(this._elements).map(e => e.measure())).then(() => {
+        Promise.all(
+          Object.values(this._elements).map(e => e.measure())
+        ).then(() => {
           store.dispatch({
             type: 'TRANSITION_TO_VIEW_READY',
           });
@@ -232,18 +252,26 @@ export default class SharedElementGroup extends Component {
       const state = store.getState();
 
       let possibleOtherGroups;
-      if (scene.index > prevScene.index) { // pushing
+      if (scene.index > prevScene.index) {
+        // pushing
         possibleOtherGroups = _.filter(
           state.elementGroups,
-          group => group.routeKey === scene.route.key && group.sceneIndex === scene.index,
+          group =>
+            group.routeKey === scene.route.key &&
+            group.sceneIndex === scene.index
         );
       } else {
         possibleOtherGroups = _.filter(
           state.elementGroups,
-          group => group.routeKey === prevScene.route.key && group.sceneIndex === prevScene.index,
+          group =>
+            group.routeKey === prevScene.route.key &&
+            group.sceneIndex === prevScene.index
         );
       }
-      const otherGroup = _.find(possibleOtherGroups, group => group.id === this.props.id);
+      const otherGroup = _.find(
+        possibleOtherGroups,
+        group => group.id === this.props.id
+      );
       if (!otherGroup) {
         return;
       }
@@ -252,11 +280,17 @@ export default class SharedElementGroup extends Component {
         this.props.onTransitionStart(transitionProps, prevTransitionProps);
       }
       if (otherGroup.style.onTransitionStart) {
-        otherGroup.style.onTransitionStart(transitionProps, prevTransitionProps, true);
+        otherGroup.style.onTransitionStart(
+          transitionProps,
+          prevTransitionProps,
+          true
+        );
       }
 
       // $FlowFixMe
-      Promise.all(Object.values(this._elements).map(e => e.measure())).then(() => {
+      Promise.all(
+        Object.values(this._elements).map(e => e.measure())
+      ).then(() => {
         store.dispatch({
           type: 'START_TRANSITION_FOR_ELEMENT_GROUPS',
           fromUid: scene.index > prevScene.index ? this._uid : otherGroup.uid,
@@ -265,17 +299,19 @@ export default class SharedElementGroup extends Component {
         });
       });
     });
-  }
+  };
 
   _onTransitionEnd = (
     transitionProps: NavigationTransitionProps,
     prevTransitionProps: NavigationTransitionProps,
-    isTransitionTo?: bool = false
+    isTransitionTo?: boolean = false
   ) => {
     const { scene } = transitionProps;
     const { scene: prevScene } = prevTransitionProps;
 
-    if (scene.index !== this._sceneIndex && prevScene.index !== this._sceneIndex) {
+    if (
+      scene.index !== this._sceneIndex && prevScene.index !== this._sceneIndex
+    ) {
       return;
     }
 
@@ -288,9 +324,9 @@ export default class SharedElementGroup extends Component {
 
     const store = this.context.sharedElementStore;
     const state = store.getState();
-    const otherUid = scene.index > prevScene.index ?
-      this.state.transitioningElementGroupToUid :
-      this.state.transitioningElementGroupFromUid;
+    const otherUid = scene.index > prevScene.index
+      ? this.state.transitioningElementGroupToUid
+      : this.state.transitioningElementGroupFromUid;
     const otherGroup = state.elementGroups[otherUid];
     if (!otherGroup) {
       return;
@@ -304,25 +340,29 @@ export default class SharedElementGroup extends Component {
       this.props.onTransitionEnd(transitionProps, prevTransitionProps);
     }
     if (otherGroup.style.onTransitionEnd) {
-      otherGroup.style.onTransitionEnd(transitionProps, prevTransitionProps, true);
+      otherGroup.style.onTransitionEnd(
+        transitionProps,
+        prevTransitionProps,
+        true
+      );
     }
-  }
+  };
 
   _configureTransition = (
     a: NavigationTransitionProps,
     b: ?NavigationTransitionProps
   ): NavigationTransitionSpec => {
-    const userTransition = this.props.configureTransition ?
-      this.props.configureTransition(a, b) :
-      DEFAULT_TRANSITION;
+    const userTransition = this.props.configureTransition
+      ? this.props.configureTransition(a, b)
+      : DEFAULT_TRANSITION;
     const { timing: userTiming } = userTransition;
 
     const timing = (...timingArgs) => {
-      const timingFn = userTiming ?
-        userTiming(...timingArgs) :
-        Animated.timing(...timingArgs);
+      const timingFn = userTiming
+        ? userTiming(...timingArgs)
+        : Animated.timing(...timingArgs);
       return {
-        start: (cb) => {
+        start: cb => {
           // TODO: Figure out properly how this work and maybe wait for overlay
           // elements to be rendered before starting the animation.
           setTimeout(() => timingFn.start(cb), 100);
@@ -337,5 +377,5 @@ export default class SharedElementGroup extends Component {
       ...userTransition,
       timing,
     };
-  }
+  };
 }

@@ -5,7 +5,9 @@
 import invariant from 'invariant';
 
 import Actions from './ExNavigationActions';
-import createNavigationStore, { batchNavigationActions } from './ExNavigationStore';
+import createNavigationStore, {
+  batchNavigationActions,
+} from './ExNavigationStore';
 // import ExNavigationVisibilityManager from 'ExNavigationVisibilityManager';
 
 import type ExNavigatorContext from './ExNavigatorContext';
@@ -15,10 +17,7 @@ import type {
   ExNavigationRouter,
 } from './ExNavigationRouter';
 
-import type {
-  ExNavigationStore,
-  ExNavigationState,
-} from './ExNavigationStore';
+import type { ExNavigationStore, ExNavigationState } from './ExNavigationStore';
 
 /**
  * Represents
@@ -27,13 +26,19 @@ export default class NavigationContext {
   _store: ExNavigationStore;
   _router: ExNavigationRouter<*>;
   _navigatorContexts: {
-    [navigatorUID: string]: ExNavigatorContext<*>
+    [navigatorUID: string]: ExNavigatorContext<*>,
   };
   // _visiblityManager: ExNavigationVisibilityManager;
 
-  registerNavigatorContext: (navigatorUID: string, navigatorContext: ExNavigatorContext<*>) => void;
+  registerNavigatorContext: (
+    navigatorUID: string,
+    navigatorContext: ExNavigatorContext<*>
+  ) => void;
 
-  constructor({ store, router }: { store?: ExNavigationStore, router: ExNavigationRouter<*> }) {
+  constructor({
+    store,
+    router,
+  }: { store?: ExNavigationStore, router: ExNavigationRouter<*> }) {
     if (store == null) {
       store = createNavigationStore();
     }
@@ -53,7 +58,9 @@ export default class NavigationContext {
         if (!navigatorContext) {
           navigatorContext = c;
         } else {
-          throw new Error(`More than one navigator exists with id '${navigatorId}'. Please access the navigator context using 'getNavigatorByUID'.`);
+          throw new Error(
+            `More than one navigator exists with id '${navigatorId}'. Please access the navigator context using 'getNavigatorByUID'.`
+          );
         }
       }
     });
@@ -67,7 +74,10 @@ export default class NavigationContext {
    */
   getNavigatorByUID(navigatorUID: string): ExNavigatorContext<*> {
     // return the NavigatorContext for navigatorId
-    invariant(this._navigatorContexts[navigatorUID], 'Navigator does not exist.');
+    invariant(
+      this._navigatorContexts[navigatorUID],
+      'Navigator does not exist.'
+    );
     return this._navigatorContexts[navigatorUID];
   }
 
@@ -84,7 +94,9 @@ export default class NavigationContext {
       return null;
     }
 
-    const currentNavigator = this.navigationState.navigators[this.navigationState.currentNavigatorUID];
+    const currentNavigator = this.navigationState.navigators[
+      this.navigationState.currentNavigatorUID
+    ];
     if (!currentNavigator) {
       return null;
     }
@@ -92,13 +104,16 @@ export default class NavigationContext {
     return currentNavigator.routes[currentNavigator.index];
   }
 
-  registerNavigatorContext = (navigatorUID: string, navigatorContext: ExNavigatorContext<*>) => {
+  registerNavigatorContext = (
+    navigatorUID: string,
+    navigatorContext: ExNavigatorContext<*>
+  ) => {
     this._navigatorContexts[navigatorUID] = navigatorContext;
-  }
+  };
 
   unregisterNavigatorContext = (navigatorUID: string) => {
     delete this._navigatorContexts[navigatorUID];
-  }
+  };
 
   get store(): ExNavigationStore {
     return this._store;
@@ -131,8 +146,8 @@ export default class NavigationContext {
   performAction(actionFn: Function) {
     let actions = [];
     const stateUtils = {
-      drawer: (uid) => ({
-        jumpToItem: (itemId) => {
+      drawer: uid => ({
+        jumpToItem: itemId => {
           actions.push(
             Actions.jumpToItem(uid, {
               key: itemId,
@@ -140,13 +155,11 @@ export default class NavigationContext {
           );
         },
         toggleDrawer: () => {
-          actions.push(
-            Actions.toggleDrawer(uid)
-          );
+          actions.push(Actions.toggleDrawer(uid));
         },
       }),
-      tabs: (uid) => ({
-        jumpToTab: (tabId) => {
+      tabs: uid => ({
+        jumpToTab: tabId => {
           actions.push(
             Actions.jumpToTab(uid, {
               key: tabId,
@@ -154,36 +167,29 @@ export default class NavigationContext {
           );
         },
       }),
-      stacks: (uid) => ({
-        push: (route) => {
-          actions.push(
-            Actions.push(uid, route)
-          );
+      stacks: uid => ({
+        push: route => {
+          actions.push(Actions.push(uid, route));
         },
-        pop: (n) => {
+        pop: (n = 1) => {
           if (n === 1) {
-            actions.push(
-              Actions.pop(uid)
-            );
+            actions.push(Actions.pop(uid));
           } else {
-            actions.push(
-              Actions.popN(uid, n)
-            );
+            actions.push(Actions.popN(uid, n));
           }
         },
         popToTop: () => {
-          actions.push(
-            Actions.popToTop(uid)
-          );
+          actions.push(Actions.popToTop(uid));
         },
-        replace: (route) => {
-          actions.push(
-            Actions.replace(uid, route)
-          );
+        replace: route => {
+          actions.push(Actions.replace(uid, route));
         },
         immediatelyResetStack: (routes, index) => {
           const mappedChildren = routes.map((route, i) => {
-            invariant(route !== null && route.key, `Route at index ${i} is null or malformed.`);
+            invariant(
+              route !== null && route.key,
+              `Route at index ${i} is null or malformed.`
+            );
             return route;
           });
 
@@ -191,20 +197,14 @@ export default class NavigationContext {
             Actions.immediatelyResetStack(uid, mappedChildren, index)
           );
         },
-        updateCurrentRouteParams: (newParams) => {
-          actions.push(
-            Actions.updateCurrentRouteParams(uid, newParams)
-          );
+        updateCurrentRouteParams: newParams => {
+          actions.push(Actions.updateCurrentRouteParams(uid, newParams));
         },
         showLocalAlert: (message, options) => {
-          actions.push(
-            Actions.showLocalAlert(uid, message, options)
-          );
+          actions.push(Actions.showLocalAlert(uid, message, options));
         },
         hideLocalAlert: () => {
-          actions.push(
-            Actions.hideLocalAlert(uid)
-          );
+          actions.push(Actions.hideLocalAlert(uid));
         },
       }),
     };

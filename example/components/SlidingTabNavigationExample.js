@@ -1,15 +1,10 @@
 import React, { Component } from 'react';
-import {
-  StyleSheet,
-  View,
-  Text,
-  TouchableOpacity,
-} from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import {
   SlidingTabNavigation,
   SlidingTabNavigationItem,
-} from '@exponent/ex-navigation';
-import { Ionicons } from '@exponent/vector-icons';
+} from '@expo/ex-navigation';
+import { Ionicons } from '@expo/vector-icons';
 
 export default class SlidingTabNavigationExample extends Component {
   static route = {
@@ -17,7 +12,7 @@ export default class SlidingTabNavigationExample extends Component {
       title: 'Sliding Tab Navigation',
       ...SlidingTabNavigation.navigationBarStyles,
     },
-  }
+  };
 
   _goToFirstTab = () => {
     this.props.navigation.performAction(({ tabs, stacks }) => {
@@ -31,7 +26,7 @@ export default class SlidingTabNavigationExample extends Component {
     });
   };
 
-  _renderLabel = ({route}) => {
+  _renderLabel = ({ route }) => {
     let title;
     if (route.key === 'first') {
       title = 'First';
@@ -55,20 +50,32 @@ export default class SlidingTabNavigationExample extends Component {
           <SlidingTabNavigationItem id="first">
             <View style={styles.quoteContainer}>
               <Text style={styles.quoteMarks}>“</Text>
-              <Text style={styles.quoteText}>R2D2, you know better than to trust a strange computer!</Text>
+              <Text style={styles.quoteText}>
+                R2D2, you know better than to trust a strange computer!
+              </Text>
               <Text style={styles.quoteAuthor}>C3PO</Text>
               <TouchableOpacity onPress={this._goToSecondTab}>
-                <Ionicons name="md-arrow-forward" size={16} style={styles.button} />
+                <Ionicons
+                  name="md-arrow-forward"
+                  size={16}
+                  style={styles.button}
+                />
               </TouchableOpacity>
             </View>
           </SlidingTabNavigationItem>
           <SlidingTabNavigationItem id="second">
             <View style={styles.quoteContainer}>
               <Text style={styles.quoteMarks}>“</Text>
-              <Text style={styles.quoteText}>The best thing about a boolean is even if you are wrong, you are only off by a bit.</Text>
+              <Text style={styles.quoteText}>
+                The best thing about a boolean is even if you are wrong, you are only off by a bit.
+              </Text>
               <Text style={styles.quoteAuthor}>Bryan</Text>
               <TouchableOpacity onPress={this._goToFirstTab}>
-                <Ionicons name="md-arrow-back" size={16} style={styles.button} />
+                <Ionicons
+                  name="md-arrow-back"
+                  size={16}
+                  style={styles.button}
+                />
               </TouchableOpacity>
             </View>
           </SlidingTabNavigationItem>

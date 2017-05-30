@@ -1,8 +1,5 @@
 import React, { Component } from 'react';
-import {
-  View,
-  StyleSheet,
-} from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import ListItem from './ListItem';
 import { Router } from '../main';
 
@@ -16,11 +13,11 @@ export default class HomeScreen extends Component {
     navigationBar: {
       title: 'Examples',
     },
-  }
+  };
 
   _goToScreen = name => () => {
     this.props.navigator.push(Router.getRoute(name));
-  }
+  };
 
   render() {
     return (

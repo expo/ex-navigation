@@ -2,14 +2,9 @@
  * @flow
  */
 
-import React, {
-  Children,
-} from 'react';
-import {
-  StyleSheet,
-  View,
-} from 'react-native';
-import DrawerLayout from 'react-native-drawer-layout';
+import React, { Children } from 'react';
+import { StyleSheet, View } from 'react-native';
+import DrawerLayout from 'react-native-drawer-layout-polyfill';
 import PureComponent from '../utils/PureComponent';
 import StaticContainer from 'react-static-container';
 
@@ -56,7 +51,6 @@ export class ExNavigationDrawerContext extends ExNavigatorContext {
   }
 }
 
-
 type Props = {
   id: string,
   navigatorUID: string,
@@ -69,7 +63,10 @@ type Props = {
   children: Array<React.Element<any>>,
   drawerPosition?: 'left' | 'right',
   navigation: ExNavigationContext,
-  onRegisterNavigatorContext: (navigatorUID: string, navigatorContext: ExNavigationDrawerContext) => void,
+  onRegisterNavigatorContext: (
+    navigatorUID: string,
+    navigatorContext: ExNavigationDrawerContext
+  ) => void,
   onUnregisterNavigatorContext: (navigatorUID: string) => void,
   navigationState: Object,
 };
@@ -147,15 +144,14 @@ class ExNavigationDrawer extends PureComponent<any, Props, State> {
       drawerPosition: this.props.drawerPosition,
       width: this.props.drawerWidth,
       renderNavigationView: this.props.renderNavigationView,
-      style: [
-        this.props.drawerStyle,
-      ],
+      style: [this.props.drawerStyle],
     };
-
 
     return (
       <ExNavigationDrawerLayout
-        ref={component => { this._drawerLayout = component; }}
+        ref={component => {
+          this._drawerLayout = component;
+        }}
         {...drawerLayoutProps}
       />
     );
@@ -186,7 +182,7 @@ class ExNavigationDrawer extends PureComponent<any, Props, State> {
       <View
         key={drawerItem.id}
         removeClippedSubviews={!isSelected}
-        style={[styles.itemContentInner, {opacity: isSelected ? 1 : 0}]}
+        style={[styles.itemContentInner, { opacity: isSelected ? 1 : 0 }]}
         pointerEvents={isSelected ? 'auto' : 'none'}>
         <StaticContainer shouldUpdate={isSelected}>
           {drawerItem.element}
@@ -200,19 +196,25 @@ class ExNavigationDrawer extends PureComponent<any, Props, State> {
 
     this._registerNavigatorContext();
 
-    this.props.navigation.dispatch(Actions.setCurrentNavigator(
-      this.state.navigatorUID,
-      this.state.parentNavigatorUID,
-      'drawer',
-      {},
-      [{
-        key: this.props.initialItem,
-      }],
-    ));
+    this.props.navigation.dispatch(
+      Actions.setCurrentNavigator(
+        this.state.navigatorUID,
+        this.state.parentNavigatorUID,
+        'drawer',
+        {},
+        [
+          {
+            key: this.props.initialItem,
+          },
+        ]
+      )
+    );
   }
 
   componentWillUnmount() {
-    this.props.navigation.dispatch(Actions.removeNavigator(this.state.navigatorUID));
+    this.props.navigation.dispatch(
+      Actions.removeNavigator(this.state.navigatorUID)
+    );
     this.props.onUnregisterNavigatorContext(this.state.navigatorUID);
   }
 
@@ -223,7 +225,10 @@ class ExNavigationDrawer extends PureComponent<any, Props, State> {
 
     if (nextProps.navigationState !== this.props.navigationState) {
       this.setState({
-        renderedItemKeys: this._updateRenderedItemKeys(nextProps, this.state.renderedItemKeys),
+        renderedItemKeys: this._updateRenderedItemKeys(
+          nextProps,
+          this.state.renderedItemKeys
+        ),
       });
     }
   }
@@ -238,7 +243,9 @@ class ExNavigationDrawer extends PureComponent<any, Props, State> {
     if (prevProps.navigationState !== this.props.navigationState) {
       const navigationState = this.props.navigationState;
       const currentItemKey = navigationState.routes[navigationState.index].key;
-      const navigatorUIDForItemKey = this._getNavigatorContext().getNavigatorUIDForItemKey(currentItemKey);
+      const navigatorUIDForItemKey = this._getNavigatorContext().getNavigatorUIDForItemKey(
+        currentItemKey
+      );
       if (navigatorUIDForItemKey) {
         this.props.navigation.dispatch(
           Actions.setCurrentNavigator(navigatorUIDForItemKey)
@@ -253,16 +260,25 @@ class ExNavigationDrawer extends PureComponent<any, Props, State> {
     const selectedChild = navState.routes[navState.index];
 
     return [
-      ..._.uniq(_.without([...currentRenderedItemKeys, ...currentDrawerItems], selectedChild.key)),
+      ..._.uniq(
+        _.without(
+          [...currentRenderedItemKeys, ...currentDrawerItems],
+          selectedChild.key
+        )
+      ),
       selectedChild.key,
     ];
   }
 
   _parseDrawerItems(props) {
     const drawerItems = Children.map(props.children, (child, index) => {
+      if (!child) {
+        return null;
+      }
+
       invariant(
         child.type === ExNavigationDrawerItem,
-        'All children of DrawerNavigation must be DrawerNavigationItems.',
+        'All children of DrawerNavigation must be DrawerNavigationItems.'
       );
 
       const drawerItemProps = child.props;

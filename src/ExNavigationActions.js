@@ -9,7 +9,14 @@ export default class ExNavigationActions {
     return { type: ActionTypes.INITIALIZE };
   }
 
-  static setCurrentNavigator(navigatorUID, parentNavigatorUID, navigatorType, defaultRouteConfig, routes, index = 0) {
+  static setCurrentNavigator(
+    navigatorUID,
+    parentNavigatorUID,
+    navigatorType,
+    defaultRouteConfig,
+    routes,
+    index = 0
+  ) {
     return {
       type: ActionTypes.SET_CURRENT_NAVIGATOR,
       navigatorUID,

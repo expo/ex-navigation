@@ -3,15 +3,16 @@
  */
 
 import React, { Component, PropTypes, cloneElement } from 'react';
-import {
-  UIManager,
-  findNodeHandle,
-} from 'react-native';
+import { UIManager, findNodeHandle } from 'react-native';
+import invariant from 'invariant';
 
-import type { TransitionProps, Metrics } from './ExNavigationSharedElementReducer';
+import type {
+  TransitionProps,
+  Metrics,
+} from './ExNavigationSharedElementReducer';
 
 type Props = {
-  children: () => React.Element<*>,
+  children?: () => React.Element<*>,
   id: string,
 
   // This is not part of the public API and is used by the overlay to pass down
@@ -33,26 +34,33 @@ export default class SharedElement extends Component {
     let animationStyle = {};
     // If transitionProps is set it means this is being rendered from the overlay
     // for the animation so pass down animation styles.
-    if (this.props.transitionProps && this.props.transitionProps.progress &&
-        this.props.transitionProps.fromMetrics && this.props.transitionProps.toMetrics) {
+    if (
+      this.props.transitionProps &&
+      this.props.transitionProps.progress &&
+      this.props.transitionProps.fromMetrics &&
+      this.props.transitionProps.toMetrics
+    ) {
       const { progress, fromMetrics, toMetrics } = this.props.transitionProps;
-      animationStyle = this.getAnimationStyle(
-        progress,
-        fromMetrics,
-        toMetrics,
-      );
+      animationStyle = this.getAnimationStyle(progress, fromMetrics, toMetrics);
     }
 
+    invariant(childFn, 'Must pass a function as a child to `SharedElement`.');
     const childEl = childFn(animationStyle);
 
     return cloneElement(childEl, {
-      ref: c => { this._el = c; },
+      ref: c => {
+        this._el = c;
+      },
       collapsable: false,
       onLayout: this.measure,
     });
   }
 
-  getAnimationStyle = (progress: any, fromMetrics: Metrics, toMetrics: Metrics) => {
+  getAnimationStyle = (
+    progress: any,
+    fromMetrics: Metrics,
+    toMetrics: Metrics
+  ) => {
     const initialScaleX = fromMetrics.width / toMetrics.width;
     const initialScaleY = fromMetrics.height / toMetrics.height;
 
@@ -69,34 +77,42 @@ export default class SharedElement extends Component {
       marginTop: 0,
       marginBottom: 0,
       transform: [
-        { translateX: progress.interpolate({
-          inputRange: [0, 1],
-          outputRange: [
-            ((fromMetrics.width - toMetrics.width) / 2) + fromMetrics.x,
-            toMetrics.x,
-          ],
-        }) },
-        { translateY: progress.interpolate({
-          inputRange: [0, 1],
-          outputRange: [
-            ((fromMetrics.height - toMetrics.height) / 2) + fromMetrics.y,
-            toMetrics.y,
-          ],
-        }) },
-        { scaleX: progress.interpolate({
-          inputRange: [0, 1],
-          outputRange: [initialScaleX, 1],
-        }) },
-        { scaleY: progress.interpolate({
-          inputRange: [0, 1],
-          outputRange: [initialScaleY, 1],
-        }) },
+        {
+          translateX: progress.interpolate({
+            inputRange: [0, 1],
+            outputRange: [
+              (fromMetrics.width - toMetrics.width) / 2 + fromMetrics.x,
+              toMetrics.x,
+            ],
+          }),
+        },
+        {
+          translateY: progress.interpolate({
+            inputRange: [0, 1],
+            outputRange: [
+              (fromMetrics.height - toMetrics.height) / 2 + fromMetrics.y,
+              toMetrics.y,
+            ],
+          }),
+        },
+        {
+          scaleX: progress.interpolate({
+            inputRange: [0, 1],
+            outputRange: [initialScaleX, 1],
+          }),
+        },
+        {
+          scaleY: progress.interpolate({
+            inputRange: [0, 1],
+            outputRange: [initialScaleY, 1],
+          }),
+        },
       ],
     };
-  }
+  };
 
   measure = () => {
-    return new Promise((resolve) => {
+    return new Promise(resolve => {
       // If there is no element group uid it means this is being rendered from the
       // overlay so we don't do any measurement.
       if (!this.context.elementGroupUid) {
@@ -104,9 +120,9 @@ export default class SharedElement extends Component {
         return;
       }
 
-      UIManager.measureInWindow(
+      UIManager.measure(
         findNodeHandle(this._el),
-        (x, y, width, height) => {
+        (origX, origY, width, height, x, y) => {
           const store = this.context.sharedElementStore;
           store.dispatch({
             type: 'UPDATE_METRICS_FOR_ELEMENT',

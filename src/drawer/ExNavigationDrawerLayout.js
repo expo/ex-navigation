@@ -11,8 +11,9 @@ import {
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
-import DrawerLayout from 'react-native-drawer-layout';
-import TouchableNativeFeedbackSafe from '@exponent/react-native-touchable-native-feedback-safe';
+import DrawerLayout from 'react-native-drawer-layout-polyfill';
+import TouchableNativeFeedbackSafe
+  from '@expo/react-native-touchable-native-feedback-safe';
 
 type Props = {
   renderHeader: () => React.Element<any>,
@@ -24,7 +25,7 @@ type Props = {
 };
 
 type State = {
-  isOpen: bool,
+  isOpen: boolean,
 };
 
 export default class ExNavigationDrawerLayout extends React.Component {
@@ -38,13 +39,21 @@ export default class ExNavigationDrawerLayout extends React.Component {
 
     return (
       <DrawerLayout
-        ref={component => { this._component = component; }}
-        onDrawerClose={() => { this.setState({isOpen: false}) }}
-        onDrawerOpen={() => { this.setState({isOpen: true}) }}
+        ref={component => {
+          this._component = component;
+        }}
+        onDrawerClose={() => {
+          this.setState({ isOpen: false });
+        }}
+        onDrawerOpen={() => {
+          this.setState({ isOpen: true });
+        }}
         drawerBackgroundColor={this.props.drawerBackgroundColor}
         drawerWidth={this.props.width}
         drawerPosition={DrawerLayout.positions[position]}
-        renderNavigationView={this.props.renderNavigationView || this._renderNavigationView}>
+        renderNavigationView={
+          this.props.renderNavigationView || this._renderNavigationView
+        }>
         {this.props.children}
       </DrawerLayout>
     );
@@ -65,12 +74,15 @@ export default class ExNavigationDrawerLayout extends React.Component {
           {this.props.renderHeader()}
         </View>
 
-        <ScrollView contentContainerStyle={styles.navigationViewScrollableContentContainer}>
+        <ScrollView
+          contentContainerStyle={
+            styles.navigationViewScrollableContentContainer
+          }>
           {this._renderDrawerItems()}
         </ScrollView>
       </View>
     );
-  }
+  };
 
   _renderDrawerItems = () => {
     if (!this.props.items) {
@@ -88,21 +100,26 @@ export default class ExNavigationDrawerLayout extends React.Component {
         return (
           <TouchableNativeFeedbackSafe
             key={index}
-            onPress={() => { this._handlePress(item); }}
-            onLongPress={() => { this._handleLongPress(item); }}
+            onPress={() => {
+              this._handlePress(item);
+            }}
+            onLongPress={() => {
+              this._handleLongPress(item);
+            }}
             delayPressIn={0}
             style={[isSelected ? item.selectedStyle : item.style]}
             background={item.nativeFeedbackBackground}>
             <View style={styles.buttonContainer}>
-              {
-                icon && <View style={[styles.elementContainer]}>{icon}</View>
-              }
-              {
-                title && <View style={[styles.elementContainer]}>{title}</View>
-              }
-              {
-                rightElement && <View style={[styles.elementContainer, styles.rightElementContainer]}>{rightElement}</View>
-              }
+              {icon && <View style={[styles.elementContainer]}>{icon}</View>}
+              {title && <View style={[styles.elementContainer]}>{title}</View>}
+              {rightElement &&
+                <View
+                  style={[
+                    styles.elementContainer,
+                    styles.rightElementContainer,
+                  ]}>
+                  {rightElement}
+                </View>}
             </View>
           </TouchableNativeFeedbackSafe>
         );
@@ -110,24 +127,33 @@ export default class ExNavigationDrawerLayout extends React.Component {
         return (
           <TouchableWithoutFeedback
             key={index}
-            onPress={() => { this._handlePress(item); }}
-            onLongPress={() => { this._handleLongPress(item); }}>
-            <View style={[styles.buttonContainer, isSelected ? item.selectedStyle : item.style]}>
-              {
-                icon && <View style={[styles.elementContainer]}>{icon}</View>
-              }
-              {
-                title && <View style={[styles.elementContainer]}>{title}</View>
-              }
-              {
-                rightElement && <View style={[styles.elementContainer, styles.rightElementContainer]}>{rightElement}</View>
-              }
+            onPress={() => {
+              this._handlePress(item);
+            }}
+            onLongPress={() => {
+              this._handleLongPress(item);
+            }}>
+            <View
+              style={[
+                styles.buttonContainer,
+                isSelected ? item.selectedStyle : item.style,
+              ]}>
+              {icon && <View style={[styles.elementContainer]}>{icon}</View>}
+              {title && <View style={[styles.elementContainer]}>{title}</View>}
+              {rightElement &&
+                <View
+                  style={[
+                    styles.elementContainer,
+                    styles.rightElementContainer,
+                  ]}>
+                  {rightElement}
+                </View>}
             </View>
           </TouchableWithoutFeedback>
         );
       }
     });
-  }
+  };
 
   // TODO(brentvatne):
   // onPress and onLongPress should fire after close drawer!
@@ -135,7 +161,7 @@ export default class ExNavigationDrawerLayout extends React.Component {
   _handlePress = (item: any) => {
     item.onPress();
     this._component.closeDrawer();
-  }
+  };
 
   _handleLongPress = (item: any) => {
     if (!item.onLongPress) {
@@ -144,7 +170,7 @@ export default class ExNavigationDrawerLayout extends React.Component {
 
     item.onLongPress();
     this._component.closeDrawer();
-  }
+  };
 }
 
 const styles = StyleSheet.create({
@@ -170,6 +196,6 @@ const styles = StyleSheet.create({
   },
   rightElementContainer: {
     flex: 1,
-    justifyContent: 'flex-end'
-  }
+    justifyContent: 'flex-end',
+  },
 });
