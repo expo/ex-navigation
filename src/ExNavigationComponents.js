@@ -203,7 +203,7 @@ export function withNavigation<T>(
       return this._wrappedInstance;
     }
 
-    setWrappedInstance(ref) {
+    setWrappedInstance = (ref) => {
       this._wrappedInstance = ref;
     }
 
