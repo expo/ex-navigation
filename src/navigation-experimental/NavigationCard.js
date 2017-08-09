@@ -39,6 +39,7 @@ const NavigationPagerStyleInterpolator = require('./NavigationPagerStyleInterpol
 const NavigationPointerEventsContainer = require('./NavigationPointerEventsContainer');
 const NavigationPropTypes = require('./NavigationPropTypes');
 const React = require('react');
+const PropTypes = require('prop-types');
 
 import type  {
   NavigationPanPanHandlers,
@@ -54,8 +55,6 @@ type Props = NavigationSceneRendererProps & {
   renderScene: NavigationSceneRenderer,
   style: any,
 };
-
-const {PropTypes} = React;
 
 /**
  * Component that renders the scene as card for the <NavigationCardStack />.

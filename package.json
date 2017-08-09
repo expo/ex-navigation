@@ -31,6 +31,7 @@
     "invariant": "^2.2.1",
     "lodash": "^4.6.1",
     "mirror-creator": "^1.1.0",
+    "prop-types": "^15.5.10",
     "react-addons-pure-render-mixin": "^15.5.2",
     "react-addons-shallow-compare": "15.5.2",
     "react-clone-referenced-element": "^1.0.1",

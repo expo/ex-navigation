@@ -2,8 +2,9 @@
  * @flow
  */
 
-import React, { Component, PropTypes, cloneElement } from 'react';
+import React, { Component, cloneElement } from 'react';
 import { UIManager, findNodeHandle } from 'react-native';
+import PropTypes from 'prop-types';
 import invariant from 'invariant';
 
 import type {

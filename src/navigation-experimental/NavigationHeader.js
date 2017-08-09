@@ -37,6 +37,7 @@ const NavigationHeaderTitle = require('./NavigationHeaderTitle');
 const NavigationPropTypes = require('./NavigationPropTypes');
 const React = require('react');
 const ReactNative = require('react-native');
+const PropTypes = require('prop-types');
 const ReactComponentWithPureRenderMixin = require('react-addons-pure-render-mixin');
 
 const {
@@ -80,7 +81,6 @@ type SubViewName = 'left' | 'title' | 'right';
 
 const APPBAR_HEIGHT = Platform.OS === 'ios' ? 44 : 56;
 const STATUSBAR_HEIGHT = Platform.OS === 'ios' ? 20 : 0;
-const { PropTypes } = React;
 
 class NavigationHeader extends React.Component<DefaultProps, Props, any> {
   props: Props;
