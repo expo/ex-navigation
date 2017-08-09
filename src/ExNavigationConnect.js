@@ -4,7 +4,7 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import storeShape from 'react-redux/lib/utils/storeShape';
+import { storeShape } from 'react-redux/lib/utils/PropTypes';
 import hoistStatics from 'hoist-non-react-statics';
 import invariant from 'invariant';
 

@@ -6,7 +6,7 @@ import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import PropTypes from 'prop-types';
 
-import storeShape from 'react-redux/lib/utils/storeShape';
+import { storeShape } from 'react-redux/lib/utils/PropTypes';
 
 import Actions from './ExNavigationActions';
 import { createBackButtonManager } from './ExNavigationBackButtonManager';

@@ -38,7 +38,7 @@
     "react-mixin": "^3.0.5",
     "react-native-drawer-layout-polyfill": "^1.1.0",
     "react-native-tab-view": "^0.0.61",
-    "react-redux": "^4.4.5",
+    "react-redux": "^5.0.6",
     "react-static-container": "^1.0.0",
     "react-timer-mixin": "^0.13.3",
     "redux": "^3.5.2",
