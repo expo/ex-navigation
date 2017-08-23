@@ -4,6 +4,7 @@
 
 import React, { Children } from 'react';
 import { StyleSheet, View } from 'react-native';
+import PropTypes from 'prop-types';
 import PureComponent from '../utils/PureComponent';
 import StaticContainer from 'react-static-container';
 
@@ -98,12 +99,12 @@ class ExNavigationTab extends PureComponent<any, Props, State> {
   };
 
   static contextTypes = {
-    parentNavigatorUID: React.PropTypes.string,
+    parentNavigatorUID: PropTypes.string,
   };
 
   static childContextTypes = {
-    parentNavigatorUID: React.PropTypes.string,
-    navigator: React.PropTypes.instanceOf(ExNavigationTabContext),
+    parentNavigatorUID: PropTypes.string,
+    navigator: PropTypes.instanceOf(ExNavigationTabContext),
   };
 
   getChildContext() {
