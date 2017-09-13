@@ -14,6 +14,7 @@ const {Animated, Easing, StyleSheet, View} = require('react-native');
 const NavigationPropTypes = require('./NavigationPropTypes');
 const NavigationScenesReducer = require('./NavigationScenesReducer');
 const React = require('react');
+const PropTypes = require('prop-types');
 
 const invariant = require('fbjs/lib/invariant');
 
@@ -44,8 +45,6 @@ type State = {
   progress: NavigationAnimatedValue,
   scenes: Array<NavigationScene>,
 };
-
-const {PropTypes} = React;
 
 const DefaultTransitionSpec = {
   duration: 250,

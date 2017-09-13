@@ -6,7 +6,7 @@ import React, { cloneElement } from 'react';
 import { View, StyleSheet, findNodeHandle } from 'react-native';
 
 import { createStore } from 'redux';
-import storeShape from 'react-redux/lib/utils/storeShape';
+import { storeShape } from 'react-redux/lib/utils/PropTypes';
 
 import SharedElementReducer from './ExNavigationSharedElementReducer';
 

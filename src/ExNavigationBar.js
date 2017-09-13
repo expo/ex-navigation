@@ -1,4 +1,4 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
 import {
   Animated,
   Image,
@@ -9,6 +9,7 @@ import {
   View,
   ViewPropTypes,
 } from 'react-native';
+import PropTypes from 'prop-types';
 import PureComponent from './utils/PureComponent';
 import { unsupportedNativeView } from './ExUnsupportedNativeView';
 import { withNavigation } from './ExNavigationComponents';

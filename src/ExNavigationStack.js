@@ -4,6 +4,7 @@
 
 import React from 'react';
 import { Animated, Platform, StyleSheet, View } from 'react-native';
+import PropTypes from 'prop-types';
 import NavigationExperimental from './navigation-experimental';
 
 import _ from 'lodash';
@@ -273,16 +274,16 @@ class ExNavigationStack extends PureComponent<any, Props, State> {
   };
 
   static contextTypes = {
-    parentNavigatorUID: React.PropTypes.string,
-    headerComponent: React.PropTypes.func,
-    alertBarComponent: React.PropTypes.func,
+    parentNavigatorUID: PropTypes.string,
+    headerComponent: PropTypes.func,
+    alertBarComponent: PropTypes.func,
   };
 
   static childContextTypes = {
-    parentNavigatorUID: React.PropTypes.string,
-    navigator: React.PropTypes.instanceOf(ExNavigationStackContext),
-    headerComponent: React.PropTypes.func,
-    alertBarComponent: React.PropTypes.func,
+    parentNavigatorUID: PropTypes.string,
+    navigator: PropTypes.instanceOf(ExNavigationStackContext),
+    headerComponent: PropTypes.func,
+    alertBarComponent: PropTypes.func,
   };
 
   getChildContext() {
