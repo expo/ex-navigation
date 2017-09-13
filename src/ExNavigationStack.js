@@ -3,7 +3,7 @@
  */
 
 import React from 'react';
-import { Animated, Platform, StyleSheet, View } from 'react-native';
+import { Animated, Platform, StyleSheet, View, Dimensions } from 'react-native';
 import PropTypes from 'prop-types';
 import NavigationExperimental from './navigation-experimental';
 
@@ -46,7 +46,10 @@ const DEFAULT_ROUTE_CONFIG: ExNavigationConfig = {
     : NavigationStyles.Fade,
 };
 
-const DEFAULT_STATUSBAR_HEIGHT = Platform.OS === 'ios' ? 20 : 25;
+const dimentions =  Dimensions.get('window')
+const iphoneX = (dimentions.width === 375 || dimentions.width === 812) && (dimentions.height === 375 || dimentions.height === 812);
+const STATUSBAR_IOS_HEIGHT = (iphoneX) ? 50 : 20;
+const DEFAULT_STATUSBAR_HEIGHT = Platform.OS === 'ios' ? STATUSBAR_IOS_HEIGHT : 25;
 const STATUSBAR_HEIGHT = Platform.OS === 'ios'
   ? DEFAULT_STATUSBAR_HEIGHT
   : global.__exponent ? DEFAULT_STATUSBAR_HEIGHT : 0;
@@ -811,6 +814,11 @@ class ExNavigationStack extends PureComponent<any, Props, State> {
 
       if (_.isNumber(route.getBarHeight())) {
         customHeight += route.getBarHeight();
+        hasCustomHeight = true;
+      }
+      
+      if (route.params.hideNavigationBar) {
+        customHeight = 0;
         hasCustomHeight = true;
       }
 

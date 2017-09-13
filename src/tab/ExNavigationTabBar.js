@@ -6,6 +6,8 @@ import {
   TouchableNativeFeedback,
   Text,
   View,
+  Dimensions,
+  Platform,
 } from 'react-native';
 
 import { unsupportedNativeView } from '../ExUnsupportedNativeView';
@@ -22,7 +24,12 @@ if (expoModule) {
 
 import TabBadge from '../ExNavigationBadge';
 
-const DEFAULT_TAB_BAR_HEIGHT = 56;
+const dimentions = Dimensions.get('window');
+const iphoneX =
+  (dimentions.width === 375 || dimentions.width === 812) &&
+  (dimentions.height === 375 || dimentions.height === 812);
+
+const DEFAULT_TAB_BAR_HEIGHT = Platform.OS === 'ios' && iphoneX ? 80 : 49;
 
 export default class ExNavigationTabBar extends React.Component {
   static defaultHeight = DEFAULT_TAB_BAR_HEIGHT;
@@ -154,6 +161,8 @@ const styles = StyleSheet.create({
   itemContainer: {
     flex: 1,
     flexDirection: 'row',
+    alignItems: 'flex-start',
+    paddingTop: 1,
   },
   tabItem: {
     flex: 1,

@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   View,
   ViewPropTypes,
+  Dimensions,
 } from 'react-native';
 import PropTypes from 'prop-types';
 import PureComponent from './utils/PureComponent';
@@ -27,9 +28,13 @@ if (expoModule) {
 // Exponent draws under the status bar on Android, but vanilla React Native does not.
 // So we need to factor the status bar height in with Exponent but can ignore it with
 // vanilla React Native
-const STATUSBAR_HEIGHT = Platform.OS === 'ios'
-  ? 20
-  : global.__exponent ? 24 : 0;
+const dimentions = Dimensions.get('window');
+const iphoneX =
+  (dimentions.width === 375 || dimentions.width === 812) &&
+  (dimentions.height === 375 || dimentions.height === 812);
+const STATUSBAR_IOS_HEIGHT = iphoneX ? 50 : 20;
+const STATUSBAR_HEIGHT =
+  Platform.OS === 'ios' ? STATUSBAR_IOS_HEIGHT : global.__exponent ? 24 : 0;
 
 const APPBAR_HEIGHT = Platform.OS === 'ios' ? 44 : 55;
 const BACKGROUND_COLOR = Platform.OS === 'ios' ? '#EFEFF2' : '#FFF';
