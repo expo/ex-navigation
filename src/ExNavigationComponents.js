@@ -2,7 +2,8 @@
  * @flow
  */
 
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 
 import UUID from 'uuid-js';
 
@@ -231,7 +232,7 @@ export const createFocusableComponent = (WrappedComponent: ReactClass<any>) => {
     _wrappedInstance: ReactElement<T>;
 
     static childContextTypes = {
-      isFocused: React.PropTypes.bool,
+      isFocused: PropTypes.bool,
     };
 
     getChildContext() {
@@ -329,11 +330,11 @@ export const createFocusAwareComponent = <T>(
 ) => {
   class FocusAwareComponent extends React.Component {
     static contextTypes = {
-      isFocused: React.PropTypes.bool,
+      isFocused: PropTypes.bool,
     };
 
     static childContextTypes = {
-      isFocused: React.PropTypes.bool,
+      isFocused: PropTypes.bool,
     };
 
     _wrappedInstance: ReactElement<T>;

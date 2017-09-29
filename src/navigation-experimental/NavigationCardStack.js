@@ -43,9 +43,9 @@ const {
   View,
   ViewPropTypes,
 } = require('react-native');
+const PropTypes = require('prop-types');
 
 const { NativeAnimatedModule } = NativeModules;
-const { PropTypes } = React;
 const { Directions } = NavigationCardStackPanResponder;
 
 import type {
