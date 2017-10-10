@@ -1,6 +1,7 @@
 import React, { PropTypes } from 'react';
 import {
   Animated,
+  Dimensions,
   Image,
   Platform,
   StyleSheet,
