@@ -1,6 +1,7 @@
 import React, { PropTypes } from 'react';
 import {
   Animated,
+  Dimensions,
   Image,
   Platform,
   StyleSheet,
@@ -22,12 +23,19 @@ if (expoModule) {
   BlurView = unsupportedNativeView('BlurView');
 }
 
+const MB_BLACK = '#222';
+const IPHONE_X_HEIGHT = 812;
+const isIos = Platform.OS === 'ios';
+const isIphoneX = isIos && Dimensions.get('window').height === IPHONE_X_HEIGHT;
+
 // Exponent draws under the status bar on Android, but vanilla React Native does not.
 // So we need to factor the status bar height in with Exponent but can ignore it with
 // vanilla React Native
-const STATUSBAR_HEIGHT = Platform.OS === 'ios'
-  ? 20
-  : global.__exponent ? 24 : 0;
+let STATUSBAR_HEIGHT = global.__exponent ? 24 : 0;
+
+if (isIos) {
+  STATUSBAR_HEIGHT = isIphoneX ? 44 : 20
+}
 
 const APPBAR_HEIGHT = Platform.OS === 'ios' ? 44 : 55;
 const BACKGROUND_COLOR = Platform.OS === 'ios' ? '#EFEFF2' : '#FFF';
@@ -200,7 +208,7 @@ export default class ExNavigationBar extends PureComponent {
     if (this.props.navigationState.index !== nextProps.navigationState.index) {
       this.setState({
         delta: nextProps.navigationState.index -
-          this.props.navigationState.index,
+        this.props.navigationState.index,
       });
     } else {
       this.setState({
@@ -409,6 +417,7 @@ const styles = StyleSheet.create({
     // TODO(brentvatne): come up with a better solution for making the
     // elevation show up properly on Android
     paddingBottom: Platform.OS === 'android' ? 16 : 0,
+    backgroundColor: isIphoneX ? MB_BLACK : undefined,
   },
 
   wrapperWithoutAppbar: {
@@ -433,10 +442,10 @@ const styles = StyleSheet.create({
     left: 0,
     position: 'absolute',
     right: 0,
-    top: 0,
+    top: isIphoneX ? 24 : 0,
   },
   appbarSolid: {
-    backgroundColor: ExNavigationBar.DEFAULT_BACKGROUND_COLOR,
+    backgroundColor: isIphoneX ? MB_BLACK : ExNavigationBar.DEFAULT_BACKGROUND_COLOR,
   },
   appbarTranslucent: {
     backgroundColor: 'rgba(255,255,255,0.7)',
