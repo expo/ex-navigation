@@ -34,7 +34,7 @@ const isIphoneX = isIos && Dimensions.get('window').height === IPHONE_X_HEIGHT;
 let STATUSBAR_HEIGHT = global.__exponent ? 24 : 0;
 
 if (isIos) {
-  STATUSBAR_HEIGHT = isIphoneX ? 44 : 24
+  STATUSBAR_HEIGHT = isIphoneX ? 44 : 20
 }
 
 const APPBAR_HEIGHT = Platform.OS === 'ios' ? 44 : 55;
