@@ -13,21 +13,26 @@ import _ from 'lodash';
 
 import NavigationBar from './ExNavigationBar';
 
-import { withNavigation, createFocusableComponent } from './ExNavigationComponents';
+import {
+  withNavigation,
+  createFocusableComponent,
+} from './ExNavigationComponents';
 
 import type {
   ExNavigationState,
   ExNavigationConfig,
 } from './ExNavigationTypeDefinition';
 
-type ExNavigationRouteDefinition = (
-  ReactClass<any>
-) | (
-  (state: ExNavigationState) => ReactClass<any>
-) | {
-  render: (state: ExNavigationState) => ReactElement<any>,
-  config?: (routeConfig: ExNavigationConfig, routeParams: Object) => ExNavigationConfig,
-};
+type ExNavigationRouteDefinition =
+  | ReactClass<any>
+  | ((state: ExNavigationState) => ReactClass<any>)
+  | {
+      render: (state: ExNavigationState) => ReactElement<any>,
+      config?: (
+        routeConfig: ExNavigationConfig,
+        routeParams: Object
+      ) => ExNavigationConfig,
+    };
 
 type RouteRenderer = (x: ExNavigationState) => ReactElement<{}>;
 
@@ -84,8 +89,14 @@ export class ExNavigationRoute {
     let backgroundColor = this.getBarBackgroundColor();
 
     if (backgroundColor) {
-      if (__DEV__ && this.getTranslucent() && !backgroundColor.match(/rgba|#([0-9a-fA-F]{2}){4}/)) {
-        console.warn('Using translucent navigation bar and specifying a solid background color, please use rgba or the bar will not be translucent.');
+      if (
+        __DEV__ &&
+        this.getTranslucent() &&
+        !backgroundColor.match(/rgba|#([0-9a-fA-F]{2}){4}/)
+      ) {
+        console.warn(
+          'Using translucent navigation bar and specifying a solid background color, please use rgba or the bar will not be translucent.'
+        );
       }
 
       result.backgroundColor = backgroundColor;
@@ -160,7 +171,7 @@ export class ExNavigationRoute {
 
   getTabBarInset = () => {
     return _.get(this.config, '__tabBarInset');
-  }
+  };
 
   getContentContainerStyle = () => {
     return this.getContentInsetsStyle();
@@ -197,8 +208,8 @@ export class ExNavigationRoute {
 export class ExNavigationRouter<RC: RouteCreator> {
   _routes: { [routeName: string]: () => ExNavigationRouteDefinition };
   _routesCreator: Function;
-  _routesCreated: bool;
-  _ignoreSerializableWarnings: bool;
+  _routesCreated: boolean;
+  _ignoreSerializableWarnings: boolean;
 
   constructor(routesCreator: Function, options: Object = {}) {
     this._routesCreator = routesCreator;
@@ -214,8 +225,8 @@ export class ExNavigationRouter<RC: RouteCreator> {
       warning(
         _isSerializable(routeParams),
         'You passed a non-serializable value as route parameters. This may prevent navigation state ' +
-        'from being saved and restored properly. This is only relevant if you would like to be able to' +
-        'save and reload your navigation state. You can ignore this error with ignoreSerializableWarnings.'
+          'from being saved and restored properly. This is only relevant if you would like to be able to' +
+          'save and reload your navigation state. You can ignore this error with ignoreSerializableWarnings.'
       );
     }
 
@@ -223,7 +234,10 @@ export class ExNavigationRouter<RC: RouteCreator> {
   }
 
   updateRouteWithParams(route: ExNavigationRoute, newParams: Object) {
-    return this._createRoute(route.routeName, this._routes[route.routeName], { ...route.params, ...newParams });
+    return this._createRoute(route.routeName, this._routes[route.routeName], {
+      ...route.params,
+      ...newParams,
+    });
   }
 
   _makeRoute(RouteComponent: ReactClass<{}>): RouteRenderer {
@@ -238,7 +252,11 @@ export class ExNavigationRouter<RC: RouteCreator> {
     );
   }
 
-  _createRoute(routeName: string, routeDefinitionThunk: (routeParams: Object) => ExNavigationRouteDefinition, routeParams: Object = {}): ExNavigationRoute {
+  _createRoute(
+    routeName: string,
+    routeDefinitionThunk: (routeParams: Object) => ExNavigationRouteDefinition,
+    routeParams: Object = {}
+  ): ExNavigationRoute {
     const routeDefinitionOrComponent = routeDefinitionThunk(routeParams);
 
     let routeDefinition;
@@ -301,32 +319,33 @@ export class ExNavigationRouter<RC: RouteCreator> {
       this._routes = { ...this._routes, ...this._routesCreator() };
       this._routesCreated = true;
     }
-    invariant(
-      this._routes[routeName],
-      `Route '${routeName}' does not exist.`
-    );
+    invariant(this._routes[routeName], `Route '${routeName}' does not exist.`);
   }
 }
 
 type RouteCreator = {
-  [key: string]: () => ExNavigationRouteDefinition
-}
+  [key: string]: () => ExNavigationRouteDefinition,
+};
 
-export function createRouter<RC: RouteCreator>(routesCreator: () => RC, options?: Object): ExNavigationRouter<RC> {
+export function createRouter<RC: RouteCreator>(
+  routesCreator: () => RC,
+  options?: Object
+): ExNavigationRouter<RC> {
   return new ExNavigationRouter(routesCreator, options);
 }
 
 function _isSerializable(obj: Object): boolean {
-  if (_.isUndefined(obj) ||
-      _.isNull(obj) ||
-      _.isBoolean(obj) ||
-      _.isNumber(obj) ||
-      _.isString(obj)) {
+  if (
+    _.isUndefined(obj) ||
+    _.isNull(obj) ||
+    _.isBoolean(obj) ||
+    _.isNumber(obj) ||
+    _.isString(obj)
+  ) {
     return true;
   }
 
-  if (!_.isPlainObject(obj) &&
-      !_.isArray(obj)) {
+  if (!_.isPlainObject(obj) && !_.isArray(obj)) {
     return false;
   }
 

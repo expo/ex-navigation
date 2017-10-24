@@ -1,20 +1,19 @@
-import Exponent, { Asset, Components } from 'exponent';
+import Exponent, { Asset, AppLoading } from 'expo';
 import React, { Component } from 'react';
 import { StatusBar } from 'react-native';
 import DrawerNavigationExample from './components/DrawerNavigationExample';
 import HomeScreen from './components/HomeScreen';
 import AboutScreen from './components/AboutScreen';
 import TabNavigationExample from './components/TabNavigationExample';
-import SlidingTabNavigationExample from './components/SlidingTabNavigationExample';
+import SlidingTabNavigationExample
+  from './components/SlidingTabNavigationExample';
 import AlertBarsExample from './components/AlertBarsExample';
 import TranslucentBarExample from './components/TranslucentBarExample';
 import EventEmitterExample from './components/EventEmitterExample';
-import CustomNavigationBarExample from './components/CustomNavigationBarExample';
+import CustomNavigationBarExample
+  from './components/CustomNavigationBarExample';
 
-import {
-  createRouter,
-  NavigationProvider,
-} from '@exponent/ex-navigation';
+import { createRouter, NavigationProvider } from '@expo/ex-navigation';
 
 const assets = [
   require('./assets/beetle.jpg'),
@@ -42,7 +41,6 @@ export const Router = createRouter(() => ({
 }));
 
 class App extends Component {
-
   state = {
     bootstrapped: false,
   };
@@ -52,7 +50,9 @@ class App extends Component {
   }
 
   _bootstrap = async () => {
-    const promises = assets.map(module => Asset.fromModule(module).downloadAsync());
+    const promises = assets.map(module =>
+      Asset.fromModule(module).downloadAsync()
+    );
     await Promise.all(promises);
     this.setState({
       bootstrapped: true,
@@ -61,7 +61,7 @@ class App extends Component {
 
   render() {
     if (!this.state.bootstrapped) {
-      return <Components.AppLoading />;
+      return <AppLoading />;
     }
 
     /**

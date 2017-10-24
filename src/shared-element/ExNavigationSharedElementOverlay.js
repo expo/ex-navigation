@@ -3,14 +3,10 @@
  */
 
 import React, { cloneElement } from 'react';
-import {
-  View,
-  StyleSheet,
-  findNodeHandle,
-} from 'react-native';
+import { View, StyleSheet, findNodeHandle } from 'react-native';
 
 import { createStore } from 'redux';
-import storeShape from 'react-redux/lib/utils/storeShape';
+import { storeShape } from 'react-redux/lib/utils/PropTypes';
 
 import SharedElementReducer from './ExNavigationSharedElementReducer';
 
@@ -35,7 +31,7 @@ export default class SharedElementOverlay extends React.Component {
 
   static childContextTypes = {
     sharedElementStore: storeShape,
-  }
+  };
 
   props: Props;
   state: State = {
@@ -68,7 +64,8 @@ export default class SharedElementOverlay extends React.Component {
       this.setState({
         ...state,
         visible: state.transitioningElementGroupFromUid &&
-          state.transitioningElementGroupToUid && state.toViewReady,
+          state.transitioningElementGroupToUid &&
+          state.toViewReady,
       });
     });
 
@@ -90,7 +87,11 @@ export default class SharedElementOverlay extends React.Component {
     }
 
     return (
-      <View ref={c => { this._innerViewRef = c; }} style={{ flex: 1 }}>
+      <View
+        ref={c => {
+          this._innerViewRef = c;
+        }}
+        style={{ flex: 1 }}>
         {this.props.children}
         {overlay}
       </View>
@@ -98,21 +99,31 @@ export default class SharedElementOverlay extends React.Component {
   }
 
   _renderOverlay() {
-    const transitioningFromElementGroup = this.state.elementGroups[this.state.transitioningElementGroupFromUid];
-    const transitioningToElementGroup = this.state.elementGroups[this.state.transitioningElementGroupToUid];
+    const transitioningFromElementGroup = this.state.elementGroups[
+      this.state.transitioningElementGroupFromUid
+    ];
+    const transitioningToElementGroup = this.state.elementGroups[
+      this.state.transitioningElementGroupToUid
+    ];
 
     // Only transition elements that are present in both transition groups.
     const commonElements = transitioningToElementGroup.elements.filter(e1 =>
-      transitioningFromElementGroup.elements.some(e2 => e1.props.id === e2.props.id)
+      transitioningFromElementGroup.elements.some(
+        e2 => e1.props.id === e2.props.id
+      )
     );
 
     return (
       <View style={styles.overlay}>
         {commonElements.map((e, i) => {
-          const fromMetrics = transitioningFromElementGroup.elementMetrics[e.props.id];
-          const toMetrics = transitioningToElementGroup.elementMetrics[e.props.id];
+          const fromMetrics =
+            transitioningFromElementGroup.elementMetrics[e.props.id];
+          const toMetrics =
+            transitioningToElementGroup.elementMetrics[e.props.id];
           if (!toMetrics) {
-            throw new Error(`Cannot transition element with id '${e.props.id}'. No matching element found in next route.`);
+            throw new Error(
+              `Cannot transition element with id '${e.props.id}'. No matching element found in next route.`
+            );
           }
           return cloneElement(e, {
             key: i,

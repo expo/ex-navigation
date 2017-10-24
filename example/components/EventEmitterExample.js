@@ -19,13 +19,15 @@ import {
  * Redux.
  **/
 class SelectionBadge extends Component {
-
   state = {
     count: 0,
   };
 
   componentWillMount() {
-    this._subscription = this.props.emitter.addListener('selection', this._handleToggle);
+    this._subscription = this.props.emitter.addListener(
+      'selection',
+      this._handleToggle
+    );
   }
 
   componentWillUnmount() {
@@ -44,7 +46,9 @@ class SelectionBadge extends Component {
 
   render() {
     return (
-      <TouchableOpacity onPress={this._handlePress} style={styles.badgeContainer}>
+      <TouchableOpacity
+        onPress={this._handlePress}
+        style={styles.badgeContainer}>
         <View style={styles.badge}>
           <Text style={styles.badgeText}>{this.state.count}</Text>
         </View>
@@ -56,7 +60,7 @@ class SelectionBadge extends Component {
 export default class TranslucentBarExample extends Component {
   static route = {
     navigationBar: {
-      title: (route) => {
+      title: route => {
         if (route.selectionCount) {
           return 'Selecting…';
         } else {
@@ -70,11 +74,16 @@ export default class TranslucentBarExample extends Component {
   };
 
   state = {
-    buttons: Array.from({ length: 9 }).map((x, i) => ({ key: String(i), selected: false })),
+    buttons: Array.from({ length: 9 }).map((x, i) => ({
+      key: String(i),
+      selected: false,
+    })),
   };
 
   componentWillMount() {
-    this._subscription = this.props.route.getEventEmitter().addListener('reset', this._handleReset);
+    this._subscription = this.props.route
+      .getEventEmitter()
+      .addListener('reset', this._handleReset);
   }
 
   componentWillUnmount() {
@@ -108,11 +117,17 @@ export default class TranslucentBarExample extends Component {
 
   render() {
     return (
-      <ScrollView style={styles.container} contentContainerStyle={styles.content}>
+      <ScrollView
+        style={styles.container}
+        contentContainerStyle={styles.content}>
         <View style={styles.row}>
           {this.state.buttons.map(button => (
-            <TouchableWithoutFeedback key={button.key} onPress={() => this._toggleButton(button.key)}>
-              <View style={[styles.button, button.selected && styles.selected]} />
+            <TouchableWithoutFeedback
+              key={button.key}
+              onPress={() => this._toggleButton(button.key)}>
+              <View
+                style={[styles.button, button.selected && styles.selected]}
+              />
             </TouchableWithoutFeedback>
           ))}
         </View>
@@ -126,7 +141,6 @@ export default class TranslucentBarExample extends Component {
     );
   }
 }
-
 
 const BUTTON_SIZE = (Dimensions.get('window').width - 40) / 3;
 

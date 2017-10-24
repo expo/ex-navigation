@@ -21,14 +21,22 @@ export default class CustomNavigationBarExample extends Component {
   static route = {
     navigationBar: {
       title: 'Custom NavigationBar',
-      tintColor: "#FFF",
-      renderBackground: (props) => <View><Image style={[styles.bgImage]} source={{uri: 'http://il9.picdn.net/shutterstock/videos/3951179/thumb/1.jpg'}} resizeMode={'cover'} /></View>,
+      tintColor: '#FFF',
+      renderBackground: props => (
+        <Image
+          style={styles.bgImage}
+          source={{
+            uri: 'http://il9.picdn.net/shutterstock/videos/3951179/thumb/1.jpg',
+          }}
+          resizeMode={'cover'}
+        />
+      ),
     },
-  }
+  };
 
   _goToScreen = name => () => {
     this.props.navigator.push(Router.getRoute(name));
-  }
+  };
 
   render() {
     return (
@@ -68,9 +76,6 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
   bgImage: {
-    top: 0,
-    left: 0,
-    right: 0,
-    height: Platform.OS === 'ios' ? 64 : 65,
+    flex: 1,
   },
 });

@@ -17,19 +17,19 @@ import exNavConnect from './ExNavigationConnect';
 
 type AlertState = {
   options: {
-    container: (Object|number),
-    text: (Object|number),
+    container: Object | number,
+    text: Object | number,
   },
   message: string,
-}
+};
 
 type Props = {
   alertState: ?AlertState,
   navigatorUID: any,
-}
+};
 
 type State = {
-  isVisible: bool,
+  isVisible: boolean,
   yOffset: any,
   currentAlertState: ?AlertState,
 };
@@ -53,7 +53,7 @@ export default class ExNavigationAlertBar extends React.Component {
 
     return {
       alertState,
-    }
+    };
   }
 
   state: State = {
@@ -67,9 +67,13 @@ export default class ExNavigationAlertBar extends React.Component {
     // to hide the alert we don't have to do some janky shouldComponentUpdate
     // business to make sure that the text/styles remain the same until
     // the animation is completed
-    if (!this.props.alertState && nextProps.alertState ||
-        (this.props.alertState && nextProps.alertState && (this.props.alertState !== nextProps.alertState))) {
-      this.setState({currentAlertState: nextProps.alertState});
+    if (
+      (!this.props.alertState && nextProps.alertState) ||
+      (this.props.alertState &&
+        nextProps.alertState &&
+        this.props.alertState !== nextProps.alertState)
+    ) {
+      this.setState({ currentAlertState: nextProps.alertState });
     }
   }
 
@@ -103,16 +107,19 @@ export default class ExNavigationAlertBar extends React.Component {
     return (
       <View style={styles.overflowContainer}>
         <TouchableWithoutFeedback onPress={this._dispatchHide}>
-          <Animated.View style={[
-            {transform: [{translateY: this.state.yOffset}]}, // Animated styles
-            styles.alertBar, // Default styles
-            this.props.style, // This is necessary to take into account the appbar visibility
-            containerStyleOptions, // Configurable styles when presenting the alert
-          ]}>
+          <Animated.View
+            style={[
+              { transform: [{ translateY: this.state.yOffset }] }, // Animated styles
+              styles.alertBar, // Default styles
+              this.props.style, // This is necessary to take into account the appbar visibility
+              containerStyleOptions, // Configurable styles when presenting the alert
+            ]}>
             <View
               style={styles.alertBarInnerContainer}
               onLayout={this._onLayout}
-              ref={view => { this._textContainerRef = view; }}>
+              ref={view => {
+                this._textContainerRef = view;
+              }}>
               <Text style={[styles.alertText, textStyleOptions]}>
                 {message}
               </Text>
@@ -127,22 +134,23 @@ export default class ExNavigationAlertBar extends React.Component {
     /* a bug in react-native causes measure results to be undefined
      * if we don't call onLayout, but we don't actually need to do
      * anything with these results */
-  }
+  };
 
   _show = () => {
     const { currentAlertState } = this.state;
-    const { options } = currentAlertState
-    const duration = options.duration || ALERT_DISPLAY_TIME_MS
+    const { options } = currentAlertState;
+    const duration = options.duration || ALERT_DISPLAY_TIME_MS;
 
-    this.setState({isVisible: true}, () => {
+    this.setState({ isVisible: true }, () => {
       this.requestAnimationFrame(() => {
-        this._textContainerRef && this._textContainerRef.measure((l, t, w, height) => {
-          this._animateIn(height);
-          this._timeout = this.setTimeout(this._dispatchHide, duration);
-        });
+        this._textContainerRef &&
+          this._textContainerRef.measure((l, t, w, height) => {
+            this._animateIn(height);
+            this._timeout = this.setTimeout(this._dispatchHide, duration);
+          });
       });
     });
-  }
+  };
 
   _hide = () => {
     if (!this._textContainerRef || !this._textContainerRef.measure) {
@@ -157,7 +165,7 @@ export default class ExNavigationAlertBar extends React.Component {
     this._textContainerRef.measure((l, t, w, height) => {
       this._animateOut(height);
     });
-  }
+  };
 
   _maybeRestartTimeout = () => {
     if (this._timeout) {
@@ -165,13 +173,13 @@ export default class ExNavigationAlertBar extends React.Component {
     }
 
     this._timeout = this.setTimeout(this._dispatchHide, ALERT_DISPLAY_TIME_MS);
-  }
+  };
 
   _dispatchHide = () => {
     if (this._textContainerRef) {
       this.props.getNavigatorContext().hideLocalAlert();
     }
-  }
+  };
 
   _animateIn(textHeight: number) {
     textHeight += ALERT_TEXT_VERTICAL_MARGIN * 2;
@@ -192,7 +200,7 @@ export default class ExNavigationAlertBar extends React.Component {
       easing: Easing.inOut(Easing.linear),
       duration: 150,
     }).start(result => {
-      this.setState({isVisible: false});
+      this.setState({ isVisible: false });
     });
   }
 }
@@ -202,6 +210,7 @@ const WINDOW_WIDTH = Dimensions.get('window').width;
 const styles = StyleSheet.create({
   overflowContainer: {
     overflow: 'hidden',
+    elevation: 0,
   },
   alertBar: {
     backgroundColor: '#000',

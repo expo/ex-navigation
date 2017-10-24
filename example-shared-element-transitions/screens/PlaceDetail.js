@@ -56,7 +56,8 @@ export default class PlaceDetail extends React.Component {
                 duration: 500,
               })}
               onTransitionStart={(transitionProps, prevTransitionProps) => {
-                const inverse = transitionProps.scene.index < prevTransitionProps.scene.index;
+                const inverse =
+                  transitionProps.scene.index < prevTransitionProps.scene.index;
                 Animated.timing(this.state.contentAnimation, {
                   toValue: inverse ? 0 : 1,
                   duration: 500,
@@ -71,7 +72,7 @@ export default class PlaceDetail extends React.Component {
                 }).start();
               }}>
               <SharedElement id="image">
-                {(animation) => (
+                {animation => (
                   <Animated.View style={[styles.image, animation]}>
                     {
                       <Animated.Image
@@ -83,7 +84,7 @@ export default class PlaceDetail extends React.Component {
                 )}
               </SharedElement>
               <SharedElement id="price">
-                {(animation) => (
+                {animation => (
                   <Animated.View style={[styles.priceLabel, animation]}>
                     <Text style={styles.priceLabelText}>
                       ${data.price}
@@ -92,17 +93,23 @@ export default class PlaceDetail extends React.Component {
                 )}
               </SharedElement>
             </SharedElementGroup>
-            <Animated.View style={[styles.navbar, { opacity: this.state.navbarAnimation }]}>
-              <TouchableOpacity onPress={this._goBack} hitSlop={{ top: 10, right: 10, bottom: 10, left: 10 }}>
+            <Animated.View
+              style={[styles.navbar, { opacity: this.state.navbarAnimation }]}>
+              <TouchableOpacity
+                onPress={this._goBack}
+                hitSlop={{ top: 10, right: 10, bottom: 10, left: 10 }}>
                 <Image
                   style={styles.backButton}
-                  source={{ uri: 'https://www.android.com/static/img/map/back-arrow.png' }}
+                  source={{
+                    uri: 'https://www.android.com/static/img/map/back-arrow.png',
+                  }}
                 />
               </TouchableOpacity>
               <Text style={styles.title} numberOfLines={1}>{data.title}</Text>
               <View style={styles.placeholder} />
             </Animated.View>
-            <Animated.View style={{ transform: [{ translateY: contentTranslateY }]}}>
+            <Animated.View
+              style={{ transform: [{ translateY: contentTranslateY }] }}>
               <Text style={styles.descriptionText}>{data.description}</Text>
             </Animated.View>
           </View>
@@ -113,13 +120,11 @@ export default class PlaceDetail extends React.Component {
 
   _goBack = () => {
     this.props.navigator.pop();
-  }
+  };
 }
 
 const styles = StyleSheet.create({
-  imageContainer: {
-
-  },
+  imageContainer: {},
   image: {
     width: Dimensions.get('window').width,
     height: 220,

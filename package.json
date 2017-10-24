@@ -1,6 +1,6 @@
 {
-  "name": "@exponent/ex-navigation",
-  "version": "2.5.0",
+  "name": "@expo/ex-navigation",
+  "version": "3.1.0",
   "description": "Route-centric navigation library for React Native.",
   "main": "./src/ExNavigation.js",
   "files": [
@@ -11,18 +11,18 @@
     "lint": "eslint ./src ./example",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "repository": "https://github.com/exponent/ex-navigation.git",
+  "repository": "https://github.com/expo/ex-navigation.git",
   "keywords": [
     "react-native",
     "navigation",
-    "exponent",
+    "expo",
     "react"
   ],
   "author": "Adam Miskiewicz <adam@exponentjs.com>",
   "license": "MIT",
   "peerDependencies": {},
   "dependencies": {
-    "@exponent/react-native-touchable-native-feedback-safe": "^1.1.0",
+    "@expo/react-native-touchable-native-feedback-safe": "^1.1.0",
     "clamp": "^1.0.1",
     "core-decorators": "^0.12.2",
     "fbemitter": "^2.0.2",
@@ -31,12 +31,14 @@
     "invariant": "^2.2.1",
     "lodash": "^4.6.1",
     "mirror-creator": "^1.1.0",
-    "react-addons-shallow-compare": "15.3.2",
+    "prop-types": "^15.5.10",
+    "react-addons-pure-render-mixin": "^15.5.2",
+    "react-addons-shallow-compare": "15.5.2",
     "react-clone-referenced-element": "^1.0.1",
     "react-mixin": "^3.0.5",
-    "react-native-drawer-layout": "^1.0.0",
-    "react-native-tab-view": "^0.0.38",
-    "react-redux": "^4.4.5",
+    "react-native-drawer-layout-polyfill": "^1.1.0",
+    "react-native-tab-view": "^0.0.61",
+    "react-redux": "^5.0.6",
     "react-static-container": "^1.0.0",
     "react-timer-mixin": "^0.13.3",
     "redux": "^3.5.2",
@@ -46,14 +48,15 @@
     "warning": "^2.1.0"
   },
   "devDependencies": {
-    "babel-eslint": "^6.1.0",
-    "eslint": "^3.0.0",
-    "eslint-config-exponent": "^2.0.2",
-    "eslint-plugin-babel": "^3.3.0",
-    "eslint-plugin-flow-vars": "^0.4.0",
-    "eslint-plugin-react": "^5.2.2",
+    "babel-eslint": "^7.1.1",
+    "eslint": "^3.12.2",
+    "eslint-config-expo": "^5.1.3",
+    "eslint-plugin-babel": "^4.0.0",
+    "eslint-plugin-flowtype": "^2.30.0",
+    "eslint-plugin-import": "^2.2.0",
+    "eslint-plugin-react": "^6.8.0",
     "flow-bin": "^0.30.0",
-    "react": "15.3.2",
-    "react-native": "git+https://github.com/exponent/react-native#exp-latest"
+    "react": "~15.4.2",
+    "react-native": "https://github.com/exponent/react-native/archive/sdk-15.0.0.tar.gz"
   }
 }
