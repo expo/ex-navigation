@@ -120,13 +120,14 @@ function customForHorizontalIOS(props: NavigationSceneRendererProps): Object {
 
   const opacity = position.interpolate({
     inputRange: [index - 1, index, index + 1, index + 1.0001],
-    outputRange: ([1, 1, 0.9, 0]: Array<number>),
+    outputRange: ([1, 1, 0.92, 0]: Array<number>),
     extrapolateRight: "clamp",
   });
 
   const shadowOpacity = position.interpolate({
-    inputRange: [index - 1, index, index + 1],
-    outputRange: ([0, 0.4, 0]: Array<number>),
+    inputRange: [index - 1, index],
+    outputRange: ([0, 0.325]: Array<number>),
+    extrapolateRight: "clamp",
   });
 
   return {
