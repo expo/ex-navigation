@@ -334,7 +334,7 @@ export function createRouter<RC: RouteCreator>(
   return new ExNavigationRouter(routesCreator, options);
 }
 
-function _isSerializable(obj: Object): boolean {
+const _isSerializable = (obj: Object) => boolean {
   if (
     _.isUndefined(obj) ||
     _.isNull(obj) ||
