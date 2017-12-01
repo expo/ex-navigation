@@ -1,4 +1,4 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
 import {
   Animated,
   Dimensions,
@@ -8,7 +8,9 @@ import {
   Text,
   TouchableOpacity,
   View,
+  ViewPropTypes,
 } from 'react-native';
+import PropTypes from 'prop-types';
 import PureComponent from './utils/PureComponent';
 import { unsupportedNativeView } from './ExUnsupportedNativeView';
 import { withNavigation } from './ExNavigationComponents';
@@ -187,7 +189,7 @@ export default class ExNavigationBar extends PureComponent {
     renderBackgroundComponent: PropTypes.func,
     barHeight: PropTypes.number.isRequired,
     statusBarHeight: PropTypes.number.isRequired,
-    style: View.propTypes.style,
+    style: ViewPropTypes.style,
   };
 
   constructor(props, context) {
@@ -339,16 +341,9 @@ export default class ExNavigationBar extends PureComponent {
   }
 
   _renderSubView(props, name, renderer, styleInterpolator, options = {}) {
-    const {
-      scene,
-      navigationState,
-    } = props;
+    const { scene, navigationState } = props;
 
-    const {
-      index,
-      isStale,
-      key,
-    } = scene;
+    const { index, isStale, key } = scene;
 
     const offset = navigationState.index - index;
 

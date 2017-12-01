@@ -1,11 +1,6 @@
 import React, { Component } from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  StatusBar,
-} from 'react-native';
-import pak from '@exponent/ex-navigation/package.json';
+import { View, Text, StyleSheet, StatusBar } from 'react-native';
+import pak from '@expo/ex-navigation/package.json';
 
 export default class HomeScreen extends Component {
   /**
@@ -16,9 +11,9 @@ export default class HomeScreen extends Component {
   static route = {
     navigationBar: {
       title: 'About',
-      tintColor: "#000",
+      tintColor: '#000',
     },
-  }
+  };
 
   render() {
     return (

@@ -31,10 +31,15 @@ export default class ExNavigatorContext<T> {
   }
 
   isFocused() {
-    return this.navigationContext.getCurrentNavigatorUID() === this.navigatorUID;
+    return (
+      this.navigationContext.getCurrentNavigatorUID() === this.navigatorUID
+    );
   }
 
   _getNavigatorState() {
-    return this.navigationContext.navigationState && this.navigationContext.navigationState.navigators[this.navigatorUID];
+    return (
+      this.navigationContext.navigationState &&
+      this.navigationContext.navigationState.navigators[this.navigatorUID]
+    );
   }
 }

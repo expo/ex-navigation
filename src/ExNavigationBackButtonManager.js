@@ -2,11 +2,13 @@
  * @flow
  */
 
-import { BackAndroid } from 'react-native';
+import { BackAndroid, BackHandler } from 'react-native';
 
 import ExNavigationActions from './ExNavigationActions';
 
 import type { ExNavigationStore } from './ExNavigationStore';
+
+const Handler = BackHandler ? BackHandler : BackAndroid;
 
 /**
  * Manages a global listener, as well as any custom listeners, on the
@@ -48,14 +50,17 @@ class ExNavigationBackButtonManager {
   }
 
   ensureGlobalListener() {
-    this._setListeners([
-      this._onHardwareBackPress,
-    ]);
+    this._setListeners([this._onHardwareBackPress]);
   }
 
   disable() {
-    this._listeners.forEach(listener => BackAndroid.removeEventListener('hardwareBackPress', listener));
-    BackAndroid.addEventListener('hardwareBackPress', this._disabledBackButtonPress); // Don't let app be exited.
+    this._listeners.forEach(listener =>
+      Handler.removeEventListener('hardwareBackPress', listener)
+    );
+    Handler.addEventListener(
+      'hardwareBackPress',
+      this._disabledBackButtonPress
+    ); // Don't let app be exited.
   }
 
   enable() {
@@ -65,8 +70,14 @@ class ExNavigationBackButtonManager {
   _setListeners(newListeners: Array<() => Promise<void>>) {
     this.disable();
     this._listeners = newListeners;
-    BackAndroid.removeEventListener('hardwareBackPress', this._disabledBackButtonPress);
-    BackAndroid.addEventListener('hardwareBackPress', this._listeners[this._listeners.length - 1]);
+    Handler.removeEventListener(
+      'hardwareBackPress',
+      this._disabledBackButtonPress
+    );
+    Handler.addEventListener(
+      'hardwareBackPress',
+      this._listeners[this._listeners.length - 1]
+    );
   }
 
   _onHardwareBackPress = async () => {
@@ -75,13 +86,13 @@ class ExNavigationBackButtonManager {
     }
     const moreRoutes = await this._store.dispatch(ExNavigationActions.goBack());
     if (moreRoutes === false) {
-      BackAndroid.exitApp();
+      Handler.exitApp();
     }
   };
 
   _disabledBackButtonPress = () => {
     return true;
-  }
+  };
 }
 
 let manager;

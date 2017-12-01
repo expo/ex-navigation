@@ -4,7 +4,7 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import storeShape from 'react-redux/lib/utils/storeShape';
+import { storeShape } from 'react-redux/lib/utils/PropTypes';
 import hoistStatics from 'hoist-non-react-statics';
 import invariant from 'invariant';
 
@@ -24,11 +24,12 @@ export default function exNavConnect(...args: any) {
         super(props, context);
         this.navigationStore = props.navigationStore || context.navigationStore;
 
-        invariant(this.navigationStore,
+        invariant(
+          this.navigationStore,
           `Could not find "navigationStore" in either the context or ` +
-          `props of "${connectDisplayName}". ` +
-          `Either wrap the root component in a <Provider>, ` +
-          `or explicitly pass "store" as a prop to "${connectDisplayName}".`
+            `props of "${connectDisplayName}". ` +
+            `Either wrap the root component in a <Provider>, ` +
+            `or explicitly pass "store" as a prop to "${connectDisplayName}".`
         );
       }
 

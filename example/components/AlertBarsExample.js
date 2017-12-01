@@ -1,18 +1,12 @@
 import React, { Component } from 'react';
-import {
-  StyleSheet,
-  Image,
-  View,
-  TouchableOpacity,
-  Text,
-} from 'react-native';
+import { StyleSheet, Image, View, TouchableOpacity, Text } from 'react-native';
 
 export default class TranslucentBarExample extends Component {
   static route = {
     navigationBar: {
       title: 'Alert Bars',
     },
-  }
+  };
 
   _showAlert = () => {
     this.props.navigator.showLocalAlert('Tap on me to close!', {
@@ -35,12 +29,17 @@ export default class TranslucentBarExample extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <Image source={require('../assets/sparkles.jpg')} style={styles.cover} />
+        <Image
+          source={require('../assets/sparkles.jpg')}
+          style={styles.cover}
+        />
         <View style={styles.buttonsContainer}>
           <TouchableOpacity style={styles.button} onPress={this._showAlert}>
             <Text style={styles.buttonText}>SHOW ALERT</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.button} onPress={this._showAnotherAlert}>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={this._showAnotherAlert}>
             <Text style={styles.buttonText}>SHOW ANOTHER ALERT</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.button} onPress={this._goBack}>

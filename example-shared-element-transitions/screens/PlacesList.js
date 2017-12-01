@@ -102,12 +102,14 @@ export default class PlacesList extends React.Component {
   _renderRow = (rowData, sectionId, rowId) => {
     this._rowAnimations[rowId] = new Animated.Value(0);
     const rowStyle = {
-      transform: [{
-        translateY: this._rowAnimations[rowId].interpolate({
-          inputRange: [-1, 0, 1],
-          outputRange: [-200, 0, 200],
-        }),
-      }],
+      transform: [
+        {
+          translateY: this._rowAnimations[rowId].interpolate({
+            inputRange: [-1, 0, 1],
+            outputRange: [-200, 0, 200],
+          }),
+        },
+      ],
     };
     return (
       <TouchableWithoutFeedback
@@ -116,14 +118,17 @@ export default class PlacesList extends React.Component {
         <Animated.View style={[styles.listItem, rowStyle]}>
           <SharedElementGroup
             id="place-header"
-            ref={g => { this._placeHeaderGroups[rowId] = g; }}
+            ref={g => {
+              this._placeHeaderGroups[rowId] = g;
+            }}
             configureTransition={() => ({
               timing: Animated.timing,
               easing: Easing.inOut(Easing.ease),
               duration: 500,
             })}
             onTransitionStart={(transitionProps, prevTransitionProps) => {
-              const inverse = transitionProps.scene.index < prevTransitionProps.scene.index;
+              const inverse =
+                transitionProps.scene.index < prevTransitionProps.scene.index;
               const animations = [];
               const rowInt = parseInt(rowId, 10);
               for (let i = rowInt - 2; i <= rowInt + 2; i++) {
@@ -134,7 +139,7 @@ export default class PlacesList extends React.Component {
                 if (anim) {
                   animations.push(
                     Animated.timing(anim, {
-                      toValue: inverse ? 0 : (i < rowInt ? -1 : 1),
+                      toValue: inverse ? 0 : i < rowInt ? -1 : 1,
                       duration: 500,
                       useNativeDriver: true,
                     })
@@ -145,7 +150,7 @@ export default class PlacesList extends React.Component {
               Animated.parallel(animations).start();
             }}>
             <SharedElement id="image">
-              {(animation) => (
+              {animation => (
                 <Animated.View style={[styles.listImage, animation]}>
                   {
                     <Animated.Image
@@ -157,7 +162,7 @@ export default class PlacesList extends React.Component {
               )}
             </SharedElement>
             <SharedElement id="price">
-              {(animation) => (
+              {animation => (
                 <Animated.View style={[styles.priceLabel, animation]}>
                   <Text style={styles.priceLabelText}>
                     ${rowData.price}
@@ -169,13 +174,14 @@ export default class PlacesList extends React.Component {
         </Animated.View>
       </TouchableWithoutFeedback>
     );
-  }
+  };
 
   _onListItemPress = (rowData, sectionId, rowId) => {
     this.props.navigator.push(
       AppRouter.getRoute('placeDetail', {
         data: rowData,
-      }), {
+      }),
+      {
         transitionGroup: this._placeHeaderGroups[rowId],
       }
     );
