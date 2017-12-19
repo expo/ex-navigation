@@ -5,7 +5,7 @@
   "main": "node_modules/expo/AppEntry.js",
   "dependencies": {
     "@expo/ex-navigation": "file:../",
-    "expo": "^24.0.0",
+    "expo": "^24.0.1",
     "lodash": "^4.13.1",
     "react": "16.0.0",
     "react-native": "https://github.com/expo/react-native/archive/sdk-24.0.0.tar.gz"
