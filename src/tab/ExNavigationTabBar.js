@@ -28,9 +28,12 @@ export default class ExNavigationTabBar extends React.Component {
   static defaultHeight = DEFAULT_TAB_BAR_HEIGHT;
 
   render() {
-    const height = this.props.height || DEFAULT_TAB_BAR_HEIGHT;
+    const height =
+      (this.props.height || DEFAULT_TAB_BAR_HEIGHT) +
+      (this.props.extraHeight || 0);
     let isTranslucent = this.props.translucent;
     let backgroundColor = isTranslucent ? 'rgba(255,255,255,0.5)' : '#fefefe';
+    let paddingBottom = this.props.bottomOffset || 0;
 
     return (
       <View style={[styles.container, { height }]}>
@@ -40,7 +43,7 @@ export default class ExNavigationTabBar extends React.Component {
         <View
           style={[
             styles.innerContainer,
-            { backgroundColor },
+            { backgroundColor, paddingBottom },
             this.props.style,
           ]}>
           <View style={styles.itemContainer}>
@@ -65,7 +68,11 @@ export default class ExNavigationTabBar extends React.Component {
         if (renderTitle) {
           title = renderTitle(isSelected, item.title, index);
         } else {
-          title = <Text>{item.title}</Text>;
+          title = (
+            <Text>
+              {item.title}
+            </Text>
+          );
         }
       }
 
@@ -78,7 +85,11 @@ export default class ExNavigationTabBar extends React.Component {
       if (renderBadge) {
         badge = renderBadge(isSelected, item.title, index);
       } else if (badgeText) {
-        badge = <TabBadge style={styles.badge}>{badgeText}</TabBadge>;
+        badge = (
+          <TabBadge style={styles.badge}>
+            {badgeText}
+          </TabBadge>
+        );
       }
 
       if (item.showsTouches) {

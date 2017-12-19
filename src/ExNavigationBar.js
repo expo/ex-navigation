@@ -14,6 +14,8 @@ import PureComponent from './utils/PureComponent';
 import { unsupportedNativeView } from './ExUnsupportedNativeView';
 import { withNavigation } from './ExNavigationComponents';
 
+import isIPhoneX from './utils/isIPhoneX';
+
 let BlurView;
 let expoModule = global.__exponent || global.__expo;
 if (expoModule) {
@@ -27,17 +29,18 @@ if (expoModule) {
 // Exponent draws under the status bar on Android, but vanilla React Native does not.
 // So we need to factor the status bar height in with Exponent but can ignore it with
 // vanilla React Native
-const STATUSBAR_HEIGHT = Platform.OS === 'ios'
-  ? 20
-  : global.__exponent ? 24 : 0;
+const STATUSBAR_HEIGHT =
+  Platform.OS === 'ios' ? 20 : global.__exponent ? 24 : 0;
 
 const APPBAR_HEIGHT = Platform.OS === 'ios' ? 44 : 55;
 const BACKGROUND_COLOR = Platform.OS === 'ios' ? '#EFEFF2' : '#FFF';
 const BORDER_BOTTOM_COLOR = 'rgba(0, 0, 0, .15)';
-const BORDER_BOTTOM_WIDTH = Platform.OS === 'ios'
-  ? StyleSheet.hairlineWidth
-  : 0;
+const BORDER_BOTTOM_WIDTH =
+  Platform.OS === 'ios' ? StyleSheet.hairlineWidth : 0;
 const BACK_BUTTON_HIT_SLOP = { top: 0, bottom: 0, left: 0, right: 30 };
+
+const IPHONE_X_EXTRA_HEIGHT = isIPhoneX ? 20 : 0;
+const IPHONE_X_TOP_OFFSET = isIPhoneX ? 30 : 0;
 
 class ExNavigationBarTitle extends PureComponent {
   render() {
@@ -85,7 +88,8 @@ const titleStyles = StyleSheet.create({
   },
 });
 
-@withNavigation class ExNavigationBarBackButton extends PureComponent {
+@withNavigation
+class ExNavigationBarBackButton extends PureComponent {
   render() {
     const { tintColor } = this.props;
 
@@ -168,7 +172,11 @@ export default class ExNavigationBar extends PureComponent {
     renderTitleComponent(props) {
       const { navigationState } = props;
       const title = String(navigationState.title || '');
-      return <ExNavigationBarTitle>{title}</ExNavigationBarTitle>;
+      return (
+        <ExNavigationBarTitle>
+          {title}
+        </ExNavigationBarTitle>
+      );
     },
     barHeight: APPBAR_HEIGHT,
     statusBarHeight: STATUSBAR_HEIGHT,
@@ -201,8 +209,8 @@ export default class ExNavigationBar extends PureComponent {
 
     if (this.props.navigationState.index !== nextProps.navigationState.index) {
       this.setState({
-        delta: nextProps.navigationState.index -
-          this.props.navigationState.index,
+        delta:
+          nextProps.navigationState.index - this.props.navigationState.index,
       });
     } else {
       this.setState({
@@ -229,7 +237,8 @@ export default class ExNavigationBar extends PureComponent {
     });
 
     // TODO: this should come from the latest scene config
-    const height = this.props.barHeight + this.props.statusBarHeight;
+    const height =
+      this.props.barHeight + this.props.statusBarHeight + IPHONE_X_EXTRA_HEIGHT;
 
     let styleFromRouteConfig = this.props.latestRoute.getBarStyle();
     let isTranslucent = !!this.props.latestRoute.getTranslucent();
@@ -284,7 +293,7 @@ export default class ExNavigationBar extends PureComponent {
           <View
             style={[
               styles.appbarInnerContainer,
-              { top: this.props.statusBarHeight },
+              { top: this.props.statusBarHeight + IPHONE_X_EXTRA_HEIGHT },
             ]}>
             {titleComponents}
             {leftComponents}
@@ -386,8 +395,10 @@ export default class ExNavigationBar extends PureComponent {
   }
 }
 
-ExNavigationBar.DEFAULT_HEIGHT = APPBAR_HEIGHT + STATUSBAR_HEIGHT;
-ExNavigationBar.DEFAULT_HEIGHT_WITHOUT_STATUS_BAR = APPBAR_HEIGHT;
+ExNavigationBar.DEFAULT_HEIGHT =
+  APPBAR_HEIGHT + STATUSBAR_HEIGHT + IPHONE_X_EXTRA_HEIGHT;
+ExNavigationBar.DEFAULT_HEIGHT_WITHOUT_STATUS_BAR =
+  APPBAR_HEIGHT + IPHONE_X_EXTRA_HEIGHT;
 ExNavigationBar.DEFAULT_BACKGROUND_COLOR = BACKGROUND_COLOR;
 ExNavigationBar.DEFAULT_BORDER_BOTTOM_COLOR = BORDER_BOTTOM_COLOR;
 ExNavigationBar.DEFAULT_BORDER_BOTTOM_WIDTH = BORDER_BOTTOM_WIDTH;
