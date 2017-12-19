@@ -16,8 +16,12 @@ import ExNavigatorContext from '../ExNavigatorContext';
 import ExNavigationTabBar from './ExNavigationTabBar';
 import ExNavigationTabItem from './ExNavigationTabItem';
 import { createNavigatorComponent } from '../ExNavigationComponents';
+import isIPhoneX from '../utils/isIPhoneX';
 
 import type ExNavigationContext from '../ExNavigationContext';
+
+const IPHONE_X_EXTRA_HEIGHT = isIPhoneX ? 38 : 0;
+const IPHONE_X_BOTTOM_OFFSET = isIPhoneX ? 28 : 0;
 
 export class ExNavigationTabContext extends ExNavigatorContext {
   type = 'tab';
@@ -93,7 +97,13 @@ class ExNavigationTab extends PureComponent<any, Props, State> {
 
   static defaultProps = {
     renderTabBar(props) {
-      return <ExNavigationTabBar {...props} />;
+      return (
+        <ExNavigationTabBar
+          {...props}
+          extraHeight={IPHONE_X_EXTRA_HEIGHT}
+          bottomOffset={IPHONE_X_BOTTOM_OFFSET}
+        />
+      );
     },
   };
 
@@ -152,8 +162,9 @@ class ExNavigationTab extends PureComponent<any, Props, State> {
     const tabBar = this.props.renderTabBar(tabBarProps);
     const TabBarComponent = tabBar.type;
     // Get the tab bar's height from a static property on the class
-    const tabBarHeight =
-      this.props.tabBarHeight || TabBarComponent.defaultHeight || 0;
+    let tabBarHeight =
+      (this.props.tabBarHeight || TabBarComponent.defaultHeight || 0) +
+      IPHONE_X_EXTRA_HEIGHT;
     const isTranslucent = this.props.translucent;
 
     return (
@@ -301,7 +312,7 @@ class ExNavigationTab extends PureComponent<any, Props, State> {
           let defaultRouteConfig = child.props.defaultRouteConfig || {};
           defaultRouteConfig = {
             ...defaultRouteConfig,
-            __tabBarInset: this.props.tabBarHeight,
+            __tabBarInset: this.props.tabBarHeight + IPHONE_X_EXTRA_HEIGHT,
           };
           tabItem.element = cloneReferencedElement(child, {
             ...child.props,
