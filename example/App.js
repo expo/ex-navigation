@@ -1,4 +1,4 @@
-import Exponent, { Asset, AppLoading } from 'expo';
+import { Asset, AppLoading } from 'expo';
 import React, { Component } from 'react';
 import { StatusBar } from 'react-native';
 import DrawerNavigationExample from './components/DrawerNavigationExample';
@@ -40,7 +40,7 @@ export const Router = createRouter(() => ({
   customNavigationBarExample: () => CustomNavigationBarExample,
 }));
 
-class App extends Component {
+export default class App extends Component {
   state = {
     bootstrapped: false,
   };
@@ -85,5 +85,3 @@ class App extends Component {
     );
   }
 }
-
-Exponent.registerRootComponent(App);

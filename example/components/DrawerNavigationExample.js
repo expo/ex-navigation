@@ -6,7 +6,7 @@ import {
   DrawerNavigationItem,
 } from '@expo/ex-navigation';
 import { Ionicons } from '@expo/vector-icons';
-import { Router } from '../main';
+import { Router } from '../App';
 
 export default class DrawerNavigationExample extends Component {
   _renderHeader = () => {

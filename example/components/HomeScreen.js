@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { View, StyleSheet } from 'react-native';
 import ListItem from './ListItem';
-import { Router } from '../main';
+import { Router } from '../App';
 
 export default class HomeScreen extends Component {
   /**

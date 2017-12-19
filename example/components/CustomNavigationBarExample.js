@@ -7,7 +7,7 @@ import {
   Dimensions,
   Image,
 } from 'react-native';
-import { Router } from '../main';
+import { Router } from '../App';
 import ListItem from './ListItem';
 
 const window = Dimensions.get('window');
