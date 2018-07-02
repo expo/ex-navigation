@@ -95,6 +95,7 @@ export default class ExNavigationTabBar extends React.Component {
       if (item.showsTouches) {
         return (
           <TouchableNativeFeedback
+            accessibilityLabel={"tab"+index} testID={"tab"+index}
             key={index}
             onPress={item.onPress}
             onLongPress={item.onLongPress}
@@ -112,6 +113,7 @@ export default class ExNavigationTabBar extends React.Component {
       } else {
         return (
           <TouchableWithoutFeedback
+           accessibilityLabel={"tab"+index} testID={"tab"+index}
             key={index}
             onPress={item.onPress}
             delayPressIn={0}
