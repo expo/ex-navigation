@@ -43,7 +43,8 @@ export { default as NavigationActions } from './ExNavigationActions';
 export { default as NavigationActionTypes } from './ExNavigationActionTypes';
 export { default as NavigationReducer } from './ExNavigationReducer';
 
-export * as NavigationStyles from './ExNavigationStyles';
+import * as NavigationStyles from './ExNavigationStyles';
+export { NavigationStyles };
 
 export { createRouter } from './ExNavigationRouter';
 export {
