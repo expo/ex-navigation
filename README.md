@@ -7,9 +7,9 @@ React Native that works seamlessly on Android and iOS.
 
 The successor to ExNavigation,
 ["react-navigation"](https://github.com/react-community/react-navigation),
-is now in public beta. Before the 1.0 release of react-navigation, a migration path from
-ExNavigation will be provided, but feel free to migrate before then if
-you prefer.
+has had semantically-versioned, stable releases since early 2018. A migration path from
+ExNavigation will be provided, but feel free to migrate before official guidance is available if
+you require some of the new functionality and performance in react-navigation.
 
 This means that ExNavigation is currently in maintenance mode -- we
 aren't actively adding new features unless we need them for our own
