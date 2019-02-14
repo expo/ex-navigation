@@ -1,11 +1,12 @@
 
 
-## This library is no longer maintained
+# 🚨This library is no longer maintained 🚨
 
 Please use ["react-navigation"](https://github.com/react-navigation/react-navigation), or [other alternatives](https://reactnavigation.org/docs/en/alternatives.html) instead.
 
+----------------------------------------------------
 
-# ExNavigation
+## ExNavigation
 
 A route-centric, batteries-included navigation library for Expo and
 React Native that works seamlessly on Android and iOS.
