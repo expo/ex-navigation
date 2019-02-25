@@ -687,6 +687,10 @@ export default function goHome() {
   let navigatorUID = Store.getState().navigation.currentNavigatorUID;
   Store.dispatch(NavigationActions.push(navigatorUID, Router.getRoute('home')))
 }
+
+export default function jumpToProfileTab() {
+  Store.dispatch(NavigationActions.jumpToTab("main", {key: "profile"})) //assuming root tab navigatorUID is "main"and id of tab is "profile"
+}
 ```
 
 ### Screen Tracking / Analytics
