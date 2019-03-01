@@ -57,6 +57,7 @@ type Props = {
   navigatorUID: string,
   initialItem: string,
   renderHeader: () => React.Element<any>,
+  renderFooter: () => React.Element<any>,
   renderNavigationView: () => React.Element<any>,
   drawerBackgroundColor: string,
   drawerWidth: 300,
@@ -93,6 +94,9 @@ class ExNavigationDrawer extends PureComponent<any, Props, State> {
     drawerPosition: 'left',
     drawerBackgroundColor: '#fff',
     renderHeader() {
+      return null;
+    },
+    renderFooter() {
       return null;
     },
   };
@@ -139,6 +143,7 @@ class ExNavigationDrawer extends PureComponent<any, Props, State> {
     const drawerLayoutProps = {
       children: this.renderContent(),
       renderHeader: this.props.renderHeader,
+      renderFooter: this.props.renderFooter,
       selectedItem: navigationState.routes[navigationState.index].key,
       items: this.state.drawerItems,
       drawerBackgroundColor: this.props.drawerBackgroundColor,

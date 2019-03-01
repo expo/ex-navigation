@@ -17,6 +17,7 @@ import TouchableNativeFeedbackSafe
 
 type Props = {
   renderHeader: () => React.Element<any>,
+  renderFooter: () => React.Element<any>,
   width: number,
   children: React.Element<any>,
   drawerBackgroundColor: string,
@@ -80,6 +81,10 @@ export default class ExNavigationDrawerLayout extends React.Component {
           }>
           {this._renderDrawerItems()}
         </ScrollView>
+
+        <View>
+          {this.props.renderFooter()}
+        </View>
       </View>
     );
   };
