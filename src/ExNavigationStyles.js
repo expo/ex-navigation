@@ -109,9 +109,38 @@ function customForHorizontal(props: NavigationSceneRendererProps): Object {
   };
 }
 
+function customForHorizontalIOS(props: NavigationSceneRendererProps): Object {
+  const { layout, position, scene } = props;
+
+  if (!layout.isMeasured) {
+    return forInitial(props);
+  }
+
+  const index = scene.index;
+
+  const opacity = position.interpolate({
+    inputRange: [index - 1, index, index + 1, index + 1.0001],
+    outputRange: ([1, 1, 0.92, 0]: Array<number>),
+    extrapolateRight: "clamp",
+  });
+
+  const shadowOpacity = position.interpolate({
+    inputRange: [index - 1, index],
+    outputRange: ([0, 0.325]: Array<number>),
+    extrapolateRight: "clamp",
+  });
+
+  return {
+    ...customForHorizontal(props),
+    opacity,
+    shadowRadius: 5,
+    shadowOpacity,
+  };
+}
+
 export const SlideHorizontalIOS: ExNavigationStyles = {
   configureTransition: configureSpringTransition,
-  sceneAnimations: customForHorizontal,
+  sceneAnimations: customForHorizontalIOS,
   navigationBarAnimations: {
     forContainer: (props, delta) => {
       const { layout, position, scene, scenes } = props;
