@@ -742,3 +742,60 @@ returns a promise that wraps the function you want to be called. Eg.
    ...
 </AndroidBackButtonBehavior>
 ```
+
+### Programmatically toggle drawer
+Credit to @haikyuu, @sibelius
+
+You may want to toggle the drawer from a component different than the defaulted
+menu bar icon in the navigation bar. Here's an example component you can use:
+
+```javascript
+import React, { Component } from 'react';
+import { View, TouchableOpacity } from 'react-native';
+import { Navigation } from '@exponent/ex-navigation';
+import Icon from 'react-native-vector-icons/MaterialIcons';
+
+export default class NavigationMenuButton extends Component {
+  render() {
+    const { navigation } = this.props;
+    const navigator = navigation.getNavigator(this.props.drawerID);
+
+    return (
+      <View>
+        <TouchableOpacity onPress={() => navigator.toggleDrawer()}>
+          <Icon name="menu" size={24} color="#444" />
+        </TouchableOpacity>
+      </View>
+    );
+  }
+}
+```
+
+Then render your component somewhere in your navigation stack. Be sure to pass
+the navigation object to your component so that you can select and toggle the
+proper drawer.
+
+```javascript
+import React, { Component } from 'react';
+import { View, Text } from 'react-native';
+import NavigationMenuButton from '../../../components/ExNavigation/DrawerButton';
+
+export default class Home extends Component {
+
+  static route = {
+    navigationBar: {
+      visible: false
+    },
+  };
+
+  render() {
+    return (
+      <View style={styles.article}>
+        <NavigationMenuButton navigation={this.props.navigation} drawerID="main" />
+        <Text>This is home.</Text>
+      </View>
+    );
+  }
+}
+
+```
