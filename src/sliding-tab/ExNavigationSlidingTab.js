@@ -147,10 +147,9 @@ class ExNavigationSlidingTab extends PureComponent<any, Props, State> {
   }
 
   componentWillReceiveProps(nextProps) {
-    // TODO: Should make it possible to dynamically add children after initial render?
-    // if (nextProps.children && nextProps.children !== this.props.children) {
-    //   this._parseTabItems(nextProps);
-    // }
+    if (nextProps.children && nextProps.children !== this.props.children) {
+      this._parseTabItems(nextProps);
+    }
   }
 
   componentDidUpdate(prevProps) {
