@@ -81,6 +81,10 @@ class ExNavigationReducer {
   }
 
   static [ActionTypes.REMOVE_NAVIGATOR](state, { navigatorUID }) {
+    const navigatorsKeys = Object.keys(state.navigators)
+    if (!navigatorsKeys.includes(navigatorUID)) {
+      return state
+    }
     const currentNavigatorUID =
       (navigatorsToRestore.length &&
         navigatorsToRestore[navigatorsToRestore.length - 1]) ||
