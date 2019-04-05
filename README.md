@@ -408,6 +408,7 @@ drawer button icons.
 be visible for this route.
 - `translucent` - iOS and Expo only, use background blur on the
 `navigationBar`, like in the Apple Podcasts app, for example.
+- `elevation` - shadow depth (*Android only*). 0 = no elevation.
 - `borderBottomWidth` - the width of the bottom border
 - `borderBottomColor` - the color of the bottom border
 - `renderLeft` - a function that should return a React component that
