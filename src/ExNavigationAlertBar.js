@@ -48,7 +48,7 @@ export default class ExNavigationAlertBar extends React.Component {
   _timeout: number;
 
   static getDataProps(data: any, props: Props) {
-    let { alerts } = data.navigation;
+    let { alerts } = data[props.store.__exNavigationStateKey];
     let alertState = alerts[props.navigatorUID];
 
     return {
