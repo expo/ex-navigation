@@ -24,9 +24,8 @@ React Native that works seamlessly on Android and iOS.
 
 ## Help / Support / Questions
 
-We don't provide any realtime support for ExNavigation questions. If you
-join the Expo Slack and ask a question there, we will direct you to
-this section of the README. We suggest the following resources:
+ExNavigation realtime support will only be provided on Fridays at 10 am - 12 pm (Pacific Time)
+until the 1.0 release of react-navigation. We suggest the following additional resources:
 
 - Search the README.
 - [Search the issues, then post an issue if nothing matches](https://github.com/expo/ex-navigation/issues).
