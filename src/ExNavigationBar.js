@@ -95,6 +95,7 @@ class ExNavigationBarBackButton extends PureComponent {
 
     return (
       <TouchableOpacity
+        accessibilityLabel={"backButton"} testID={"backButton"}
         onPress={this._onPress}
         hitSlop={BACK_BUTTON_HIT_SLOP}
         style={buttonStyles.buttonContainer}>
