@@ -191,6 +191,12 @@ class ExNavigationTab extends PureComponent<any, Props, State> {
   }
 
   renderTab(tabItem: Object) {
+    // Check if initialTab matches any actual TabItems
+    invariant(tabItem,
+      `Invalid initialTab=${this.state.renderedTabKeys[0]} ` +
+      `Please check your TabNavigation initialTab`,
+    );
+
     if (!tabItem.element) {
       return null;
     }
